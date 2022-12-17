@@ -186,7 +186,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         if evt.actionName.IsAction(n"equip_item") {
             if !evt.uiInventoryItem.IsEquipped() {
                 if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
-                    this.QueueEvent(new ItemDisplayRefreshEvent());
+                    this.QueueEvent(ItemDisplayRefreshEvent.CreateFrom(evt));
                     this.RefreshOutfitItemsList();
                 }
             }
@@ -194,7 +194,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
             if evt.actionName.IsAction(n"unequip_item") {
                 if evt.uiInventoryItem.IsEquipped() {
                     if this.m_outfitSystem.UnequipItem(evt.uiInventoryItem.ID) {
-                        this.QueueEvent(new ItemDisplayRefreshEvent());
+                        this.QueueEvent(ItemDisplayRefreshEvent.CreateFrom(evt));
                         this.RefreshOutfitItemsList();
                     }
                 }
@@ -420,14 +420,14 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
                 for item in slotItems {
                     itemData = new VendorUIInventoryItemData();
                     itemData.Item = UIInventoryItem.Make(this.m_player, item, this.m_uiInventorySystem.GetInventoryItemsManager());
+                    itemData.Item.m_slotID = slotID;
                     itemData.DisplayContextData = this.m_itemDisplayContext;
 
-                    ArrayPush(result, itemData);
-
                     if itemData.Item.IsEquipped() {
-                        header.ItemData.ID = item.GetID();
-                        header.ItemData.Name = this.m_outfitSystem.GetItemName(item.GetID());
+                        header.Item = itemData.Item;
                     }
+
+                    ArrayPush(result, itemData);
                 }
             }
         }

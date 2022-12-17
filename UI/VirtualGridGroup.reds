@@ -1,7 +1,7 @@
 module EquipmentEx
 
 public class VirtualGridGroupController extends inkVirtualCompoundItemController {
-    protected let m_newData: ref<VendorUIInventoryItemData>;
+    protected let m_newData: ref<WrappedInventoryItemData>;
     protected let m_slotNameText: ref<inkText>;
     protected let m_itemNameText: ref<inkText>;
     
@@ -27,7 +27,6 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
         this.m_itemNameText = new inkText();
         this.m_itemNameText.SetName(n"item_name");
         this.m_itemNameText.SetFontFamily("base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily");
-        // this.m_itemNameText.SetFontSize(36);
         this.m_itemNameText.SetLetterCase(textLetterCase.UpperCase);
         this.m_itemNameText.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
         this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Blue");
@@ -38,14 +37,24 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
         container.Reparent(this.GetRootCompoundWidget());
     }
 
-    public func OnDataChanged(value: Variant) {
-        this.m_newData = FromVariant<ref<IScriptable>>(value) as VendorUIInventoryItemData;
+    protected cb func OnDataChanged(value: Variant) {
+        this.m_newData = FromVariant<ref<IScriptable>>(value) as WrappedInventoryItemData;
+        this.UpdateView();
+    }
 
+    protected cb func OnRefresh(evt: ref<ItemDisplayRefreshEvent>) {
+        if Equals(this.m_newData.ItemData.SlotID, evt.uiInventoryItem.m_slotID) {
+            this.m_newData.Item = evt.uiInventoryItem;
+            this.UpdateView();
+        }
+    }
+
+    protected func UpdateView() {
         if IsDefined(this.m_newData) {
             this.m_slotNameText.SetText(this.m_newData.ItemData.CategoryName);
 
-            if ItemID.IsValid(this.m_newData.ItemData.ID) {
-                this.m_itemNameText.SetText(this.m_newData.ItemData.Name);
+            if this.m_newData.Item.IsEquipped() {
+                this.m_itemNameText.SetText(this.m_newData.Item.GetName());
                 this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Blue");
             } else {
                 this.m_itemNameText.SetText(GetLocalizedTextByKey(n"UI-Labels-EmptySlot"));

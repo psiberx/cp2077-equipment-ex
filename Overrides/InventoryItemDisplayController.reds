@@ -37,7 +37,20 @@ protected func RefreshUI() {
     }
 }
 
-public class ItemDisplayRefreshEvent extends Event {}
+public class ItemDisplayRefreshEvent extends Event {
+    public let itemData: InventoryItemData;
+    public let uiInventoryItem: ref<UIInventoryItem>;
+    public let displayContextData: wref<ItemDisplayContextData>;
+
+    public static func CreateFrom(evt: ref<ItemDisplayClickEvent>) -> ref<ItemDisplayRefreshEvent> {
+        let instance = new ItemDisplayRefreshEvent();
+        instance.itemData = evt.itemData;
+        instance.uiInventoryItem = evt.uiInventoryItem;
+        instance.displayContextData = evt.displayContextData;
+
+        return instance;
+    }
+}
 
 @addMethod(InventoryItemDisplayController)
 protected cb func OnRefresh(evt: ref<ItemDisplayRefreshEvent>) {
