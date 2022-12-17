@@ -194,9 +194,6 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
                 }
             }
         }
-        if evt.actionName.IsAction(n"world_map_fake_rotate") {
-            Debug.DumpToLua(evt.uiInventoryItem.ID);
-        }
     }
 
     protected cb func OnInventoryItemHoverOver(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
