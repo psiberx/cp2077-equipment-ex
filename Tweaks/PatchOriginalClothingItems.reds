@@ -191,7 +191,6 @@ class OutfitSlotMatcher {
                 t"Items.Solo_01_Set_TShirt",
                 t"Items.SQ012_Shirt_VoteForPeralez",
                 t"Items.SQ023_Switchblade_Shirt",
-                t"Items.Techie_01_Set_TShirt",
                 t"Items.TShirt_02_old_02"
             ]),
             new RecordMapping(t"OutfitSlots.TorsoMiddle", [
