@@ -185,12 +185,18 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     protected cb func OnInventoryClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
         if evt.actionName.IsAction(n"equip_item") {
             if !evt.uiInventoryItem.IsEquipped() {
-                this.EquipItem(evt.uiInventoryItem.ID);
+                if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
+                    this.QueueEvent(new ItemDisplayRefreshEvent());
+                    this.RefreshOutfitItemsList();
+                }
             }
         } else {
             if evt.actionName.IsAction(n"unequip_item") {
                 if evt.uiInventoryItem.IsEquipped() {
-                    this.UnequipItem(evt.uiInventoryItem.ID);
+                    if this.m_outfitSystem.UnequipItem(evt.uiInventoryItem.ID) {
+                        this.QueueEvent(new ItemDisplayRefreshEvent());
+                        this.RefreshOutfitItemsList();
+                    }
                 }
             }
         }
@@ -448,18 +454,6 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         }
 
         return true;
-    }
-
-    private func EquipItem(itemId: ItemID) -> Void {
-        this.m_outfitSystem.EquipItem(itemId);
-        this.PopulateItemsList();
-        this.RefreshOutfitItemsList();
-    }
-
-    private func UnequipItem(itemId: ItemID) -> Void {
-        this.m_outfitSystem.UnequipItem(itemId);
-        this.PopulateItemsList();
-        this.RefreshOutfitItemsList();
     }
 
     private func InitializeOutfitsLayout() -> Void {

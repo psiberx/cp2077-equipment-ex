@@ -36,3 +36,10 @@ protected func RefreshUI() {
         inkWidgetRef.SetMargin(this.m_wardrobeInfoContainer, new inkMargin(12.0, 0, 0, 12.0));
     }
 }
+
+public class ItemDisplayRefreshEvent extends Event {}
+
+@addMethod(InventoryItemDisplayController)
+protected cb func OnRefresh(evt: ref<ItemDisplayRefreshEvent>) {
+    this.NewUpdateEquipped(this.m_uiInventoryItem);
+}
