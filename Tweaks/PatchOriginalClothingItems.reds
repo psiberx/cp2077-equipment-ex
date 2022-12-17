@@ -249,7 +249,8 @@ class OutfitSlotMatcher {
                 t"Items.Vest_10_old_01",
                 t"Items.Vest_10_old_02",
                 t"Items.Vest_10_rich_01",
-                t"Items.Vest_10_rich_02"
+                t"Items.Vest_10_rich_02",
+                t"Items.Vest_04_old_01"
             ]),
             new RecordMapping(t"OutfitSlots.LegsOuter", [
                 t"Items.Shorts_03_basic_01",
