@@ -97,7 +97,7 @@ class OutfitSet {
             let item = part.GetItemHash();
 
             let index = 0;
-            while (index < ArraySize(items) && items[index] < item) {
+            while index < ArraySize(items) && items[index] < item {
                 index += 1;
             }
 
@@ -110,7 +110,7 @@ class OutfitSet {
 
         for item in items {
             let i = 8;
-            while (i > 0) {
+            while i > 0 {
                 hash = hash ^ (item % base);
 		    	hash *= prime;
                 item /= base;

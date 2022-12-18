@@ -592,9 +592,16 @@ public class OutfitSystem extends ScriptableSystem {
 
     public func GetOutfits() -> array<CName> {
         let outfits: array<CName>;
+        
         for outfit in this.m_state.GetOutfits() {
-            ArrayPush(outfits, outfit.GetName());
+            let index = 0;
+            while index < ArraySize(outfits) && StrCmp(NameToString(outfit.GetName()), NameToString(outfits[index])) > 0 {
+                index += 1;
+            }
+
+            ArrayInsert(outfits, index, outfit.GetName());
         }
+
         return outfits;
     }
 
@@ -636,7 +643,7 @@ public class OutfitSystem extends ScriptableSystem {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
     }
 
-    public static func Version() -> String = "0.3.5";
+    public static func Version() -> String = "0.4.0";
 }
 
 public class AttachmentSlotsCallback extends AttachmentSlotsScriptCallback {

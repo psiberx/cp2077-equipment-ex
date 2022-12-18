@@ -125,7 +125,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.InitializeOutfitsLayout();
         this.InitializeSearchField();
 
-        this.PopulateOutfitsList();
+        this.PopulateOutfitsList(true);
         this.RefreshOutfitItemsList();
         this.UpdateButtonHints();
     }
@@ -562,7 +562,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_searchInput.Reparent(searchWrapper);
     }
 
-    private func PopulateOutfitsList() -> Void {
+    private func PopulateOutfitsList(opt animate: Bool) -> Void {
         this.m_outfitsList.RemoveAllChildren();
 
         let buttonCreate = this.SpawnFromExternal(this.m_outfitsList, r"equipment_ex\\gui\\outfit_list_item.inkwidget", n"FiltersListItem:EquipmentEx.OutfitListItemController");
@@ -583,19 +583,21 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         for name in this.m_outfitSystem.GetOutfits() {
             this.SpawnOutfitListItem(name);
         };
-        
-        let controller: ref<OutfitListItemController>;
-        let delay: Float = 30.0;
-        let numChildren: Int32 = this.m_outfitsList.GetNumChildren();
-        let i: Int32 = 0;
-        while i < numChildren {
-            delay = Cast<Float>(i) / 20.0;
-            controller = this.m_outfitsList.GetWidgetByIndex(i).GetController() as OutfitListItemController;
-            if IsDefined(controller) {
-                controller.PlayIntroAnimation(delay);
+
+        if animate {
+            let controller: ref<OutfitListItemController>;
+            let delay: Float = 30.0;
+            let numChildren: Int32 = this.m_outfitsList.GetNumChildren();
+            let i: Int32 = 0;
+            while i < numChildren {
+                delay = Cast<Float>(i) / 20.0;
+                controller = this.m_outfitsList.GetWidgetByIndex(i).GetController() as OutfitListItemController;
+                if IsDefined(controller) {
+                    controller.PlayIntroAnimation(delay);
+                };
+                i += 1;
             };
-          i += 1;
-        };
+        }
     }
 
     private func CreateOutfit(name: CName, opt createListItem: Bool) -> Void {
@@ -604,7 +606,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         };
         this.PlaySound(n"Item", n"OnBuy");
         this.m_outfitSystem.SaveOutfit(name, true);
-        this.RefreshOutfitItemsList();
+        this.PopulateOutfitsList();
     }
 
     private func DeleteOutfit(name: CName) -> Void {
