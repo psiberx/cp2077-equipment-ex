@@ -54,6 +54,24 @@ public abstract class EquipmentEx {
         }
     }
 
+    public static func ExportItems(game: GameInstance) {
+        let outfitSystem = OutfitSystem.GetInstance(game);
+        let usedSlots = outfitSystem.GetUsedSlots();
+
+        if ArraySize(usedSlots) > 0 {
+            let transactionSystem = GameInstance.GetTransactionSystem(game);
+            let player = GetPlayer(game);
+            let command = "";
+            
+            for slotID in usedSlots {
+                let itemID = transactionSystem.GetItemInSlot(player, slotID).GetItemID();
+                command += s"EquipmentEx.EquipItem(\"\(TDBID.ToStringDEBUG(ItemID.GetTDBID(itemID)))\") ";
+            }
+            
+             LogChannel(n"DEBUG", command);
+        }
+    }
+
     public static func LoadOutfit(game: GameInstance, name: CName) {
         OutfitSystem.GetInstance(game).LoadOutfit(name);
     }
