@@ -19,7 +19,9 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     private let m_filterManager: ref<ItemCategoryFliterManager>;
     private let m_currentFilter: ItemFilterCategory;
 
-    private let m_inventoryManager: ref<InventoryDataManagerV2>;
+    // private let m_inventoryManager: ref<InventoryDataManagerV2>;
+    private let m_itemDropQueue: array<ItemModParams>;
+
     private let m_uiInventorySystem: wref<UIInventoryScriptableSystem>;
     
     private let m_itemsClassifier: ref<TemplateClassifier>;
@@ -98,8 +100,8 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
         this.m_itemDisplayContext = ItemDisplayContextData.Make(this.m_player, ItemDisplayContext.GearPanel);
 
-        this.m_inventoryManager = new InventoryDataManagerV2();
-        this.m_inventoryManager.Initialize(this.m_player);
+        // this.m_inventoryManager = new InventoryDataManagerV2();
+        // this.m_inventoryManager.Initialize(this.m_player);
         this.m_uiInventorySystem = UIInventoryScriptableSystem.GetInstance(this.m_player.GetGame());
 
         // Listeners
@@ -123,8 +125,8 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
         this.PlaySound(n"GameMenu", n"OnClose");
 
-        this.m_inventoryManager.ClearInventoryItemDataCache();
-        this.m_inventoryManager.UnInitialize();
+        // this.m_inventoryManager.ClearInventoryItemDataCache();
+        // this.m_inventoryManager.UnInitialize();
 
         this.m_uiInventorySystem.FlushFullscreenCache();
 
@@ -174,6 +176,11 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
             this.m_tooltipManager.ShowTooltipAtWidget(n"itemTooltip", widget, data, gameuiETooltipPlacement.RightTop);
         }
+    }
+
+    protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) -> Bool {
+        this.m_itemDropQueue = evt.m_dropQueue;
+        this.PopulateItemsList();
     }
 
     protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) -> Bool {
@@ -383,8 +390,9 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     }
 
     private func PopulateItemsList() -> Void {
-        let allItems = this.m_inventoryManager.GetPlayerInventoryItems();
-        this.m_inventoryHelper.GetStashItems(allItems);
+        // let allItems = this.m_inventoryManager.GetPlayerInventoryItems();
+        // this.m_inventoryHelper.GetStashItems(allItems);
+        let allItems = this.m_inventoryHelper.GetPlayerAndStashItems(this.m_itemDropQueue);
         let finalItems = this.BuildCategorizedClothingList(allItems);
         this.m_playerItemsDataSource.Reset(finalItems);
     }

@@ -97,6 +97,10 @@ protected func ShowOutfitManager() -> Bool {
 
     this.m_buttonHintsController.Hide();
 
+    let evt = new DropQueueUpdatedEvent();
+    evt.m_dropQueue = this.m_itemModeLogicController.m_itemDropQueue;
+    this.QueueEvent(evt);
+
     return true;
 }
 
