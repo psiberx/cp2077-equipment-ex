@@ -194,6 +194,13 @@ class OutfitSlotMatcher {
                 t"Items.TShirt_02_old_02"
             ]),
             new RecordMapping(t"OutfitSlots.TorsoMiddle", [
+                t"Items.Dress_01_basic_01",
+                t"Items.Dress_01_basic_02",
+                t"Items.Dress_01_basic_03",
+                t"Items.Dress_01_rich_01",
+                t"Items.Dress_01_rich_02",
+                t"Items.Dress_01_rich_03",
+                t"Items.Dress_01_rich_03_Crafting",
                 t"Items.Jacket_11_basic_01",
                 t"Items.Jacket_11_basic_02",
                 t"Items.Jacket_11_old_01",
