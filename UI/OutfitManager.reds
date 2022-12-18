@@ -6,6 +6,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
     private let m_outfitSystem: wref<OutfitSystem>;
     private let m_inventoryHelper: wref<InventoryHelper>;
+    private let m_delaySystem: wref<DelaySystem>;
 
     private let m_inventoryBlackboard: wref<IBlackboard>;
     private let m_itemAddedCallback: ref<CallbackHandle>;
@@ -50,6 +51,9 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     private let m_outfitToCreate: CName;
     private let m_outfitToDelete: CName;
 
+    private let m_performSearchDelay: Float = 0.5;
+    private let m_searchDelayId: DelayID;
+
     protected cb func OnInitialize() -> Bool {
         super.OnInitialize();
 
@@ -60,6 +64,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_player = this.GetPlayerControlledObject() as PlayerPuppet;
         this.m_outfitSystem = OutfitSystem.GetInstance(this.m_player.GetGame());
         this.m_inventoryHelper = InventoryHelper.GetInstance(this.m_player.GetGame());
+        this.m_delaySystem = GameInstance.GetDelaySystem(this.m_player.GetGame());
 
         this.m_itemScrollArea = this.GetChildWidgetByPath(n"wrapper/wrapper/vendorPanel/inventoryContainer") as inkCompoundWidget;
         this.m_itemScrollController = this.m_itemScrollArea.GetController() as inkScrollController;
@@ -134,6 +139,8 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         super.OnUninitialize();
 
         this.PlaySound(n"GameMenu", n"OnClose");
+
+        this.m_delaySystem.CancelDelay(this.m_searchDelayId);
 
         // this.m_inventoryManager.ClearInventoryItemDataCache();
         // this.m_inventoryManager.UnInitialize();
@@ -318,6 +325,11 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnSearchFieldInput(widget: wref<inkWidget>) -> Bool {
+        this.m_delaySystem.CancelDelay(this.m_searchDelayId);
+        this.m_searchDelayId = this.m_delaySystem.DelayEvent(this.m_player, new PerformSearchEvent(), this.m_performSearchDelay, false);
+    }
+
+    protected cb func OnPerformSearchEvent(evt: ref<PerformSearchEvent>) -> Bool {
         this.PopulateItemsList();
         this.m_itemScrollController.SetScrollPosition(0.0);
     }
@@ -666,3 +678,5 @@ public class TemplateClassifier extends inkVirtualItemTemplateClassifier {
         return 0u;
     }
 }
+
+public class PerformSearchEvent extends Event {}
