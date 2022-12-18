@@ -23,12 +23,16 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     private let m_itemDropQueue: array<ItemModParams>;
 
     private let m_uiInventorySystem: wref<UIInventoryScriptableSystem>;
-    
+
+    private let m_itemScrollArea: wref<inkCompoundWidget>;
+    private let m_itemScrollController: wref<inkScrollController>;
+    private let m_itemGridArea: wref<inkWidget>;
+    private let m_itemGridController: wref<inkVirtualGridController>;
+    private let m_itemInteractionArea: wref<inkWidget>;
+
     private let m_itemsClassifier: ref<TemplateClassifier>;
     private let m_playerItemsDataView: ref<BackpackDataView>;
     private let m_playerItemsDataSource: ref<ScriptableDataSource>;
-    private let m_itemsGrid: wref<inkVirtualGridController>;
-    private let m_scrollController: wref<inkScrollController>;
     private let m_playerUIInventoryItems: array<ref<UIInventoryItem>>;
     
     private let m_lastItemHoverOverEvent: ref<ItemDisplayHoverOverEvent>;
@@ -38,6 +42,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     private let m_previewWrapper: wref<inkWidget>;
 
     private let m_leftMouseButtonPressed: Bool;
+    private let m_isCursorOverItemList: Bool;
 
     private let m_confirmationRequestToken: ref<inkGameNotificationToken>;
     private let m_overwriteRequestToken: ref<inkGameNotificationToken>;
@@ -51,18 +56,18 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         (this.GetChildWidgetByPath(n"wrapper/wrapper/vendorPanel/vendorHeader/vendoHeaderWrapper/vendorNameWrapper/value") as inkText).SetLocalizedTextString("LocKey#83290");
 
         let root: ref<inkCompoundWidget> = this.GetRootCompoundWidget();
-        let scrollable: ref<inkWidget> = root.GetWidget(n"wrapper/wrapper/vendorPanel/inventoryContainer");
-        let grid: ref<inkWidget> = root.GetWidget(n"wrapper/wrapper/vendorPanel/inventoryContainer/stash_scroll_area_cache/scrollArea/vendor_virtualgrid");
-
+        
         this.m_player = this.GetPlayerControlledObject() as PlayerPuppet;
         this.m_outfitSystem = OutfitSystem.GetInstance(this.m_player.GetGame());
         this.m_inventoryHelper = InventoryHelper.GetInstance(this.m_player.GetGame());
 
-        this.m_itemsGrid = grid.GetController() as inkVirtualGridController;
-        
-        this.m_scrollController = scrollable.GetController() as inkScrollController;
-        // this.m_scrollController.SetViewportHeight(scrollable.GetHeight());
-        // this.m_scrollController.UpdateScrollPositionFromScrollArea();
+        this.m_itemScrollArea = this.GetChildWidgetByPath(n"wrapper/wrapper/vendorPanel/inventoryContainer") as inkCompoundWidget;
+        this.m_itemScrollController = this.m_itemScrollArea.GetController() as inkScrollController;
+
+        this.m_itemGridArea = this.m_itemScrollArea.GetWidget(n"stash_scroll_area_cache/scrollArea/vendor_virtualgrid");
+        this.m_itemGridController = this.m_itemGridArea.GetController() as inkVirtualGridController;
+
+        this.m_itemInteractionArea = this.m_itemScrollArea.GetWidget(n"interactiveArea");
 
         this.m_tooltipManager = this.GetRootWidget().GetControllerByType(n"gameuiTooltipsManager") as gameuiTooltipsManager;
         this.m_tooltipManager.Setup(ETooltipsStyle.Menus);
@@ -107,9 +112,13 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         // Listeners
         
         this.m_previewWrapper.RegisterToCallback(n"OnPress", this, n"OnPreviewPress");
+        this.m_previewWrapper.RegisterToCallback(n"OnRelative", this, n"OnPreviewRelative");
+        this.m_previewWrapper.RegisterToCallback(n"OnHoverOver", this, n"OnPreviewOver");
+        this.m_previewWrapper.RegisterToCallback(n"OnHoverOut", this, n"OnPreviewOut");
+
         this.RegisterToGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.RegisterToGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
-        this.RegisterToGlobalInputCallback(n"OnPostOnRelative", this, n"OnGlobalRelative");
+        this.RegisterToGlobalInputCallback(n"OnPreOnRelative", this, n"OnGlobalRelative");
 
         this.InitializeVirtualItemLists();
         this.InitializeOutfitsLayout();
@@ -131,15 +140,12 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_uiInventorySystem.FlushFullscreenCache();
 
         this.m_playerItemsDataView.SetSource(null);
-        this.m_itemsGrid.SetSource(null);
-        this.m_itemsGrid.SetClassifier(null);
+        this.m_itemGridController.SetSource(null);
+        this.m_itemGridController.SetClassifier(null);
         this.m_itemsClassifier = null;
         this.m_playerItemsDataView = null;
         this.m_playerItemsDataSource = null;
 
-        // this.m_searchInput.UnregisterFromCallback(n"OnInput", this, n"OnSearchFieldInput");
-
-        this.m_previewWrapper.UnregisterFromCallback(n"OnPress", this, n"OnPreviewPress");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelative", this, n"OnGlobalRelative");
@@ -186,7 +192,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) -> Bool {
         this.m_currentFilter = this.m_filterManager.GetAt(selectedIndex);
         this.PopulateItemsList();
-        this.m_scrollController.SetScrollPosition(0.0);
+        this.m_itemScrollController.SetScrollPosition(0.0);
     }
 
     protected cb func OnInventoryClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
@@ -236,6 +242,27 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         }
     }
 
+    protected cb func OnPreviewRelative(evt: ref<inkPointerEvent>) -> Bool {
+        if evt.IsAction(n"mouse_wheel") && evt.GetAxisData() != 0.0 {
+            let zoomArea = evt.GetAxisData() < 0.0 ? InventoryPaperdollZoomArea.Default : InventoryPaperdollZoomArea.Head;
+            let setCameraSetupEvent = new gameuiPuppetPreview_SetCameraSetupEvent();
+            setCameraSetupEvent.setupIndex = Cast<Uint32>(EnumInt(zoomArea));
+            this.m_inventoryHelper.GetPreview().QueueEvent(setCameraSetupEvent);
+        }
+    }
+
+    protected cb func OnPreviewOver(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_buttonHintsController.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
+        this.m_buttonHintsController.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
+        this.m_isCursorOverItemList = false;
+    }
+
+    protected cb func OnPreviewOut(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_buttonHintsController.RemoveButtonHint(n"mouse_wheel");
+        this.m_buttonHintsController.RemoveButtonHint(n"mouse_left");
+        this.m_isCursorOverItemList = true;
+    }
+
     protected cb func OnGlobalPress(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_left") {
             if !IsDefined(evt.GetTarget()) || !evt.GetTarget().CanSupportFocus() {
@@ -253,7 +280,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
             this.QueueEvent(cursorEvent);
 
             evt.Consume();
-        };
+        }
 
         if evt.IsAction(n"drop_item") && NotEquals(this.m_lastHoveredOutfit, n"") {
             this.m_outfitToDelete = this.m_lastHoveredOutfit;
@@ -264,6 +291,10 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnGlobalRelative(evt: ref<inkPointerEvent>) -> Bool {
+        if evt.IsAction(n"mouse_wheel") {
+            this.m_itemScrollController.SetEnabled(this.m_isCursorOverItemList);
+        }
+
         if this.m_leftMouseButtonPressed && evt.IsAction(n"mouse_x") {
             let previewPuppet = this.m_inventoryHelper.GetPreview();
 
@@ -287,7 +318,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
     protected cb func OnSearchFieldInput(widget: wref<inkWidget>) -> Bool {
         this.PopulateItemsList();
-        this.m_scrollController.SetScrollPosition(0.0);
+        this.m_itemScrollController.SetScrollPosition(0.0);
     }
 
     protected cb func OnCreateButtonClick(evt: ref<inkPointerEvent>) -> Bool {
@@ -383,8 +414,8 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_playerItemsDataView.SetSortMode(ItemSortMode.Default);
         this.m_playerItemsDataView.SetSource(this.m_playerItemsDataSource);
 
-        this.m_itemsGrid.SetClassifier(this.m_itemsClassifier);
-        this.m_itemsGrid.SetSource(this.m_playerItemsDataView);
+        this.m_itemGridController.SetClassifier(this.m_itemsClassifier);
+        this.m_itemGridController.SetSource(this.m_playerItemsDataView);
 
         this.PopulateItemsList();
     }

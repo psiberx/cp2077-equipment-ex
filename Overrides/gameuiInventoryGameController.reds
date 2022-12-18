@@ -143,8 +143,8 @@ protected func HideOutfitManager() -> Bool {
     this.GetChildWidgetByPath(n"outfit_manager/wrapper/preview").SetVisible(false);
     inkWidgetRef.SetVisible(this.m_paperDollWidget, true);
 
-    // this.ZoomCamera(EnumInt(InventoryPaperdollZoomArea.Default));
     this.PlaySlidePaperdollAnimation(PaperdollPositionAnimation.Center, false);
+    this.ZoomCamera(EnumInt(InventoryPaperdollZoomArea.Default));
 
     this.m_buttonHintsController.Show();
 
