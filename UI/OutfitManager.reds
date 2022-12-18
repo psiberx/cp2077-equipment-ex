@@ -68,6 +68,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_itemGridController = this.m_itemGridArea.GetController() as inkVirtualGridController;
 
         this.m_itemInteractionArea = this.m_itemScrollArea.GetWidget(n"interactiveArea");
+        this.m_isCursorOverItemList = true;        
 
         this.m_tooltipManager = this.GetRootWidget().GetControllerByType(n"gameuiTooltipsManager") as gameuiTooltipsManager;
         this.m_tooltipManager.Setup(ETooltipsStyle.Menus);
