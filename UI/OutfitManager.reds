@@ -254,7 +254,10 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
     protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) -> Bool {
         this.m_itemDropQueue = evt.m_dropQueue;
-        this.PopulateItemGrid();
+
+        if IsDefined(this.m_itemGridDataSource) {
+            this.PopulateItemGrid();
+        }
     }
 
     protected cb func OnInventoryItemsChanged(value: Variant) -> Bool {

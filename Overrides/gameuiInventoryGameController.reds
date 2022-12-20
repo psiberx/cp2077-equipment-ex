@@ -99,7 +99,7 @@ protected func ShowOutfitManager() -> Bool {
 
     let evt = new DropQueueUpdatedEvent();
     evt.m_dropQueue = this.m_itemModeLogicController.m_itemDropQueue;
-    this.QueueEvent(evt);
+    outfitManager.GetController().QueueEvent(evt);
 
     return true;
 }
