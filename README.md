@@ -7,10 +7,10 @@
 
 ## How to make compatible items
 
-Any item can support one standard slot and one outfit slot at the same time,
+Any item can support one base slot and one outfit slot at the same time,
 making the item compatible with both the game equipment system and the outfit system.
 
-To make an item compatible with the outfit system the outfit slot must be added to the `placementSlots` property:
+The outfit slot must be added to the `placementSlots` property after the base slot:
 
 ```yaml
 Items.MyNecklace:
@@ -29,7 +29,7 @@ Items.MyNecklace:
     - OutfitSlots.NecklaceShort
 ```
 
-If the user doesn't have Equipment-EX installed, the item will still work with the standard slot.
+If user doesn't have Equipment-EX installed, the item will still work with the base slot.
 
 Supported slots:
 
@@ -47,7 +47,7 @@ Supported slots:
 | `OutfitSlots.NecklaceLong`  | Long Necklaces                    |  
 | `OutfitSlots.TorsoInner`    | Bras, Tops, T-Shirts              |  
 | `OutfitSlots.TorsoMiddle`   | Shirts, Vests, Tight Dresses      |     
-| `OutfitSlots.TorsoOuter`    | Jackets, Coats, Looses Dresses    |           
+| `OutfitSlots.TorsoOuter`    | Jackets, Coats, Loose Dresses     |           
 | `OutfitSlots.TorsoAux`      | Vests, Harnesses                  |                      
 | `OutfitSlots.ShoulderLeft`  |                                   |                    
 | `OutfitSlots.ShoulderRight` |                                   |                   
@@ -56,7 +56,7 @@ Supported slots:
 | `OutfitSlots.HandLeft`      | Gloves, Rings                     |
 | `OutfitSlots.HandRight`     | Gloves, Rings                     |
 | `OutfitSlots.Waist`         | Belts                             |
-| `OutfitSlots.LegsInner`     | Thights, Leggings                 |
+| `OutfitSlots.LegsInner`     | Tights, Leggings                  |
 | `OutfitSlots.LegsMiddle`    | Thight Pants, Thight Shorts       |
 | `OutfitSlots.LegsOuter`     | Loose Pants, Loose Shorts, Skirts |
 | `OutfitSlots.ThighLeft`     |                                   |
@@ -64,5 +64,5 @@ Supported slots:
 | `OutfitSlots.AnkleLeft`     |                                   |
 | `OutfitSlots.AnkleRight`    |                                   |
 | `OutfitSlots.Feet`          | Footwear                          |
-| `OutfitSlots.BodyInner`     | Netrunning Suits                  |
-| `OutfitSlots.BodyOuter`     | Jumpsuits                         |
+| `OutfitSlots.BodyInner`     | Tight-fitting Suits               |
+| `OutfitSlots.BodyOuter`     | Jumpsuits, Tracksuits             |
