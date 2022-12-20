@@ -679,7 +679,7 @@ public class OutfitSystem extends ScriptableSystem {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
     }
 
-    public static func Version() -> String = "0.4.0";
+    public static func Version() -> String = "0.5.0";
 }
 
 public class AttachmentSlotsCallback extends AttachmentSlotsScriptCallback {

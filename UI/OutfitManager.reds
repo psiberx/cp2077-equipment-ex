@@ -18,7 +18,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     private let m_filtersContainer: ref<inkUniformGrid>;
     private let m_filtersRadioGroup: ref<FilterRadioGroup>;
     private let m_filterManager: ref<ItemCategoryFliterManager>;
-    private let m_currentFilter: ItemFilterCategory;
+    // private let m_currentFilter: ItemFilterCategory;
 
     // private let m_inventoryManager: ref<InventoryDataManagerV2>;
     private let m_itemDropQueue: array<ItemModParams>;
@@ -32,11 +32,11 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     private let m_itemInteractionArea: wref<inkWidget>;
 
     private let m_itemsClassifier: ref<TemplateClassifier>;
-    private let m_playerItemsDataView: ref<BackpackDataView>;
-    private let m_playerItemsDataSource: ref<ScriptableDataSource>;
+    private let m_itemGridDataView: ref<VirtualGridDataView>;
+    private let m_itemGridDataSource: ref<ScriptableDataSource>;
     private let m_playerUIInventoryItems: array<ref<UIInventoryItem>>;
     
-    private let m_lastItemHoverOverEvent: ref<ItemDisplayHoverOverEvent>;
+    // private let m_lastItemHoverOverEvent: ref<ItemDisplayHoverOverEvent>;
     private let m_itemDisplayContext: ref<ItemDisplayContextData>;
     private let m_searchInput: ref<HubTextInput>;
     private let m_outfitsList: ref<inkVerticalPanel>;
@@ -44,7 +44,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
     private let m_leftMouseButtonPressed: Bool;
     private let m_isCursorOverItemGrid: Bool;
-    private let m_itemGridUpdateDelay: Float = 0.5;
+    private let m_itemGridUpdateDelay: Float = 0.25;
     private let m_itemGridUpdateDelayID: DelayID;
     private let m_scrollResetPending: Bool;
 
@@ -89,7 +89,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
         // Filters
 
-        this.m_currentFilter = ItemFilterCategory.AllItems;
+        // this.m_currentFilter = ItemFilterCategory.AllItems;
 
         this.m_filtersContainer = root.GetWidget(n"wrapper/wrapper/vendorPanel/vendorHeader/inkHorizontalPanelWidget2/filtersContainer") as inkUniformGrid;
         this.m_filtersContainer.SetWrappingWidgetCount(2u);
@@ -127,7 +127,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.RegisterToGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
         this.RegisterToGlobalInputCallback(n"OnPreOnRelative", this, n"OnGlobalRelative");
 
-        this.InitializeVirtualItemLists();
+        this.InitializeItemGrid();
         this.InitializeOutfitsLayout();
         this.InitializeSearchField();
 
@@ -147,12 +147,12 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
         this.m_uiInventorySystem.FlushFullscreenCache();
 
-        this.m_playerItemsDataView.SetSource(null);
+        this.m_itemGridDataView.SetSource(null);
         this.m_itemGridController.SetSource(null);
         this.m_itemGridController.SetClassifier(null);
         this.m_itemsClassifier = null;
-        this.m_playerItemsDataView = null;
-        this.m_playerItemsDataSource = null;
+        this.m_itemGridDataView = null;
+        this.m_itemGridDataSource = null;
 
         this.UnregisterFromGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
@@ -162,13 +162,80 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_inventoryBlackboard.UnregisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemRemoved, this.m_itemRemovedCallback);
     }
 
-    private final func ShowTooltipForUIInventoryItem(widget: wref<inkWidget>, inspectedItem: wref<UIInventoryItem>) -> Void {
-        this.m_tooltipManager.HideTooltips();
+    private func InitializeItemGrid() -> Void {
+        this.m_itemsClassifier = new TemplateClassifier();
+        
+        this.m_itemGridDataSource = new ScriptableDataSource();
+        
+        this.m_itemGridDataView = new VirtualGridDataView();
+        this.m_itemGridDataView.BindUIScriptableSystem(this.m_uiScriptableSystem);
+        this.m_itemGridDataView.SetFilterType(ItemFilterCategory.AllItems);
+        this.m_itemGridDataView.SetSortMode(ItemSortMode.Default);
+        this.m_itemGridDataView.SetSource(this.m_itemGridDataSource);
 
-        if IsDefined(inspectedItem) {
-            let data = UIInventoryItemTooltipWrapper.Make(inspectedItem, this.m_itemDisplayContext);
+        this.m_itemGridController.SetClassifier(this.m_itemsClassifier);
+        this.m_itemGridController.SetSource(this.m_itemGridDataView);
 
-            this.m_tooltipManager.ShowTooltipAtWidget(n"itemTooltip", widget, data, gameuiETooltipPlacement.RightTop);
+        this.PopulateItemGrid();
+    }
+
+    private func PopulateItemGrid() -> Void {
+        let allItems = this.m_inventoryHelper.GetPlayerAndStashItems(this.m_itemDropQueue);
+        let finalItems: array<ref<IScriptable>>;
+        let slotItems: array<wref<gameItemData>>;
+        let searchQuery = StrLower(this.m_searchInput.GetText());
+        let groupIndex: Int32;
+        let itemIndex: Int32;
+
+        for slotID in this.m_outfitSystem.GetOutfitSlots() {
+            ArrayClear(slotItems);
+
+            for itemData in allItems {
+                if this.m_outfitSystem.IsEquippable(itemData.GetID(), slotID) {
+                    ArrayPush(slotItems, itemData);
+                }
+            }
+
+            if ArraySize(slotItems) > 0 {
+                let uiSlotData = new VirtualGridGroupData();
+                uiSlotData.ItemData.SlotID = slotID;
+                uiSlotData.ItemData.CategoryName = this.m_outfitSystem.GetSlotName(slotID);
+                uiSlotData.GroupIndex = groupIndex;
+                uiSlotData.ItemIndex = itemIndex;
+                uiSlotData.IsVisible = true;
+                groupIndex += 1;
+                itemIndex += 1;
+                
+                ArrayPush(finalItems, uiSlotData);
+
+                for itemData in slotItems {
+                    let uiItemData = new VirtualGridItemData();
+                    uiItemData.Item = UIInventoryItem.Make(this.m_player, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
+                    uiItemData.DisplayContextData = this.m_itemDisplayContext;
+                    uiItemData.GroupIndex = groupIndex;
+                    uiItemData.ItemIndex = itemIndex;
+                    uiItemData.IsVisible = true;
+                    itemIndex += 1;
+
+                    ArrayPush(finalItems, uiItemData);
+                    ArrayPush(uiSlotData.Children, uiItemData);
+
+                    if uiItemData.Item.IsEquipped() {
+                        uiSlotData.ItemData.ID = uiItemData.Item.GetID();
+                        uiSlotData.ItemData.Name = uiItemData.Item.GetName();
+                        uiSlotData.ItemData.IsEquipped = true;
+                    }
+                }
+            }
+        }
+
+        this.m_itemGridDataSource.Reset(finalItems);
+    }
+
+    private func UpdateScrollPosition(opt forceReset: Bool) -> Void {
+        if forceReset || this.m_scrollResetPending {
+            this.m_itemScrollController.SetScrollPosition(0.0);
+            this.m_scrollResetPending = false;
         }
     }
 
@@ -187,7 +254,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
     protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) -> Bool {
         this.m_itemDropQueue = evt.m_dropQueue;
-        this.PopulateItemsList();
+        this.PopulateItemGrid();
     }
 
     protected cb func OnInventoryItemsChanged(value: Variant) -> Bool {
@@ -195,25 +262,51 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) -> Bool {
-        this.m_currentFilter = this.m_filterManager.GetAt(selectedIndex);
-        this.PopulateItemsList();
         this.UpdateScrollPosition(true);
+        this.m_itemGridDataView.SetFilterType(this.m_filterManager.GetAt(selectedIndex));
+        this.m_itemGridDataView.ApplySortingAndFilters();
+    }
+
+    protected cb func OnSearchFieldInput(widget: wref<inkWidget>) -> Bool {
+        this.UpdateScrollPosition(true);
+        this.m_itemGridDataView.SetSearchQuery(this.m_searchInput.GetText());
+        this.m_itemGridDataView.ApplySortingAndFilters();
+    }
+
+    private final func ShowItemTooltip(widget: wref<inkWidget>, item: wref<UIInventoryItem>) -> Void {
+        this.m_tooltipManager.HideTooltips();
+
+        if IsDefined(item) {
+            let data = UIInventoryItemTooltipWrapper.Make(item, this.m_itemDisplayContext);
+            this.m_tooltipManager.ShowTooltipAtWidget(n"itemTooltip", widget, data, gameuiETooltipPlacement.RightTop);
+        }
+    }
+
+    private final func ShowItemButtonHints(item: wref<UIInventoryItem>) -> Void {
+        this.m_buttonHintsController.RemoveButtonHint(n"equip_item");
+        this.m_buttonHintsController.RemoveButtonHint(n"unequip_item");
+        
+        if IsDefined(item) {
+            if item.IsEquipped() {
+                this.m_buttonHintsController.AddButtonHint(n"unequip_item", GetLocalizedText("UI-UserActions-Unequip"));
+            } else {
+                this.m_buttonHintsController.AddButtonHint(n"equip_item", GetLocalizedText("UI-UserActions-Equip"));
+            }
+        }
     }
 
     protected cb func OnInventoryClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
         if evt.actionName.IsAction(n"equip_item") {
             if !evt.uiInventoryItem.IsEquipped() {
                 if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
-                    // this.QueueEvent(ItemDisplayRefreshEvent.CreateFrom(evt));
-                    // this.RefreshOutfitItemsList();
+                    this.ShowItemButtonHints(evt.uiInventoryItem);
                 }
             }
         } else {
             if evt.actionName.IsAction(n"unequip_item") {
                 if evt.uiInventoryItem.IsEquipped() {
                     if this.m_outfitSystem.UnequipItem(evt.uiInventoryItem.ID) {
-                        // this.QueueEvent(ItemDisplayRefreshEvent.CreateFrom(evt));
-                        // this.RefreshOutfitItemsList();
+                        this.ShowItemButtonHints(evt.uiInventoryItem);
                     }
                 }
             }
@@ -221,20 +314,14 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnInventoryItemHoverOver(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
-        if evt.uiInventoryItem.IsEquipped() {
-            this.m_buttonHintsController.AddButtonHint(n"unequip_item", GetLocalizedText("UI-UserActions-Unequip"));
-        } else {
-            this.m_buttonHintsController.AddButtonHint(n"equip_item", GetLocalizedText("UI-UserActions-Equip"));
-        }
-
-        this.ShowTooltipForUIInventoryItem(evt.widget, evt.uiInventoryItem);
+        this.ShowItemButtonHints(evt.uiInventoryItem);
+        this.ShowItemTooltip(evt.widget, evt.uiInventoryItem);
     }
 
     protected cb func OnInventoryItemHoverOut(evt: ref<ItemDisplayHoverOutEvent>) {
+        this.ShowItemButtonHints(null);
         this.m_tooltipManager.HideTooltips();
-        this.m_buttonHintsController.RemoveButtonHint(n"equip_item");
-        this.m_buttonHintsController.RemoveButtonHint(n"unequip_item");
-        this.m_lastItemHoverOverEvent = null;
+        // this.m_lastItemHoverOverEvent = null;
     }
 
     protected cb func OnPreviewPress(evt: ref<inkPointerEvent>) -> Bool {
@@ -316,16 +403,12 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         }
     }
 
-    protected cb func OnSearchFieldInput(widget: wref<inkWidget>) -> Bool {
-        this.QueueItemGridUpdate(true);
-    }
-
     protected cb func OnCreateButtonClick(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"activate") && this.m_outfitSystem.IsActive() {
             this.PlaySound(n"Button", n"OnPress");
             this.m_confirmationRequestToken = GenericMessageNotification.ShowInput(this, "Save outfit", "Enter outfit name:", GenericMessageNotificationType.ConfirmCancel);
             this.m_confirmationRequestToken.RegisterListener(this, n"OnCreateOutfitConfirmation");
-        };
+        }
     }
 
     protected cb func OnCreateOutfitConfirmation(data: ref<inkGameNotificationData>) -> Bool {
@@ -338,8 +421,8 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
                 this.m_outfitToCreate = newOutfit;
             } else {
                 this.CreateOutfit(newOutfit, true);
-            };
-        };
+            }
+        }
         this.m_confirmationRequestToken = null;
     }
 
@@ -347,7 +430,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         let resultData = data as GenericMessageNotificationCloseData;
         if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
             this.CreateOutfit(this.m_outfitToCreate);
-        };
+        }
         this.m_outfitToCreate = n"";
         this.m_overwriteRequestToken = null;
     }
@@ -356,18 +439,14 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         if evt.IsAction(n"activate") {
             this.PlaySound(n"Button", n"OnPress");
             this.m_outfitSystem.LoadOutfit(evt.GetTarget().GetName());
-            // this.PopulateItemsList();
-            // this.RefreshOutfitItemsList();
-        };
+        }
     }
 
     protected cb func OnNoOutfitButtonClick(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"activate") {
             this.PlaySound(n"Button", n"OnPress");
             this.m_outfitSystem.Deactivate();
-            // this.PopulateItemsList();
-            // this.RefreshOutfitItemsList();
-        };
+        }
     }
 
     protected cb func OnHoverOverOutfitItem(evt: ref<inkPointerEvent>) -> Bool {
@@ -378,8 +457,8 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
             this.m_buttonHintsController.AddButtonHint(n"drop_item", GetLocalizedTextByKey(n"UI-Wardrobe-Deleteset"));
             if !controller.IsChecked() {
                 this.m_buttonHintsController.AddButtonHint(n"activate", GetLocalizedTextByKey(n"Gameplay-Devices-Interactions-Equip"));
-            };
-        };
+            }
+        }
     }
 
     protected cb func OnHoverOutOutfitItem(evt: ref<inkPointerEvent>) -> Bool {
@@ -393,97 +472,9 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
       if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
           this.PlaySound(n"Item", n"OnDisassemble");
           this.DeleteOutfit(this.m_outfitToDelete);
-      };
+      }
       this.m_outfitToDelete = n"";
       this.m_confirmationRequestToken = null;
-    }
-
-    private func InitializeVirtualItemLists() -> Void {
-        this.m_itemsClassifier = new TemplateClassifier();
-        
-        this.m_playerItemsDataSource = new ScriptableDataSource();
-        
-        this.m_playerItemsDataView = new BackpackDataView(); // VendorDataView
-        this.m_playerItemsDataView.BindUIScriptableSystem(this.m_uiScriptableSystem);
-        this.m_playerItemsDataView.SetFilterType(ItemFilterCategory.AllItems);
-        this.m_playerItemsDataView.SetSortMode(ItemSortMode.Default);
-        this.m_playerItemsDataView.SetSource(this.m_playerItemsDataSource);
-
-        this.m_itemGridController.SetClassifier(this.m_itemsClassifier);
-        this.m_itemGridController.SetSource(this.m_playerItemsDataView);
-
-        this.PopulateItemsList();
-    }
-
-    private func PopulateItemsList() -> Void {
-        let allItems = this.m_inventoryHelper.GetPlayerAndStashItems(this.m_itemDropQueue);
-        let finalItems: array<ref<IScriptable>>;
-        let slotItems: array<wref<gameItemData>>;
-        let searchQuery = StrLower(this.m_searchInput.GetText());
-
-        for slotID in this.m_outfitSystem.GetOutfitSlots() {
-            ArrayClear(slotItems);
-
-            for itemData in allItems {
-                if this.ShouldDisplayInCategory(itemData, slotID, this.m_currentFilter, searchQuery) {
-                    ArrayPush(slotItems, itemData);
-                }
-            }
-
-            if ArraySize(slotItems) > 0 {
-                let uiSlotData = new VendorUIInventoryItemData();
-                uiSlotData.Item = new UIInventoryItem();
-                uiSlotData.ItemData.SlotID = slotID;
-                uiSlotData.ItemData.CategoryName = this.m_outfitSystem.GetSlotName(slotID);
-                
-                ArrayPush(finalItems, uiSlotData);
-
-                for itemData in slotItems {
-                    let uiItemData = new VendorUIInventoryItemData();
-                    uiItemData.Item = UIInventoryItem.Make(this.m_player, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
-                    uiItemData.Item.m_slotID = slotID;
-                    uiItemData.DisplayContextData = this.m_itemDisplayContext;
-
-                    if uiItemData.Item.IsEquipped() {
-                        uiSlotData.ItemData.ID = uiItemData.Item.GetID();
-                        uiSlotData.ItemData.Name = uiItemData.Item.GetName();
-                        uiSlotData.ItemData.IsEquipped = true;
-                    }
-
-                    ArrayPush(finalItems, uiItemData);
-                }
-            }
-        }
-
-        this.m_playerItemsDataSource.Reset(finalItems);
-    }
-
-    private func UpdateScrollPosition(opt forceReset: Bool) -> Void {
-        if forceReset || this.m_scrollResetPending {
-            this.m_itemScrollController.SetScrollPosition(0.0);
-            this.m_scrollResetPending = false;
-        }
-    }
-
-    private func ShouldDisplayInCategory(item: ref<gameItemData>, slotID: TweakDBID, filterCategory: ItemFilterCategory, searchQuery: String) -> Bool {
-        if !this.m_outfitSystem.IsEquippable(item.GetID(), slotID) {
-            return false;
-        }
-
-        if Equals(filterCategory, ItemFilterCategory.Clothes) {
-            if !this.m_uiInventorySystem.GetInventoryItemsManager().IsItemEquipped(item.GetID()) {
-                return false;
-            }
-        }
-
-        if NotEquals(searchQuery, "") {
-            let itemName = StrLower(this.m_outfitSystem.GetItemName(item.GetID()));
-            if !StrContains(itemName, searchQuery) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private func InitializeOutfitsLayout() -> Void {
@@ -572,7 +563,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
         for name in this.m_outfitSystem.GetOutfits() {
             this.SpawnOutfitListItem(name);
-        };
+        }
 
         if animate {
             let controller: ref<OutfitListItemController>;
@@ -584,16 +575,16 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
                 controller = this.m_outfitsList.GetWidgetByIndex(i).GetController() as OutfitListItemController;
                 if IsDefined(controller) {
                     controller.PlayIntroAnimation(delay);
-                };
+                }
                 i += 1;
-            };
+            }
         }
     }
 
     private func CreateOutfit(name: CName, opt createListItem: Bool) -> Void {
         if createListItem {
             this.SpawnOutfitListItem(name);
-        };
+        }
         this.PlaySound(n"Item", n"OnBuy");
         this.m_outfitSystem.SaveOutfit(name, true);
         this.PopulateOutfitsList();
@@ -637,11 +628,11 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
                         controller.SetEnabled(this.m_outfitSystem.IsActive());
                     } else {
                         controller.SetEquipped(this.m_outfitSystem.IsEquipped(childName));
-                    };
-                };
-            };
+                    }
+                }
+            }
             i += 1;
-        };
+        }
     }
 }
 
@@ -662,7 +653,7 @@ class UpdateItemGridCallback extends DelayCallback {
 
 	public func Call() -> Void {
         if IsDefined(this.m_controller) {
-            this.m_controller.PopulateItemsList();
+            this.m_controller.PopulateItemGrid();
             this.m_controller.UpdateScrollPosition();
         }
 	}
