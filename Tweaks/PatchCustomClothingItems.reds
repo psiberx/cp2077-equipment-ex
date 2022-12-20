@@ -3,8 +3,9 @@ module EquipmentEx
 class PatchCustomClothingItems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
+        let slotMatcher = OutfitSlotMatcher.Create();
 
-        let originalEntities = [
+        slotMatcher.IgnoreEntities([
             n"player_head_item",
             n"player_face_item",
             n"player_inner_torso_item",
@@ -12,21 +13,39 @@ class PatchCustomClothingItems extends ScriptableTweak {
             n"player_legs_item",
             n"player_feet_item",
             n"player_outfit_item"
-        ];
-        
+        ]);
+
+        slotMatcher.MapEquipmentAreas([
+            new EquipmentAreaMapping(t"OutfitSlots.Headwear", [t"EquipmentArea.HeadArmor"]),
+            new EquipmentAreaMapping(t"OutfitSlots.TorsoInner", [t"EquipmentArea.InnerChest"]),
+            new EquipmentAreaMapping(t"OutfitSlots.TorsoOuter", [t"EquipmentArea.ChestArmor"]),
+            new EquipmentAreaMapping(t"OutfitSlots.LegsMiddle", [t"EquipmentArea.LegArmor"]),
+            new EquipmentAreaMapping(t"OutfitSlots.Feet", [t"EquipmentArea.Feet"]),
+            new EquipmentAreaMapping(t"OutfitSlots.BodyInner", [t"EquipmentArea.Outfit"])
+        ]);
+
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
-            let entityName = item.EntityName();
-            let garmentOffset = item.GarmentOffset();
-            let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
-            let placementSlot = ArrayLast(placementSlots);
+            let slotID = slotMatcher.Match(item);
 
-            // Process only custom items with default offset
-            if garmentOffset == 0 && !ArrayContains(originalEntities, entityName) {
+            if TDBID.IsValid(slotID) {
                 for outfitSlot in outfitSlots {
-                    if outfitSlot.slotID == placementSlot {
-                        if outfitSlot.garmentOffset != garmentOffset {
+                    if outfitSlot.slotID == slotID {
+                        let updated = false;
+
+                        let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
+                        if ArraySize(placementSlots) == 1 && !ArrayContains(placementSlots, outfitSlot.slotID) {
+                            ArrayPush(placementSlots, outfitSlot.slotID);
+                            TweakDBManager.SetFlat(item.GetID() + t".placementSlots", placementSlots);
+                            updated = true;
+                        }
+                        
+                        if item.GarmentOffset() == 0 {
                             TweakDBManager.SetFlat(item.GetID() + t".garmentOffset", outfitSlot.garmentOffset);
+                            updated = true;
+                        }
+                        
+                        if updated {
                             TweakDBManager.UpdateRecord(item.GetID());
                         }
                         break;

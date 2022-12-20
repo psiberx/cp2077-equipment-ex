@@ -1,98 +1,24 @@
 module EquipmentEx
 
-struct RecordMapping {
-    public let slotID: TweakDBID;
-    public let recordIDs: array<TweakDBID>;
-}
+class PatchOriginalClothingItems extends ScriptableTweak {
+    protected func OnApply() -> Void {
+        let outfitSlots = OutfitConfig.OutfitSlots();
+        let slotMatcher = OutfitSlotMatcher.Create();
 
-struct EntityNameMapping {
-    public let slotID: TweakDBID;
-    public let entityName: CName;
-}
+        slotMatcher.IgnoreEntities([
+            n"player_outfit_item"
+        ]);
 
-struct AppearanceNameMapping {
-    public let slotID: TweakDBID;
-    public let appearanceTokens: array<String>;
-}
-
-struct PriceModifierMapping {
-    public let slotID: TweakDBID;
-    public let priceModifiers: array<TweakDBID>;
-}
-
-class OutfitSlotMatcher {
-    private let m_recordMappings: array<RecordMapping>;
-    private let m_entityMappings: array<EntityNameMapping>;
-    private let m_appearanceMappings: array<AppearanceNameMapping>;
-    private let m_priceMappings: array<PriceModifierMapping>;
-    
-    public func Match(item: ref<Clothing_Record>) -> TweakDBID {
-        let recordID = item.GetID();
-        let entityName = item.EntityName();
-        let appearanceName = NameToString(item.AppearanceName());
-        let priceModifiers = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".buyPrice");
-
-        if Equals(entityName, n"player_outfit_item") {
-            return TDBID.None();
-        }
-
-        // Record exact match
-        for mapping in this.m_recordMappings {
-            if ArrayContains(mapping.recordIDs, recordID) {
-                return mapping.slotID;
-            }
-        }
-
-        // Appearance exact match
-        for mapping in this.m_appearanceMappings {
-            for appearanceToken in mapping.appearanceTokens {
-                if Equals(appearanceName, appearanceToken) {
-                    return mapping.slotID;
-                }
-            }
-        }
-
-        // Price exact match
-        for mapping in this.m_priceMappings {
-            for priceModifier in mapping.priceModifiers {
-                if ArrayContains(priceModifiers, priceModifier) {
-                    return mapping.slotID;
-                }
-            }
-        }
-
-        // Appearance partial match
-        for mapping in this.m_appearanceMappings {
-            for appearanceToken in mapping.appearanceTokens {
-                if StrFindFirst(appearanceName, appearanceToken) >= 0 {
-                    return mapping.slotID;
-                }
-            }
-        }
-
-        // Entity exact match
-        for mapping in this.m_entityMappings {
-            if Equals(entityName, mapping.entityName) {
-                return mapping.slotID;
-            }
-        }
-
-        return TDBID.None();
-    }
-
-    public static func Create() -> ref<OutfitSlotMatcher> {
-        let instance = new OutfitSlotMatcher();
-
-        instance.m_entityMappings = [
+        slotMatcher.MapEntities([
             new EntityNameMapping(t"OutfitSlots.Headwear", n"player_head_item"),
             new EntityNameMapping(t"OutfitSlots.Mask", n"player_face_item"),
             new EntityNameMapping(t"OutfitSlots.TorsoInner", n"player_inner_torso_item"),
             new EntityNameMapping(t"OutfitSlots.TorsoOuter", n"player_outer_torso_item"),
             new EntityNameMapping(t"OutfitSlots.LegsMiddle", n"player_legs_item"),
             new EntityNameMapping(t"OutfitSlots.Feet", n"player_feet_item")
-        ];
+        ]);
 
-        instance.m_appearanceMappings = [
+        slotMatcher.MapAppearances([
             new AppearanceNameMapping(t"OutfitSlots.Balaclava", ["h1_balaclava_"]),
             new AppearanceNameMapping(t"OutfitSlots.TorsoInner", ["t1_undershirt_", "t1_tshirt_", "set_01_fixer_01_t1_"]),
             new AppearanceNameMapping(t"OutfitSlots.TorsoInner", ["t2_shirt_", "t2_jacket_16_basic_01_"]),
@@ -101,16 +27,16 @@ class OutfitSlotMatcher {
             new AppearanceNameMapping(t"OutfitSlots.TorsoOuter", ["t2_dress_", "t2_vest_01_basic_01_"]),
             new AppearanceNameMapping(t"OutfitSlots.LegsOuter", ["set_01_fixer_01_l1_"]),
             new AppearanceNameMapping(t"OutfitSlots.BodyInner", ["t1_jumpsuit_", "set_01_netrunner_01_t1_"])
-        ];
+        ]);
 
-        instance.m_priceMappings = [
+        slotMatcher.MapPrices([
             new PriceModifierMapping(t"OutfitSlots.Mask", [t"Price.Mask"]),
             new PriceModifierMapping(t"OutfitSlots.Glasses", [t"Price.Glasses", t"Price.Visor"]),
             new PriceModifierMapping(t"OutfitSlots.Wreath", [t"Price.TechFaceClothing"]),
             new PriceModifierMapping(t"OutfitSlots.LegsOuter", [t"Price.Skirt"])
-        ];
+        ]);
 
-        instance.m_recordMappings = [
+        slotMatcher.MapRecords([
             /*new RecordMapping(t"OutfitSlots.Headcovering", [
                 t"Items.Scarf_03_basic_01",
                 t"Items.Scarf_03_basic_02",
@@ -384,16 +310,7 @@ class OutfitSlotMatcher {
                 t"Items.Proficiency_Jumpsuit_02_rich_03_Crafting",
                 t"Items.Q114_Cyberspace_Jumpsuit"
             ])
-        ];
-
-        return instance;
-    }
-}
-
-class PatchOriginalClothingItems extends ScriptableTweak {
-    protected func OnApply() -> Void {
-        let outfitSlots = OutfitConfig.OutfitSlots();
-        let slotMatcher = OutfitSlotMatcher.Create();
+        ]);
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
