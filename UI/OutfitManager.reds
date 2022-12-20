@@ -44,7 +44,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
 
     private let m_leftMouseButtonPressed: Bool;
     private let m_isCursorOverItemGrid: Bool;
-    private let m_itemGridUpdateDelay: Float = 0.25;
+    private let m_itemGridUpdateDelay: Float = 0.5;
     private let m_itemGridUpdateDelayID: DelayID;
     private let m_scrollResetPending: Bool;
 
@@ -132,7 +132,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.InitializeSearchField();
 
         this.PopulateOutfitsList(true);
-        this.RefreshOutfitItemsList();
+        this.RefreshOutfitList();
     }
 
     protected cb func OnUninitialize() -> Bool {
@@ -162,7 +162,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_inventoryBlackboard.UnregisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemRemoved, this.m_itemRemovedCallback);
     }
 
-    private func InitializeItemGrid() -> Void {
+    private func InitializeItemGrid() {
         this.m_itemsClassifier = new TemplateClassifier();
         
         this.m_itemGridDataSource = new ScriptableDataSource();
@@ -179,7 +179,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.PopulateItemGrid();
     }
 
-    private func PopulateItemGrid() -> Void {
+    private func PopulateItemGrid() {
         let allItems = this.m_inventoryHelper.GetPlayerAndStashItems(this.m_itemDropQueue);
         let finalItems: array<ref<IScriptable>>;
         let slotItems: array<wref<gameItemData>>;
@@ -232,14 +232,19 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_itemGridDataSource.Reset(finalItems);
     }
 
-    private func UpdateScrollPosition(opt forceReset: Bool) -> Void {
+    private func RefreshItemGrid() {
+        this.m_itemGridDataView.ApplySortingAndFilters();
+        this.m_itemScrollController.UpdateScrollPositionFromScrollArea();
+    }
+
+    private func UpdateScrollPosition(opt forceReset: Bool) {
         if forceReset || this.m_scrollResetPending {
             this.m_itemScrollController.SetScrollPosition(0.0);
             this.m_scrollResetPending = false;
         }
     }
 
-    protected cb func QueueItemGridUpdate(opt resetScroll: Bool) -> Bool {
+    protected cb func QueueItemGridUpdate(opt resetScroll: Bool) {
         if resetScroll {
             this.m_scrollResetPending = true;
         }
@@ -248,11 +253,16 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_itemGridUpdateDelayID = this.m_delaySystem.DelayCallback(UpdateItemGridCallback.Create(this), this.m_itemGridUpdateDelay, false);
     }
 
-    protected cb func OnOutfitItemUpdated(evt: ref<OutfitItemUpdated>) -> Bool {
-        this.RefreshOutfitItemsList();
+    protected cb func OnOutfitUpdated(evt: ref<OutfitUpdated>) {
+        this.RefreshOutfitList();
+        this.RefreshItemGrid();
     }
 
-    protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) -> Bool {
+    protected cb func OnOutfitPartUpdated(evt: ref<OutfitPartUpdated>) {
+        this.RefreshOutfitList();
+    }
+
+    protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) {
         this.m_itemDropQueue = evt.m_dropQueue;
 
         if IsDefined(this.m_itemGridDataSource) {
@@ -260,23 +270,26 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         }
     }
 
-    protected cb func OnInventoryItemsChanged(value: Variant) -> Bool {
-        this.QueueItemGridUpdate();
+    protected cb func OnInventoryItemsChanged(value: Variant) {
+        let itemID = FromVariant<ItemID>(value);
+        if ItemID.IsValid(itemID) && this.m_outfitSystem.IsEquippable(itemID) {
+            this.QueueItemGridUpdate();
+        }
     }
 
-    protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) -> Bool {
+    protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) {
         this.UpdateScrollPosition(true);
         this.m_itemGridDataView.SetFilterType(this.m_filterManager.GetAt(selectedIndex));
         this.m_itemGridDataView.ApplySortingAndFilters();
     }
 
-    protected cb func OnSearchFieldInput(widget: wref<inkWidget>) -> Bool {
+    protected cb func OnSearchFieldInput(widget: wref<inkWidget>) {
         this.UpdateScrollPosition(true);
         this.m_itemGridDataView.SetSearchQuery(this.m_searchInput.GetText());
         this.m_itemGridDataView.ApplySortingAndFilters();
     }
 
-    private final func ShowItemTooltip(widget: wref<inkWidget>, item: wref<UIInventoryItem>) -> Void {
+    private final func ShowItemTooltip(widget: wref<inkWidget>, item: wref<UIInventoryItem>) {
         this.m_tooltipManager.HideTooltips();
 
         if IsDefined(item) {
@@ -285,7 +298,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         }
     }
 
-    private final func ShowItemButtonHints(item: wref<UIInventoryItem>) -> Void {
+    private final func ShowItemButtonHints(item: wref<UIInventoryItem>) {
         this.m_buttonHintsController.RemoveButtonHint(n"equip_item");
         this.m_buttonHintsController.RemoveButtonHint(n"unequip_item");
         
@@ -483,7 +496,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
       this.m_confirmationRequestToken = null;
     }
 
-    private func InitializeOutfitsLayout() -> Void {
+    private func InitializeOutfitsLayout() {
         let outerContainer: ref<inkCanvas> = new inkCanvas();
         outerContainer.SetName(n"OuterContainer");
         outerContainer.SetMargin(new inkMargin(100.0, 0.0, 0.0, 0.0));
@@ -532,7 +545,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_outfitsList.Reparent(verticalContainer);
     }
 
-    private func InitializeSearchField() -> Void {
+    private func InitializeSearchField() {
         let filterWrapper = this.GetRootCompoundWidget().GetWidget(n"wrapper/wrapper/vendorPanel/vendorHeader/inkHorizontalPanelWidget2") as inkCompoundWidget;
         let filterSpacing = this.m_filtersContainer.GetChildMargin();
 
@@ -549,7 +562,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.m_searchInput.Reparent(searchWrapper);
     }
 
-    private func PopulateOutfitsList(opt animate: Bool) -> Void {
+    private func PopulateOutfitsList(opt animate: Bool) {
         this.m_outfitsList.RemoveAllChildren();
 
         let buttonCreate = this.SpawnFromExternal(this.m_outfitsList, r"equipment_ex\\gui\\outfit_list_item.inkwidget", n"FiltersListItem:EquipmentEx.OutfitListItemController");
@@ -587,7 +600,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         }
     }
 
-    private func CreateOutfit(name: CName, opt createListItem: Bool) -> Void {
+    private func CreateOutfit(name: CName, opt createListItem: Bool) {
         if createListItem {
             this.SpawnOutfitListItem(name);
         }
@@ -596,13 +609,13 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         this.PopulateOutfitsList();
     }
 
-    private func DeleteOutfit(name: CName) -> Void {
+    private func DeleteOutfit(name: CName) {
         this.m_outfitsList.RemoveChildByName(name);
         this.m_outfitSystem.DeleteOutfit(name);
-        this.RefreshOutfitItemsList();
+        this.RefreshOutfitList();
     }
 
-    private func SpawnOutfitListItem(name: CName) -> Void {
+    private func SpawnOutfitListItem(name: CName) {
         let item = this.SpawnFromExternal(this.m_outfitsList, r"equipment_ex\\gui\\outfit_list_item.inkwidget", n"FiltersListItem:EquipmentEx.OutfitListItemController") as inkCompoundWidget;
         item.SetName(name);
         item.RegisterToCallback(n"OnPress", this, n"OnOutfitItemClick");
@@ -614,7 +627,7 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
         itemController.SetEquipped(this.m_outfitSystem.IsEquipped(name));
     }
 
-    private func RefreshOutfitItemsList() -> Void {
+    private func RefreshOutfitList() {
         let numChildren: Int32 = this.m_outfitsList.GetNumChildren();
         if numChildren < 2 { return ; }
 
@@ -657,10 +670,10 @@ public class TemplateClassifier extends inkVirtualItemTemplateClassifier {
 class UpdateItemGridCallback extends DelayCallback {
     protected let m_controller: wref<OutfitManagerController>;
 
-	public func Call() -> Void {
+	public func Call() {
         if IsDefined(this.m_controller) {
-            this.m_controller.PopulateItemGrid();
             this.m_controller.UpdateScrollPosition();
+            this.m_controller.PopulateItemGrid();
         }
 	}
 

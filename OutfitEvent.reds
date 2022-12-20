@@ -1,6 +1,11 @@
 module EquipmentEx
 
-public class OutfitItemUpdated extends Event {
+public class OutfitUpdated extends Event {
+    public let isActive: Bool;
+    public let outfitName: CName;
+}
+
+public class OutfitPartUpdated extends Event {
     public let itemID: ItemID;
     public let itemName: String;
     public let slotID: TweakDBID;

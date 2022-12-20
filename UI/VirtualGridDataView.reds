@@ -8,10 +8,21 @@ public class VirtualGridItemData extends VendorUIInventoryItemData {
 
 public class VirtualGridGroupData extends VirtualGridItemData {
     public let Children: array<wref<VirtualGridItemData>>;
+
+    protected func GetActiveItem() -> wref<VirtualGridItemData> {
+        for uiItem in this.Children {
+            if uiItem.Item.IsEquipped() {
+                return uiItem;
+            }
+        }
+
+        return null;
+    }
 }
 
 public class VirtualGridDataView extends BackpackDataView {
     private let m_filter: Bool;
+    private let m_refresh: Bool;
     private let m_reverse: Bool;
     private let m_searchQuery: String;
 
@@ -50,11 +61,11 @@ public class VirtualGridDataView extends BackpackDataView {
             }
         } else {
             if IsDefined(uiGroupData) {
-                uiItemData.IsVisible = false;
+                uiGroupData.IsVisible = false;
 
-                for child in uiGroupData.Children {
-                    if child.IsVisible {
-                        uiItemData.IsVisible = true;
+                for uiChildData in uiGroupData.Children {
+                    if uiChildData.IsVisible {
+                        uiGroupData.IsVisible = true;
                         break;
                     }
                 }

@@ -142,7 +142,7 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_transactionSystem.GivePreviewItemByItemID(this.m_player, itemID);
         this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
 
-        this.TriggerAttachEvent(itemID, slotID);
+        this.TriggerAttachmentEvent(itemID, slotID);
         this.UpdateBlackboard(itemID, slotID);
     }
 
@@ -151,7 +151,7 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
         this.m_transactionSystem.RemoveItem(this.m_player, previewID, 1);
 
-        this.TriggerDetachEvent(itemID, slotID);
+        this.TriggerDetachmentEvent(itemID, slotID);
         this.UpdateBlackboard(slotID);
     }
 
@@ -244,6 +244,8 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.ClearParts();
 
             this.CloneEquipment();
+            
+            this.TriggerActivationEvent();
         }
     }
 
@@ -253,6 +255,8 @@ public class OutfitSystem extends ScriptableSystem {
 
             this.m_state.SetActive(true);
             this.m_state.ClearParts();
+
+            this.TriggerActivationEvent();
         }
     }
 
@@ -264,6 +268,8 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.ClearParts();
 
             this.CloneEquipment(ItemID.None(), slotID);
+
+            this.TriggerActivationEvent();
         }
     }
 
@@ -275,6 +281,8 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.ClearParts();
 
             this.CloneEquipment(itemID, TDBID.None());
+
+            this.TriggerActivationEvent();
         }
     }
 
@@ -285,6 +293,8 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.SetActive(true);
             
             this.AttachAllVisualsToSlots(true);
+
+            this.TriggerActivationEvent();
         }
     }
 
@@ -294,6 +304,8 @@ public class OutfitSystem extends ScriptableSystem {
 
             this.ShowEquipment();
             this.DetachAllVisualsFromSlots(false);
+
+            this.TriggerDeactivationEvent();
         }
     }
 
@@ -470,8 +482,23 @@ public class OutfitSystem extends ScriptableSystem {
         return itemID;
     }
 
-    private func TriggerAttachEvent(itemID: ItemID, slotID: TweakDBID) {
-        let event = new OutfitItemUpdated();
+    private func TriggerActivationEvent(opt outfitName: CName) {
+        let event = new OutfitUpdated();
+        event.isActive = true;
+        event.outfitName = outfitName;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
+    }
+
+    private func TriggerDeactivationEvent() {
+        let event = new OutfitUpdated();
+        event.isActive = false;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
+    }
+
+    private func TriggerAttachmentEvent(itemID: ItemID, slotID: TweakDBID) {
+        let event = new OutfitPartUpdated();
         event.itemID = itemID;
         event.itemName = this.GetItemName(itemID);
         event.slotID = slotID;
@@ -481,8 +508,8 @@ public class OutfitSystem extends ScriptableSystem {
         GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
     }
 
-    private func TriggerDetachEvent(itemID: ItemID, slotID: TweakDBID) {
-        let event = new OutfitItemUpdated();
+    private func TriggerDetachmentEvent(itemID: ItemID, slotID: TweakDBID) {
+        let event = new OutfitPartUpdated();
         event.itemID = itemID;
         event.itemName = this.GetItemName(itemID);
         event.slotID = slotID;
@@ -594,6 +621,8 @@ public class OutfitSystem extends ScriptableSystem {
         for slotID in slots {
             this.UnequipSlot(slotID);
         }
+
+        this.TriggerActivationEvent(name);
 
         return true;
     }

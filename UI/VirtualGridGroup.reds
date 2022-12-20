@@ -1,7 +1,7 @@
 module EquipmentEx
 
 public class VirtualGridGroupController extends inkVirtualCompoundItemController {
-    protected let m_newData: ref<WrappedInventoryItemData>;
+    protected let m_uiData: ref<VirtualGridGroupData>;
     protected let m_slotNameText: ref<inkText>;
     protected let m_itemNameText: ref<inkText>;
     
@@ -38,30 +38,35 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
     }
 
     protected cb func OnDataChanged(value: Variant) {
-        this.m_newData = FromVariant<ref<IScriptable>>(value) as WrappedInventoryItemData;
-        this.UpdateView();
+        this.m_uiData = FromVariant<ref<IScriptable>>(value) as VirtualGridGroupData;
+
+        this.UpdateSlotInfo();
+        this.UpdateActiveItem();
     }
 
-    protected cb func OnOutfitItemUpdated(evt: ref<OutfitItemUpdated>) {
-        if Equals(this.m_newData.ItemData.SlotID, evt.slotID) {
-            this.m_newData.ItemData.ID = evt.itemID;
-            this.m_newData.ItemData.Name = evt.itemName;
-            this.m_newData.ItemData.IsEquipped = evt.isEquipped;
-            this.UpdateView();
+    protected cb func OnOutfitUpdated(evt: ref<OutfitUpdated>) {
+        this.UpdateActiveItem();
+    }
+
+    protected cb func OnOutfitPartUpdated(evt: ref<OutfitPartUpdated>) {
+        if Equals(this.m_uiData.ItemData.SlotID, evt.slotID) {
+            this.UpdateActiveItem();
         }
     }
 
-    protected func UpdateView() {
-        if IsDefined(this.m_newData) {
-            this.m_slotNameText.SetText(this.m_newData.ItemData.CategoryName);
+    protected func UpdateSlotInfo() {
+        this.m_slotNameText.SetText(this.m_uiData.ItemData.CategoryName);
+    }
 
-            if this.m_newData.ItemData.IsEquipped {
-                this.m_itemNameText.SetText(this.m_newData.ItemData.Name);
-                this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Blue");
-            } else {
-                this.m_itemNameText.SetText(GetLocalizedTextByKey(n"UI-Labels-EmptySlot"));
-                this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Grey");
-            }
+    protected func UpdateActiveItem() {
+        let uiActiveItem = this.m_uiData.GetActiveItem();
+        
+        if IsDefined(uiActiveItem) {
+            this.m_itemNameText.SetText(uiActiveItem.Item.GetName());
+            this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Blue");
+        } else {
+            this.m_itemNameText.SetText(GetLocalizedTextByKey(n"UI-Labels-EmptySlot"));
+            this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Grey");
         }
     }
 }
