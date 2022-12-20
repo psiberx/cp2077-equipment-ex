@@ -19,3 +19,9 @@ public final const func IsVisualSetActive() -> Bool {
 public final const func IsSlotOverriden(area: gamedataEquipmentArea) -> Bool {
     return wrappedMethod(area) || this.m_outfitSystem.IsActive();
 }
+
+@wrapMethod(EquipmentSystemPlayerData)
+public final func OnRestored() {
+    wrappedMethod();
+    this.UnequipWardrobeSet();
+}
