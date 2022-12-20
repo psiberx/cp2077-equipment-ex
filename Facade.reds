@@ -1,5 +1,9 @@
 import EquipmentEx.OutfitSystem
 
+public static func Print(const str: script_ref<String>) {
+    LogChannel(n"DEBUG", str);
+}
+
 public abstract class EquipmentEx {
     public static func Activate(game: GameInstance) {
         OutfitSystem.GetInstance(game).Activate();
@@ -41,16 +45,16 @@ public abstract class EquipmentEx {
             let transactionSystem = GameInstance.GetTransactionSystem(game);
             let player = GetPlayer(game);
 
-            LogChannel(n"DEBUG", "=== Equipped Items ===");
+            Print("=== Equipped Items ===");
             
             for slotID in usedSlots {
                 let itemID = transactionSystem.GetItemInSlot(player, slotID).GetItemID();
-                LogChannel(n"DEBUG", s"\(outfitSystem.GetSlotName(slotID)) : \(outfitSystem.GetItemName(itemID))");
+                Print(s"\(outfitSystem.GetSlotName(slotID)) : \(outfitSystem.GetItemName(itemID))");
             }
             
-            LogChannel(n"DEBUG", "===");
+            Print("===");
         } else {
-            LogChannel(n"DEBUG", "=== No Equipped Items ===");
+            Print("=== No Equipped Items ===");
         }
     }
 
@@ -68,7 +72,7 @@ public abstract class EquipmentEx {
                 command += s"EquipmentEx.EquipItem(\"\(TDBID.ToStringDEBUG(ItemID.GetTDBID(itemID)))\") ";
             }
             
-             LogChannel(n"DEBUG", command);
+             Print(command);
         }
     }
 
@@ -93,15 +97,15 @@ public abstract class EquipmentEx {
         let outfitNames = outfitSystem.GetOutfits();
 
         if ArraySize(outfitNames) > 0 {
-            LogChannel(n"DEBUG", "=== Saved Outfits ===");
+            Print("=== Saved Outfits ===");
 
             for outfitName in outfitNames {
-                LogChannel(n"DEBUG", NameToString(outfitName));
+                Print(NameToString(outfitName));
             }
 
-            LogChannel(n"DEBUG", "===");
+            Print("===");
         } else {
-            LogChannel(n"DEBUG", "=== No Saved Outfits ===");
+            Print("=== No Saved Outfits ===");
         }
     }
 }

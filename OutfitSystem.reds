@@ -141,19 +141,24 @@ public class OutfitSystem extends ScriptableSystem {
         let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
         this.m_transactionSystem.GivePreviewItemByItemID(this.m_player, itemID);
         this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
+
+        this.TriggerAttachEvent(itemID, slotID);
+        this.UpdateBlackboard(itemID, slotID);
     }
 
     private func DetachVisualFromSlot(itemID: ItemID, slotID: TweakDBID) {
         let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
         this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
         this.m_transactionSystem.RemoveItem(this.m_player, previewID, 1);
+
+        this.TriggerDetachEvent(itemID, slotID);
+        this.UpdateBlackboard(slotID);
     }
 
     private func AttachAllVisualsToSlots(opt refresh: Bool) {
         for part in this.m_state.GetParts() {
             if this.IsOutfitSlot(part.GetSlotID()) {
                 this.AttachVisualToSlot(part.GetItemID(), part.GetSlotID());
-                this.UpdateBlackboard(part.GetItemID(), part.GetSlotID());
 
                 if refresh {
                     this.RefreshSlotAttachment(part.GetSlotID());
@@ -166,7 +171,6 @@ public class OutfitSystem extends ScriptableSystem {
         for part in this.m_state.GetParts() {
             if this.IsOutfitSlot(part.GetSlotID()) {
                 this.DetachVisualFromSlot(part.GetItemID(), part.GetSlotID());
-                this.UpdateBlackboard(part.GetSlotID());
 
                 if refresh {
                     this.RefreshSlotAttachment(part.GetSlotID());
@@ -371,9 +375,8 @@ public class OutfitSystem extends ScriptableSystem {
         this.UnequipItem(itemID);
         this.UnequipSlot(slotID);
 
-        this.AttachVisualToSlot(itemID, slotID);
         this.AddItemToState(itemID, slotID);
-        this.UpdateBlackboard(itemID, slotID);
+        this.AttachVisualToSlot(itemID, slotID);
 
         return true;
     }
@@ -399,9 +402,8 @@ public class OutfitSystem extends ScriptableSystem {
 
         let slotID = part.GetSlotID();
 
-        this.DetachVisualFromSlot(itemID, slotID);
         this.RemoveItemFromState(itemID);
-        this.UpdateBlackboard(slotID);
+        this.DetachVisualFromSlot(itemID, slotID);
 
         return true;
     }
@@ -417,9 +419,8 @@ public class OutfitSystem extends ScriptableSystem {
 
         let itemID = part.GetItemID();
 
-        this.DetachVisualFromSlot(itemID, slotID);
         this.RemoveItemFromState(itemID);
-        this.UpdateBlackboard(slotID);
+        this.DetachVisualFromSlot(itemID, slotID);
 
         return true;
     }
@@ -429,9 +430,8 @@ public class OutfitSystem extends ScriptableSystem {
 
         for part in this.m_state.GetParts() {
             if this.IsOutfitSlot(part.GetSlotID()) {
-                this.DetachVisualFromSlot(part.GetItemID(), part.GetSlotID());
                 this.RemoveItemFromState(part.GetItemID());
-                this.UpdateBlackboard(part.GetSlotID());
+                this.DetachVisualFromSlot(part.GetItemID(), part.GetSlotID());
             }
         }
     }
@@ -468,6 +468,28 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         return itemID;
+    }
+
+    private func TriggerAttachEvent(itemID: ItemID, slotID: TweakDBID) {
+        let event = new OutfitItemUpdated();
+        event.itemID = itemID;
+        event.itemName = this.GetItemName(itemID);
+        event.slotID = slotID;
+        event.slotName = this.GetSlotName(slotID);
+        event.isEquipped = true;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
+    }
+
+    private func TriggerDetachEvent(itemID: ItemID, slotID: TweakDBID) {
+        let event = new OutfitItemUpdated();
+        event.itemID = itemID;
+        event.itemName = this.GetItemName(itemID);
+        event.slotID = slotID;
+        event.slotName = this.GetSlotName(slotID);
+        event.isEquipped = false;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);       
     }
 
     private func UpdateBlackboard(slotID: TweakDBID) {

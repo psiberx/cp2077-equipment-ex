@@ -42,9 +42,11 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
         this.UpdateView();
     }
 
-    protected cb func OnRefresh(evt: ref<ItemDisplayRefreshEvent>) {
-        if Equals(this.m_newData.ItemData.SlotID, evt.uiInventoryItem.m_slotID) {
-            this.m_newData.Item = evt.uiInventoryItem;
+    protected cb func OnOutfitItemUpdated(evt: ref<OutfitItemUpdated>) {
+        if Equals(this.m_newData.ItemData.SlotID, evt.slotID) {
+            this.m_newData.ItemData.ID = evt.itemID;
+            this.m_newData.ItemData.Name = evt.itemName;
+            this.m_newData.ItemData.IsEquipped = evt.isEquipped;
             this.UpdateView();
         }
     }
@@ -53,8 +55,8 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
         if IsDefined(this.m_newData) {
             this.m_slotNameText.SetText(this.m_newData.ItemData.CategoryName);
 
-            if this.m_newData.Item.IsEquipped() {
-                this.m_itemNameText.SetText(this.m_newData.Item.GetName());
+            if this.m_newData.ItemData.IsEquipped {
+                this.m_itemNameText.SetText(this.m_newData.ItemData.Name);
                 this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Blue");
             } else {
                 this.m_itemNameText.SetText(GetLocalizedTextByKey(n"UI-Labels-EmptySlot"));
