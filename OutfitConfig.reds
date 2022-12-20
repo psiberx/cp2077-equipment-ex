@@ -21,6 +21,17 @@ struct ExtraSlotConfig {
     }
 }
 
+struct AppearanceSuffixConfig {
+    public let suffixID: TweakDBID;
+    public let suffixName: CName;
+    public let system: CName;
+    public let method: CName;
+
+    public static func Create(suffixName: CName, system: CName, method: CName) -> AppearanceSuffixConfig {
+        return new AppearanceSuffixConfig(TDBID.Create(NameToString(suffixName)), suffixName, system, method);
+    }
+}
+
 public abstract class OutfitConfig {
     public static func BaseSlots() -> array<BaseSlotConfig> = [
         BaseSlotConfig.Create(t"AttachmentSlots.Head", gamedataEquipmentArea.Head),
@@ -91,5 +102,9 @@ public abstract class OutfitConfig {
         // Full Body
         ExtraSlotConfig.Create(n"OutfitSlots.BodyInner", -10, t"AttachmentSlots.Torso", "Inner Body"),
         ExtraSlotConfig.Create(n"OutfitSlots.BodyOuter", 0, t"AttachmentSlots.Torso", "Outer Body")
+    ];
+
+    public static func AppearanceSuffixes() -> array<AppearanceSuffixConfig> = [
+        AppearanceSuffixConfig.Create(n"itemsFactoryAppearanceSuffix.LegsState", n"EquipmentEx.OutfitSystem", n"GetLegsStateSuffix")
     ];
 }

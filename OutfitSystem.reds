@@ -639,6 +639,20 @@ public class OutfitSystem extends ScriptableSystem {
         return slots;
     }
 
+    private func GetLegsStateSuffix(itemD: ItemID, owner: wref<GameObject>, suffixRecord: ref<ItemsFactoryAppearanceSuffixBase_Record>) -> String {
+        if Equals((this.m_player as gamePuppet).GetResolvedGenderName(), n"Male") {
+            return "";
+        }
+
+        let isLifted = this.m_state.IsActive()
+            ? !this.m_transactionSystem.IsSlotEmpty(this.m_player, t"OutfitSlots.Feet") 
+                || this.m_transactionSystem.IsSlotEmptySpawningItem(this.m_player, t"OutfitSlots.Feet")
+            : !this.m_transactionSystem.IsSlotEmpty(this.m_player, t"AttachmentSlots.Feet") 
+                || this.m_transactionSystem.IsSlotEmptySpawningItem(this.m_player, t"AttachmentSlots.Feet");
+        
+        return isLifted ? "Lifted" : "Flat";
+    }
+
     public static func GetInstance(game: GameInstance) -> ref<OutfitSystem> {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
     }
