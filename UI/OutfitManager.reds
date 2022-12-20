@@ -344,8 +344,11 @@ public class OutfitManagerController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnPreviewOver(evt: ref<inkPointerEvent>) -> Bool {
-        this.m_buttonHintsController.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
-        this.m_buttonHintsController.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
+        if this.m_player.PlayerLastUsedKBM() {
+            this.m_buttonHintsController.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
+            this.m_buttonHintsController.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
+        }
+
         this.m_isCursorOverItemGrid = false;
     }
 
