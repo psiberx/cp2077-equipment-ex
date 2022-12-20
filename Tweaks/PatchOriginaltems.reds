@@ -307,6 +307,7 @@ class PatchOriginaltems extends ScriptableTweak {
                 t"Items.Jumpsuit_02_rich_01",
                 t"Items.Jumpsuit_02_rich_02",
                 t"Items.Jumpsuit_02_rich_03",
+                t"Items.Jumpsuit_02_old_02",
                 t"Items.Proficiency_Jumpsuit_02_rich_03_Crafting",
                 t"Items.Q114_Cyberspace_Jumpsuit"
             ])
