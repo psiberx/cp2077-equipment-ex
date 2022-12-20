@@ -1,6 +1,6 @@
 module EquipmentEx
 
-class ConfigureClothingSlots extends ScriptableTweak {
+class RegisterOutfitSlots extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
 

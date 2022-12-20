@@ -1,6 +1,6 @@
 module EquipmentEx
 
-class PatchOriginalClothingItems extends ScriptableTweak {
+class PatchOriginaltems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
         let slotMatcher = OutfitSlotMatcher.Create();
