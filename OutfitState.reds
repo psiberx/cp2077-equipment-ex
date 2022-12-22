@@ -285,10 +285,6 @@ class OutfitState {
     }
 
     public func IsOutfit(name: CName) -> Bool {
-        if Equals(name, n"") {
-            return !this.m_active;
-        }
-
         let outfit = this.GetOutfit(name);
 
         return IsDefined(outfit) ? this.m_hash == outfit.GetHash() : false;

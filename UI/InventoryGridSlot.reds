@@ -1,6 +1,6 @@
 module EquipmentEx
 
-public class InventoryGridSlotController extends inkVirtualCompoundItemController {
+class InventoryGridSlotController extends inkVirtualCompoundItemController {
     protected let m_uiSlot: ref<InventoryGridSlotData>;
     protected let m_slotNameText: ref<inkText>;
     protected let m_itemNameText: ref<inkText>;

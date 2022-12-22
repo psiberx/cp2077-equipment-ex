@@ -592,7 +592,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func IsEquipped(name: CName) -> Bool {
-        return this.m_state.IsActive() && this.m_state.IsOutfit(name);
+        return this.m_state.IsActive() ? this.m_state.IsOutfit(name) : Equals(name, n"");
     }
 
     public func HasOutfit(name: CName) -> Bool {
@@ -628,7 +628,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func SaveOutfit(name: CName, opt overwrite: Bool) -> Bool {
-        // TODO: Clone equipment when not active
+        this.Activate();
 
         return this.m_state.SaveOutfit(name, overwrite, this.GetTimestamp());
     }
@@ -644,13 +644,16 @@ public class OutfitSystem extends ScriptableSystem {
     public func GetOutfits() -> array<CName> {
         let outfits: array<CName>;
         
-        for outfit in this.m_state.GetOutfits() {
-            let index = 0;
-            while index < ArraySize(outfits) && StrCmp(NameToString(outfit.GetName()), NameToString(outfits[index])) > 0 {
-                index += 1;
-            }
+        // for outfit in this.m_state.GetOutfits() {
+        //     let index = 0;
+        //     while index < ArraySize(outfits) && StrCmp(NameToString(outfit.GetName()), NameToString(outfits[index])) > 0 {
+        //         index += 1;
+        //     }
+        //     ArrayInsert(outfits, index, outfit.GetName());
+        // }
 
-            ArrayInsert(outfits, index, outfit.GetName());
+        for outfit in this.m_state.GetOutfits() {
+            ArrayPush(outfits, outfit.GetName());
         }
 
         return outfits;
@@ -708,7 +711,7 @@ public class OutfitSystem extends ScriptableSystem {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
     }
 
-    public static func Version() -> String = "0.5.0";
+    public static func Version() -> String = "0.6.0";
 }
 
 public class AttachmentSlotsCallback extends AttachmentSlotsScriptCallback {

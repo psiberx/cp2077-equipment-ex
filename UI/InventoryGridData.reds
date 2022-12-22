@@ -1,12 +1,12 @@
 module EquipmentEx
 
-public class InventoryGridItemData extends VendorUIInventoryItemData {
+class InventoryGridItemData extends VendorUIInventoryItemData {
     public let SlotIndex: Int32;
     public let ItemIndex: Int32;
     public let IsVisible: Bool;
 }
 
-public class InventoryGridSlotData extends InventoryGridItemData {
+class InventoryGridSlotData extends InventoryGridItemData {
     public let SlotID: TweakDBID;
     public let SlotName: String;
     public let Children: array<wref<InventoryGridItemData>>;
@@ -22,7 +22,7 @@ public class InventoryGridSlotData extends InventoryGridItemData {
     }
 }
 
-public class InventoryGridDataView extends BackpackDataView {
+class InventoryGridDataView extends BackpackDataView {
     private let m_filter: Bool;
     private let m_refresh: Bool;
     private let m_reverse: Bool;
@@ -32,7 +32,7 @@ public class InventoryGridDataView extends BackpackDataView {
         this.m_searchQuery = StrLower(searchQuery);
     }
 
-    public func ApplySortingAndFilters() {
+    public func UpdateView() {
         this.DisableSorting();
         this.m_filter = true;
         this.Filter();
@@ -87,7 +87,7 @@ public class InventoryGridDataView extends BackpackDataView {
     }
 }
 
-public class InventoryGridTemplateClassifier extends inkVirtualItemTemplateClassifier {
+class InventoryGridTemplateClassifier extends inkVirtualItemTemplateClassifier {
     public func ClassifyItem(data: Variant) -> Uint32 {
         return IsDefined(FromVariant<ref<IScriptable>>(data) as InventoryGridSlotData) ? 1u : 0u;
     }

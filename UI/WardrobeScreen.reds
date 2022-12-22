@@ -29,7 +29,6 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_inventoryGridTemplateClassifier: ref<inkVirtualItemTemplateClassifier>;
     protected let m_inventoryGridUpdateDelay: Float = 0.5;
     protected let m_inventoryGridUpdateDelayID: DelayID;
-    protected let m_isCursorOverInventoryGrid: Bool;
 
     protected let m_searchInput: ref<HubTextInput>;
 
@@ -38,8 +37,11 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_itemRemovedCallback: ref<CallbackHandle>;
 
     protected let m_previewWrapper: wref<inkWidget>;
-    protected let m_leftMouseButtonPressed: Bool;
-    
+
+    protected let m_isPreviewMouseHold: Bool;
+    protected let m_isCursorOverManager: Bool;
+    protected let m_isCursorOverPreview: Bool;
+
     protected let m_itemDisplayContext: ref<ItemDisplayContextData>;
 
     protected cb func OnInitialize() -> Bool {
@@ -67,7 +69,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_inventoryGridController = this.m_inventoryGridArea.GetController() as inkVirtualGridController;
 
         // this.m_itemInteractionArea = this.m_inventoryScrollArea.GetWidget(n"interactiveArea");
-        this.m_isCursorOverInventoryGrid = true;        
+        this.m_isCursorOverManager = false;
+        this.m_isCursorOverPreview = false;
 
         this.m_tooltipManager = this.GetRootWidget().GetControllerByType(n"gameuiTooltipsManager") as gameuiTooltipsManager;
         this.m_tooltipManager.Setup(ETooltipsStyle.Menus);
@@ -103,11 +106,14 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         // this.m_inventoryManager.Initialize(this.m_player);
 
         // Listeners
+
+        this.m_outfitManager.RegisterToCallback(n"OnEnter", this, n"OnManagerHoverOver");
+        this.m_outfitManager.RegisterToCallback(n"OnLeave", this, n"OnManagerHoverOut");
         
         this.m_previewWrapper.RegisterToCallback(n"OnPress", this, n"OnPreviewPress");
         this.m_previewWrapper.RegisterToCallback(n"OnRelative", this, n"OnPreviewRelative");
-        this.m_previewWrapper.RegisterToCallback(n"OnHoverOver", this, n"OnPreviewOver");
-        this.m_previewWrapper.RegisterToCallback(n"OnHoverOut", this, n"OnPreviewOut");
+        this.m_previewWrapper.RegisterToCallback(n"OnEnter", this, n"OnPreviewHoverOver");
+        this.m_previewWrapper.RegisterToCallback(n"OnLeave", this, n"OnPreviewHoverOut");
 
         this.RegisterToGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.RegisterToGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
@@ -232,7 +238,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected func RefreshInventoryGrid() {
-        this.m_inventoryGridDataView.ApplySortingAndFilters();
+        this.m_inventoryGridDataView.UpdateView();
         this.m_inventoryScrollController.UpdateScrollPositionFromScrollArea();
     }
 
@@ -274,13 +280,13 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) {
         this.UpdateScrollPosition(true);
         this.m_inventoryGridDataView.SetFilterType(this.m_filterManager.GetAt(selectedIndex));
-        this.m_inventoryGridDataView.ApplySortingAndFilters();
+        this.m_inventoryGridDataView.UpdateView();
     }
 
     protected cb func OnSearchFieldInput(widget: wref<inkWidget>) {
         this.UpdateScrollPosition(true);
         this.m_inventoryGridDataView.SetSearchQuery(this.m_searchInput.GetText());
-        this.m_inventoryGridDataView.ApplySortingAndFilters();
+        this.m_inventoryGridDataView.UpdateView();
     }
 
     protected final func ShowItemTooltip(widget: wref<inkWidget>, item: wref<UIInventoryItem>) {
@@ -331,12 +337,19 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected cb func OnInventoryItemHoverOut(evt: ref<ItemDisplayHoverOutEvent>) {
         this.ShowItemButtonHints(null);
         this.m_tooltipManager.HideTooltips();
-        // this.m_lastItemHoverOverEvent = null;
+    }
+
+    protected cb func OnManagerHoverOver(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_isCursorOverManager = true;
+    }
+
+    protected cb func OnManagerHoverOut(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_isCursorOverManager = false;
     }
 
     protected cb func OnPreviewPress(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_left") {
-            this.m_leftMouseButtonPressed = true;
+            this.m_isPreviewMouseHold = true;
 
             let cursorEvent = new inkMenuLayer_SetCursorVisibility();
             cursorEvent.Init(false);
@@ -353,19 +366,20 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
-    protected cb func OnPreviewOver(evt: ref<inkPointerEvent>) -> Bool {
+    protected cb func OnPreviewHoverOver(evt: ref<inkPointerEvent>) -> Bool {
         if this.m_player.PlayerLastUsedKBM() {
             this.m_buttonHints.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
             this.m_buttonHints.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
         }
 
-        this.m_isCursorOverInventoryGrid = false;
+        this.m_isCursorOverPreview = true;
     }
 
-    protected cb func OnPreviewOut(evt: ref<inkPointerEvent>) -> Bool {
+    protected cb func OnPreviewHoverOut(evt: ref<inkPointerEvent>) -> Bool {
         this.m_buttonHints.RemoveButtonHint(n"mouse_wheel");
         this.m_buttonHints.RemoveButtonHint(n"mouse_left");
-        this.m_isCursorOverInventoryGrid = true;
+
+        this.m_isCursorOverPreview = false;
     }
 
     protected cb func OnGlobalPress(evt: ref<inkPointerEvent>) -> Bool {
@@ -377,8 +391,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnGlobalRelease(evt: ref<inkPointerEvent>) -> Bool {
-        if this.m_leftMouseButtonPressed && evt.IsAction(n"mouse_left") {
-            this.m_leftMouseButtonPressed = false;
+        if this.m_isPreviewMouseHold && evt.IsAction(n"mouse_left") {
+            this.m_isPreviewMouseHold = false;
 
             let cursorEvent = new inkMenuLayer_SetCursorVisibility();
             cursorEvent.Init(true, new Vector2(0.50, 0.50));
@@ -390,10 +404,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
     protected cb func OnGlobalRelative(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_wheel") {
-            this.m_inventoryScrollController.SetEnabled(this.m_isCursorOverInventoryGrid);
+            this.m_inventoryScrollController.SetEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
         }
 
-        if this.m_leftMouseButtonPressed && evt.IsAction(n"mouse_x") {
+        if this.m_isPreviewMouseHold && evt.IsAction(n"mouse_x") {
             let previewPuppet = this.m_inventoryHelper.GetPreview();
 
             let ratio: Float;

@@ -1,22 +1,24 @@
 module EquipmentEx
 
-public class OutfitManagerController extends inkLogicController {
+class OutfitManagerController extends inkLogicController {
     protected let m_player: wref<PlayerPuppet>;
     protected let m_outfitSystem: wref<OutfitSystem>;
 
     protected let m_wardrobeScreen: wref<WardrobeScreenController>;
     protected let m_buttonHints: wref<ButtonHints>;
 
-    protected let m_outfitsList: ref<inkVerticalPanel>;
+    protected let m_outfitList: ref<inkVirtualListController>;
+    protected let m_outfitListDataView: ref<OutfitListDataView>;
+    protected let m_outfitListDataSource: ref<ScriptableDataSource>;
+    protected let m_outfitListTemplateClassifier: ref<inkVirtualItemTemplateClassifier>;
+    protected let m_outfitListScroll: wref<inkScrollController>;
 
-    protected let m_confirmationRequestToken: ref<inkGameNotificationToken>;
-    protected let m_overwriteRequestToken: ref<inkGameNotificationToken>;
-    protected let m_lastHoveredOutfit: CName;
-    protected let m_outfitToCreate: CName;
-    protected let m_outfitToDelete: CName;
+    protected let m_popupToken: ref<inkGameNotificationToken>;
+    protected let m_popupOutfit: CName;
 
     protected cb func OnInitialize() -> Bool {
         this.InitializeLayout();
+        this.InitializeList();
     }
 
     public func Setup(outfitSystem: wref<OutfitSystem>, wardrobeScreen: wref<WardrobeScreenController>, buttonHints: wref<ButtonHints>) {
@@ -24,237 +26,251 @@ public class OutfitManagerController extends inkLogicController {
         this.m_wardrobeScreen = wardrobeScreen;
         this.m_buttonHints = buttonHints;
 
-        this.PopulateOutfitList(true);
-        this.RefreshOutfitList();
+        this.PopulateList();
     }
 
     protected func InitializeLayout() {
-        let outerContainer: ref<inkCanvas> = new inkCanvas();
-        outerContainer.SetName(n"OuterContainer");
-        outerContainer.SetMargin(new inkMargin(100.0, 0.0, 0.0, 0.0));
-        outerContainer.Reparent(this.GetRootCompoundWidget());
+        this.m_outfitListScroll = this.GetChildWidgetByPath(n"scroll_wrapper").GetControllerByType(n"inkScrollController") as inkScrollController;
 
-        let verticalContainer: ref<inkVerticalPanel> = new inkVerticalPanel();
-        verticalContainer.SetName(n"Vertical");
-        verticalContainer.SetChildMargin(new inkMargin(0.0, 0.0, 20.0, 0.0));
-        verticalContainer.Reparent(outerContainer);
+        let scrollArea = this.GetChildWidgetByPath(n"scroll_wrapper/scroll_area");
+        scrollArea.RegisterToCallback(n"OnScrollChanged", this, n"OnScrollChanged");
 
-        let inputLabel: ref<inkText> = new inkText();
-        inputLabel = new inkText();
-        inputLabel.SetName(n"InputLabel");
-        inputLabel.SetText("LocKey#82878");
-        inputLabel.SetFontFamily("base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily");
-        inputLabel.SetHAlign(inkEHorizontalAlign.Left);
-        inputLabel.SetVAlign(inkEVerticalAlign.Top);
-        inputLabel.SetAnchor(inkEAnchor.TopLeft);
-        inputLabel.SetAnchorPoint(1.0, 1.0);
-        inputLabel.SetLetterCase(textLetterCase.UpperCase);
-        inputLabel.SetMargin(new inkMargin(28.0, 0.0, 0.0, 4.0));
-        inputLabel.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
-        inputLabel.BindProperty(n"tintColor", n"MainColors.Red");
-        inputLabel.BindProperty(n"fontStyle", n"MainColors.BodyFontWeight");
-        inputLabel.BindProperty(n"fontSize", n"MainColors.ReadableFontSize");
-        inputLabel.Reparent(verticalContainer);
+        let header = new inkVerticalPanel();
+        header.SetName(n"header");
+        header.SetChildMargin(new inkMargin(130.0, 0.0, 20.0, 0.0));
+        header.Reparent(this.GetRootCompoundWidget());
 
-        let divider: ref<inkRectangle> = new inkRectangle();
+        let title = new inkText();
+        title = new inkText();
+        title.SetName(n"title");
+        title.SetText("LocKey#82878");
+        title.SetFontFamily("base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily");
+        title.SetLetterCase(textLetterCase.UpperCase);
+        title.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
+        title.BindProperty(n"tintColor", n"MainColors.Red");
+        title.BindProperty(n"fontStyle", n"MainColors.BodyFontWeight");
+        title.BindProperty(n"fontSize", n"MainColors.ReadableFontSize");
+        title.SetAnchor(inkEAnchor.TopLeft);
+        title.SetMargin(new inkMargin(0.0, 0.0, 0.0, 4.0));
+        title.Reparent(header);
+
+        let divider = new inkRectangle();
         divider.SetName(n"divider");
-        divider.SetHAlign(inkEHorizontalAlign.Left);
-        divider.SetVAlign(inkEVerticalAlign.Top);
-        divider.SetAnchor(inkEAnchor.TopLeft);
-        divider.SetSize(840.0, 3.0);
-        divider.SetMargin(new inkMargin(28.0, 0.0, 0.0, 15.0));
-        divider.SetOpacity(0.3);
+        divider.SetMargin(new inkMargin(0.0, 0.0, 0.0, 15.0));
         divider.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
         divider.BindProperty(n"tintColor", n"MainColors.Red");
-        divider.Reparent(verticalContainer);
-
-        this.m_outfitsList = new inkVerticalPanel();
-        this.m_outfitsList.SetName(n"OutfitsList");
-        this.m_outfitsList.SetHAlign(inkEHorizontalAlign.Left);
-        this.m_outfitsList.SetVAlign(inkEVerticalAlign.Fill);
-        this.m_outfitsList.SetMargin(new inkMargin(0.0, 20.0, 0.0, 0.0));
-        this.m_outfitsList.SetChildMargin(new inkMargin(0.0, 10.0, 0.0, 0.0));
-        this.m_outfitsList.Reparent(verticalContainer);
+        divider.SetOpacity(0.3);
+        divider.SetSize(800.0, 3.0);
+        divider.Reparent(header);
     }
 
-    protected func PopulateOutfitList(opt animate: Bool) {
-        this.m_outfitsList.RemoveAllChildren();
-
-        let buttonCreate = this.SpawnFromLocal(this.m_outfitsList, n"OutfitListItem:EquipmentEx.OutfitListItemController");
-        buttonCreate.SetName(n"ButtonCreate");
-        buttonCreate.RegisterToCallback(n"OnPress", this, n"OnCreateButtonClick");
-        let buttonCreateController = buttonCreate.GetController() as OutfitListItemController;
-        buttonCreateController.SetCustomAppearance("Save outfit", n"MainColors.ActiveBlue");
-        buttonCreateController.HideCheckboxFrame();
-        buttonCreateController.SetEquipped(false);
+    protected func InitializeList() {
+        this.m_outfitListDataSource = new ScriptableDataSource();
+        this.m_outfitListDataView = new OutfitListDataView();
+        this.m_outfitListDataView.SetSource(this.m_outfitListDataSource);
+        this.m_outfitListTemplateClassifier = new OutfitListTemplateClassifier();
         
-        let buttonNoOutfit = this.SpawnFromLocal(this.m_outfitsList, n"OutfitListItem:EquipmentEx.OutfitListItemController");
-        buttonNoOutfit.SetName(n"ButtonNoOutfit");
-        buttonNoOutfit.RegisterToCallback(n"OnPress", this, n"OnNoOutfitButtonClick");
-        let buttonNoOutfitController = buttonNoOutfit.GetController() as OutfitListItemController;
-        buttonNoOutfitController.SetCustomAppearance("No outfit", n"MainColors.Red");
-        buttonNoOutfitController.SetEquipped(!this.m_outfitSystem.IsActive());
+        this.m_outfitList = this.GetChildWidgetByPath(n"scroll_wrapper/scroll_area/outfit_list").GetController() as inkVirtualListController;
+        this.m_outfitList.SetClassifier(this.m_outfitListTemplateClassifier);
+        this.m_outfitList.SetSource(this.m_outfitListDataView);
+    }
 
-        for name in this.m_outfitSystem.GetOutfits() {
-            this.SpawnOutfitListItem(name);
+    protected func PopulateList() {
+        let saveAction = new OutfitListEntryData();
+        saveAction.Title = "Save outfit";
+        saveAction.Color = n"MainColors.ActiveBlue";
+        saveAction.Action = OutfitListAction.Save;
+        saveAction.Postition = 1;
+
+        let unequipAction = new OutfitListEntryData();
+        unequipAction.Title = "No outfit";
+        unequipAction.Action = OutfitListAction.Unequip;
+        unequipAction.IsSelectable = true;
+        unequipAction.IsSelected = !this.m_outfitSystem.IsActive();
+        unequipAction.Postition = 2;
+
+        this.m_outfitListDataSource.Clear();
+        this.m_outfitListDataSource.AppendItem(saveAction);
+        this.m_outfitListDataSource.AppendItem(unequipAction);
+
+        for outfitName in this.m_outfitSystem.GetOutfits() {
+            this.AppendToList(outfitName, false);
         }
 
-        if animate {
-            let controller: ref<OutfitListItemController>;
-            let delay: Float = 30.0;
-            let numChildren: Int32 = this.m_outfitsList.GetNumChildren();
-            let i: Int32 = 0;
-            while i < numChildren {
-                delay = Cast<Float>(i) / 20.0;
-                controller = this.m_outfitsList.GetWidgetByIndex(i).GetController() as OutfitListItemController;
-                if IsDefined(controller) {
-                    controller.PlayIntroAnimation(delay);
+        this.m_outfitListDataView.UpdateView();
+    }
+
+    protected func AppendToList(outfitName: CName, opt updateView: Bool) {
+        let outfitEntry = new OutfitListEntryData();
+        outfitEntry.Name = outfitName;
+        outfitEntry.Title = NameToString(outfitName);
+        outfitEntry.IsRemovable = true;
+        outfitEntry.IsSelectable = true;
+        outfitEntry.IsSelected = this.m_outfitSystem.IsEquipped(outfitEntry.Name);
+
+        this.m_outfitListDataSource.AppendItem(outfitEntry);
+
+        if updateView {
+            this.m_outfitListDataView.UpdateView();
+        }
+    }
+
+    protected func RemoveFromList(outfitName: CName, opt updateView: Bool) {
+        for data in this.m_outfitListDataSource.GetArray() {
+            let outfitEntry = data as OutfitListEntryData;
+            if Equals(outfitEntry.Name, outfitName)  {
+                this.m_outfitListDataSource.RemoveItem(outfitEntry);
+
+                if updateView {
+                    this.m_outfitListDataView.UpdateView();
                 }
-                i += 1;
+
+                break;
             }
         }
     }
 
-    protected func SpawnOutfitListItem(name: CName) {
-        let item = this.SpawnFromLocal(this.m_outfitsList, n"OutfitListItem:EquipmentEx.OutfitListItemController") as inkCompoundWidget;
-        item.SetName(name);
-        item.RegisterToCallback(n"OnPress", this, n"OnOutfitItemClick");
-        item.RegisterToCallback(n"OnHoverOver", this, n"OnHoverOverOutfitItem");
-        item.RegisterToCallback(n"OnHoverOut", this, n"OnHoverOutOutfitItem");
-
-        let itemController = item.GetController() as OutfitListItemController;
-        itemController.SetText(NameToString(name));
-        itemController.SetEquipped(this.m_outfitSystem.IsEquipped(name));
-    }
-
-    protected func RefreshOutfitList() {
-        let numChildren: Int32 = this.m_outfitsList.GetNumChildren();
-        if numChildren < 2 { return ; }
-
-        let child: ref<inkWidget>;
-        let childName: CName;
-        let controller: ref<OutfitListItemController>;
-        let i: Int32 = 0;
-        while i < numChildren {
-            child = this.m_outfitsList.GetWidgetByIndex(i);
-            childName = child.GetName();
-            controller = child.GetController() as OutfitListItemController;
-            if IsDefined(controller) {
-                if Equals(childName, n"ButtonNoOutfit") {
-                    controller.SetEquipped(!this.m_outfitSystem.IsActive());
-                } else {
-                    if Equals(childName, n"ButtonCreate") {
-                        controller.SetEnabled(this.m_outfitSystem.IsActive());
-                    } else {
-                        controller.SetEquipped(this.m_outfitSystem.IsEquipped(childName));
-                    }
+    protected func RefreshList(opt updateState: Bool) {
+        if updateState {
+            for data in this.m_outfitListDataSource.GetArray() {
+                let outfitEntry = data as OutfitListEntryData;
+                if outfitEntry.IsSelectable {
+                    outfitEntry.IsSelected = this.m_outfitSystem.IsEquipped(outfitEntry.Name);
                 }
             }
-            i += 1;
         }
+
+        this.QueueEvent(new OutfitListRefresh());
     }
 
-    protected cb func OnCreateButtonClick(evt: ref<inkPointerEvent>) -> Bool {
-        if evt.IsAction(n"activate") && this.m_outfitSystem.IsActive() {
+    protected cb func OnOutfitListEntryClick(evt: ref<OutfitListEntryClick>) {
+        if evt.action.IsAction(n"click") {
             this.PlaySound(n"Button", n"OnPress");
-            this.m_confirmationRequestToken = GenericMessageNotification.ShowInput(this.m_wardrobeScreen, "Save outfit", "Enter outfit name:", GenericMessageNotificationType.ConfirmCancel);
-            this.m_confirmationRequestToken.RegisterListener(this, n"OnCreateOutfitConfirmation");
+
+            switch evt.entry.Action {
+                case OutfitListAction.Equip:
+                    this.m_outfitSystem.LoadOutfit(evt.entry.Name);
+                    break;
+                case OutfitListAction.Unequip:
+                    this.m_outfitSystem.Deactivate();
+                    break;
+                case OutfitListAction.Save:
+                    this.ShowSaveOutfitPopup();
+                    break;
+            }
+
+            this.ShowButtonHints(evt.entry);
+            return;
+        }
+
+        if evt.action.IsAction(n"drop_item") {
+            this.ShowDeleteOutfitPopup(evt.entry.Name);
         }
     }
 
-    protected cb func OnCreateOutfitConfirmation(data: ref<inkGameNotificationData>) -> Bool {
+    protected cb func OnOutfitListEntryItemHoverOver(evt: ref<OutfitListEntryHoverOver>) {
+        this.ShowButtonHints(evt.entry);
+    }
+
+    protected cb func OnOutfitListEntryItemHoverOut(evt: ref<OutfitListEntryHoverOut>) {
+        this.ShowButtonHints(null);
+    }
+
+    protected cb func ShowSaveOutfitPopup() {
+        this.m_popupToken = GenericMessageNotification.ShowInput(this.m_wardrobeScreen, "Save outfit", "Enter outfit name:", GenericMessageNotificationType.ConfirmCancel);
+        this.m_popupToken.RegisterListener(this, n"OnSaveOutfitPopupClosed");
+    }
+
+    protected cb func OnSaveOutfitPopupClosed(data: ref<inkGameNotificationData>) {
         let resultData = data as GenericMessageNotificationCloseData;
+
         if Equals(resultData.result, GenericMessageNotificationResult.Confirm) && NotEquals(resultData.input, "") {
-            let newOutfit = StringToName(resultData.input);
-            if this.m_outfitSystem.HasOutfit(newOutfit) {
-                this.m_overwriteRequestToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedText("UI-Wardrobe-LabelWarning"), "Outfit with this name already exists, do you want to overwrite it?", GenericMessageNotificationType.ConfirmCancel);
-                this.m_overwriteRequestToken.RegisterListener(this, n"OnOverwriteOutfitConfirmation");
-                this.m_outfitToCreate = newOutfit;
-            } else {
-                this.CreateOutfit(newOutfit, true);
+            let outfitName = StringToName(resultData.input);
+
+            if this.m_outfitSystem.HasOutfit(outfitName) {
+                this.ShowOverwritefitPopup(outfitName);
+                return;
+            }
+            
+            this.PlaySound(n"Item", n"OnBuy");
+            
+            if this.m_outfitSystem.SaveOutfit(outfitName, true) {
+                this.AppendToList(outfitName, true);
             }
         }
-        this.m_confirmationRequestToken = null;
+
+        this.ResetPopupState();
     }
 
-    protected cb func OnOverwriteOutfitConfirmation(data: ref<inkGameNotificationData>) -> Bool {
+    protected cb func ShowOverwritefitPopup(outfitName: CName) {
+        this.m_popupOutfit = outfitName;
+        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedText("UI-Wardrobe-LabelWarning"), "Outfit with this name already exists, do you want to overwrite it?", GenericMessageNotificationType.ConfirmCancel);
+        this.m_popupToken.RegisterListener(this, n"OnOverwriteOutfitPopupClosed");
+    }
+
+    protected cb func OnOverwriteOutfitPopupClosed(data: ref<inkGameNotificationData>) {
         let resultData = data as GenericMessageNotificationCloseData;
+
         if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
-            this.CreateOutfit(this.m_outfitToCreate);
-        }
-        this.m_outfitToCreate = n"";
-        this.m_overwriteRequestToken = null;
-    }
+            this.PlaySound(n"Item", n"OnBuy");
 
-    protected cb func OnOutfitItemClick(evt: ref<inkPointerEvent>) -> Bool {
-        if evt.IsAction(n"activate") {
-            this.PlaySound(n"Button", n"OnPress");
-            this.m_outfitSystem.LoadOutfit(evt.GetTarget().GetName());
-        }
-
-        if evt.IsAction(n"drop_item") && NotEquals(this.m_lastHoveredOutfit, n"") {
-            this.m_outfitToDelete = this.m_lastHoveredOutfit;
-            this.m_confirmationRequestToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedText("UI-Wardrobe-LabelWarning"), GetLocalizedText("UI-Wardrobe-NotificationDeleteSet"), GenericMessageNotificationType.ConfirmCancel);
-            this.m_confirmationRequestToken.RegisterListener(this, n"OnDeleteOutfitConfirmation");
-            evt.Consume();
-        }
-    }
-
-    protected cb func OnNoOutfitButtonClick(evt: ref<inkPointerEvent>) -> Bool {
-        if evt.IsAction(n"activate") {
-            this.PlaySound(n"Button", n"OnPress");
-            this.m_outfitSystem.Deactivate();
-        }
-    }
-
-    protected cb func OnHoverOverOutfitItem(evt: ref<inkPointerEvent>) -> Bool {
-        let item: ref<inkWidget> = evt.GetTarget();
-        let controller: ref<OutfitListItemController> = item.GetController() as OutfitListItemController;
-        if IsDefined(controller) {
-            this.m_lastHoveredOutfit = item.GetName();
-            this.m_buttonHints.AddButtonHint(n"drop_item", GetLocalizedTextByKey(n"UI-Wardrobe-Deleteset"));
-            if !controller.IsChecked() {
-                this.m_buttonHints.AddButtonHint(n"activate", GetLocalizedTextByKey(n"Gameplay-Devices-Interactions-Equip"));
+            if this.m_outfitSystem.SaveOutfit(this.m_popupOutfit, true) {
+                this.RefreshList(true);
             }
         }
+
+        this.ResetPopupState();
     }
 
-    protected cb func OnHoverOutOutfitItem(evt: ref<inkPointerEvent>) -> Bool {
-        this.m_buttonHints.RemoveButtonHint(n"activate");
-        this.m_buttonHints.RemoveButtonHint(n"drop_item");
-        this.m_lastHoveredOutfit = n"";
+    protected cb func ShowDeleteOutfitPopup(outfitName: CName) {
+        this.m_popupOutfit = outfitName;
+        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedText("UI-Wardrobe-LabelWarning"), GetLocalizedText("UI-Wardrobe-NotificationDeleteSet"), GenericMessageNotificationType.ConfirmCancel);
+        this.m_popupToken.RegisterListener(this, n"OnDeleteOutfitPopupClosed");
     }
 
-    protected cb func OnDeleteOutfitConfirmation(data: ref<inkGameNotificationData>) -> Bool {
-      let resultData: ref<GenericMessageNotificationCloseData> = data as GenericMessageNotificationCloseData;
-      if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
-          this.PlaySound(n"Item", n"OnDisassemble");
-          this.DeleteOutfit(this.m_outfitToDelete);
-      }
-      this.m_outfitToDelete = n"";
-      this.m_confirmationRequestToken = null;
-    }
+    protected cb func OnDeleteOutfitPopupClosed(data: ref<inkGameNotificationData>) {
+        let resultData = data as GenericMessageNotificationCloseData;
 
-    protected func CreateOutfit(name: CName, opt createListItem: Bool) {
-        if createListItem {
-            this.SpawnOutfitListItem(name);
+        if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
+            this.PlaySound(n"Item", n"OnDisassemble");
+
+            if this.m_outfitSystem.DeleteOutfit(this.m_popupOutfit) {
+                this.RemoveFromList(this.m_popupOutfit, true);
+            }
         }
-        this.PlaySound(n"Item", n"OnBuy");
-        this.m_outfitSystem.SaveOutfit(name, true);
-        this.PopulateOutfitList();
+
+        this.ResetPopupState();
     }
 
-    protected func DeleteOutfit(name: CName) {
-        this.m_outfitsList.RemoveChildByName(name);
-        this.m_outfitSystem.DeleteOutfit(name);
-        this.RefreshOutfitList();
+    protected func ResetPopupState() {
+        this.m_popupOutfit = n"";
+        this.m_popupToken = null;
+    }
+
+    protected func ShowButtonHints(entry: wref<OutfitListEntryData>) {
+        this.m_buttonHints.RemoveButtonHint(n"click");
+        this.m_buttonHints.RemoveButtonHint(n"drop_item");
+        
+        if IsDefined(entry) {
+            if entry.IsRemovable {
+                this.m_buttonHints.AddButtonHint(n"drop_item", GetLocalizedTextByKey(n"UI-Wardrobe-Deleteset"));
+            }
+
+            if entry.IsSelectable && !entry.IsSelected {
+                this.m_buttonHints.AddButtonHint(n"click", GetLocalizedTextByKey(n"Gameplay-Devices-Interactions-Equip"));
+            }
+        }
     }
 
     protected cb func OnOutfitUpdated(evt: ref<OutfitUpdated>) {
-        this.RefreshOutfitList();
+        this.RefreshList(true);
     }
 
     protected cb func OnOutfitPartUpdated(evt: ref<OutfitPartUpdated>) {
-        this.RefreshOutfitList();
+        this.RefreshList(true);
+    }
+
+    protected cb func OnScrollChanged(value: Vector2) {
+        this.RefreshList();
     }
 }
