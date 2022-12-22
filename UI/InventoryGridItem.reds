@@ -1,6 +1,6 @@
 module EquipmentEx
 
-public class VirtualGridItemController extends VendorItemVirtualController {
+public class InventoryGridItemController extends VendorItemVirtualController {
     protected cb func OnOutfitUpdated(evt: ref<OutfitUpdated>) {
         this.UpdateEquippedState();
     }

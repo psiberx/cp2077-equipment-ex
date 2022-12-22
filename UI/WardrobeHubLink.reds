@@ -1,6 +1,6 @@
 module EquipmentEx
 
-public class WardrobeHubLink extends MenuItemController {
+public class WardrobeHubLinkController extends MenuItemController {
     protected cb func OnInitialize() -> Bool {
         super.OnInitialize();
 

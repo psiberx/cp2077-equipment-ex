@@ -1,6 +1,6 @@
 module EquipmentEx
 
-public class WardrobeSlotBtn extends WardrobeOutfitSlotController {
+public class WardrobeHubBtnController extends WardrobeOutfitSlotController {
     protected cb func OnInitialize() -> Bool {
         super.OnInitialize();
 

@@ -6,5 +6,5 @@ protected cb func OnInitialize() -> Bool {
     this.GetChildWidgetByPath(n"setEditorScreenContainer").SetVisible(false);
     this.GetChildWidgetByPath(n"constantContainer/paperDoll").SetVisible(false);
 
-    this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\outfit_manager.inkwidget", n"Root:EquipmentEx.OutfitManagerController");
+    this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController");
 }

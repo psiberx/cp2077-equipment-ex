@@ -19,10 +19,10 @@ private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) 
         wardrobeInfo.Reparent(wardrobeContainer);
 
         // let wardrobeLink = this.SpawnFromLocal(wardrobeContainer, n"HyperlinkButton:EquipmentEx.WardrobeHubLink");
-        // wardrobeLink.RegisterToCallback(n"OnClick", this.m_inventoryController, n"OnOutfitManagerClick");
+        // wardrobeLink.RegisterToCallback(n"OnClick", this.m_inventoryController, n"OnWardrobeScreenClick");
         // wardrobeLink.SetMargin(new inkMargin(16.0, 0.0, 0.0, 0.0));
 
-        let wardrobeBtn = this.SpawnFromLocal(wardrobeContainer, n"wardrobeOutfitSlot:EquipmentEx.WardrobeSlotBtn");
+        let wardrobeBtn = this.SpawnFromLocal(wardrobeContainer, n"wardrobeOutfitSlot:EquipmentEx.WardrobeHubBtnController");
         wardrobeBtn.SetMargin(new inkMargin(16.0, 0.0, 0.0, 0.0));
 
         this.m_outfitWardrobeSpawned = true;
@@ -31,7 +31,7 @@ private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) 
 
 @replaceMethod(InventoryItemModeLogicController)
 protected cb func OnWardrobeOutfitSlotClicked(e: ref<WardrobeOutfitSlotClickedEvent>) -> Bool {
-    this.m_inventoryController.ShowOutfitManager();
+    this.m_inventoryController.ShowWardrobeScreen();
 }
 
 @replaceMethod(InventoryItemModeLogicController)

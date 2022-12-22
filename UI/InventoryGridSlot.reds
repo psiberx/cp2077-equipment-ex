@@ -1,7 +1,7 @@
 module EquipmentEx
 
-public class VirtualGridGroupController extends inkVirtualCompoundItemController {
-    protected let m_uiData: ref<VirtualGridGroupData>;
+public class InventoryGridSlotController extends inkVirtualCompoundItemController {
+    protected let m_uiSlot: ref<InventoryGridSlotData>;
     protected let m_slotNameText: ref<inkText>;
     protected let m_itemNameText: ref<inkText>;
     
@@ -12,6 +12,7 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
         container.SetVAlign(inkEVerticalAlign.Center);
         container.SetAnchor(inkEAnchor.CenterLeft);
         container.SetAnchorPoint(0.0, 0.5);
+        container.Reparent(this.GetRootCompoundWidget());
 
         this.m_slotNameText = new inkText();
         this.m_slotNameText.SetName(n"slot_name");
@@ -33,12 +34,10 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
         this.m_itemNameText.BindProperty(n"fontSize", n"MainColors.ReadableXSmall");
         this.m_itemNameText.SetFitToContent(true);
         this.m_itemNameText.Reparent(container);
-
-        container.Reparent(this.GetRootCompoundWidget());
     }
 
     protected cb func OnDataChanged(value: Variant) {
-        this.m_uiData = FromVariant<ref<IScriptable>>(value) as VirtualGridGroupData;
+        this.m_uiSlot = FromVariant<ref<IScriptable>>(value) as InventoryGridSlotData;
 
         this.UpdateSlotInfo();
         this.UpdateActiveItem();
@@ -49,20 +48,20 @@ public class VirtualGridGroupController extends inkVirtualCompoundItemController
     }
 
     protected cb func OnOutfitPartUpdated(evt: ref<OutfitPartUpdated>) {
-        if Equals(this.m_uiData.ItemData.SlotID, evt.slotID) {
+        if Equals(this.m_uiSlot.ItemData.SlotID, evt.slotID) {
             this.UpdateActiveItem();
         }
     }
 
     protected func UpdateSlotInfo() {
-        this.m_slotNameText.SetText(this.m_uiData.ItemData.CategoryName);
+        this.m_slotNameText.SetText(this.m_uiSlot.ItemData.CategoryName);
     }
 
     protected func UpdateActiveItem() {
-        let uiActiveItem = this.m_uiData.GetActiveItem();
+        let uiItem = this.m_uiSlot.GetActiveItem();
         
-        if IsDefined(uiActiveItem) {
-            this.m_itemNameText.SetText(uiActiveItem.Item.GetName());
+        if IsDefined(uiItem) {
+            this.m_itemNameText.SetText(uiItem.Item.GetName());
             this.m_itemNameText.BindProperty(n"tintColor", n"MainColors.Blue");
         } else {
             this.m_itemNameText.SetText(GetLocalizedTextByKey(n"UI-Labels-EmptySlot"));

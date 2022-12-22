@@ -15,14 +15,14 @@ protected cb func OnInitialize() -> Bool {
 
     this.m_outfitSystem = OutfitSystem.GetInstance(this.GetPlayerControlledObject().GetGame());
 
-    this.m_wardrobeButton.RegisterToCallback(n"OnClick", this, n"OnOutfitManagerClick");
+    this.m_wardrobeButton.RegisterToCallback(n"OnClick", this, n"OnWardrobeScreenClick");
 }
 
 @wrapMethod(gameuiInventoryGameController)
 protected cb func OnUninitialize() -> Bool {
     wrappedMethod();
 
-    this.m_wardrobeButton.UnregisterFromCallback(n"OnClick", this, n"OnOutfitManagerClick");
+    this.m_wardrobeButton.UnregisterFromCallback(n"OnClick", this, n"OnWardrobeScreenClick");
 }
 
 @replaceMethod(gameuiInventoryGameController)
@@ -31,7 +31,7 @@ private final func SetupSetButton() -> Void {
     let btnList = this.GetChildWidgetByPath(n"default_wrapper/menuLinks/btnsContainer") as inkCompoundWidget;
 
     // Spawn new button
-    this.m_wardrobeButton = this.SpawnFromLocal(btnList, n"HyperlinkButton:EquipmentEx.WardrobeHubLink");
+    this.m_wardrobeButton = this.SpawnFromLocal(btnList, n"HyperlinkButton:EquipmentEx.WardrobeHubLinkController");
 
     // Adjust button container size
     let btnSpacing = btnList.GetChildMargin();
@@ -47,29 +47,29 @@ private final func SetupSetButton() -> Void {
 }
 
 @addMethod(gameuiInventoryGameController)
-protected cb func OnOutfitManagerClick(evt: ref<inkPointerEvent>) -> Bool {
+protected cb func OnWardrobeScreenClick(evt: ref<inkPointerEvent>) -> Bool {
     if evt.IsAction(n"click") {
-        this.ShowOutfitManager();
+        this.ShowWardrobeScreen();
     }
 }
 
 @wrapMethod(gameuiInventoryGameController)
 protected cb func OnBack(userData: ref<IScriptable>) -> Bool {
-    if this.m_outfitManagerReady && IsDefined(this.GetChildWidgetByPath(n"outfit_manager")) {
-        return this.HideOutfitManager();
+    if this.m_outfitManagerReady && IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
+        return this.HideWardrobeScreen();
     } else {
         return wrappedMethod(userData);
     }
 }
 
 @addMethod(gameuiInventoryGameController)
-protected func ShowOutfitManager() -> Bool {
-    if IsDefined(this.GetChildWidgetByPath(n"outfit_manager")) {
+protected func ShowWardrobeScreen() -> Bool {
+    if IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
         return false;
     }
 
-    let outfitManager = this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\outfit_manager.inkwidget", n"Root:EquipmentEx.OutfitManagerController") as inkCompoundWidget;
-    outfitManager.SetName(n"outfit_manager");
+    let outfitManager = this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController") as inkCompoundWidget;
+    outfitManager.SetName(n"wardrobe");
 
     let alphaAnim = new inkAnimTransparency();
     alphaAnim.SetStartTransparency(0.0);
@@ -82,7 +82,7 @@ protected func ShowOutfitManager() -> Bool {
     animDef.AddInterpolator(alphaAnim);
 
     outfitManager.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
-    // animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnOutfitManagerShown");
+    // animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnWardrobeScreenShown");
 
     this.m_outfitManagerReady = true;
 
@@ -92,7 +92,7 @@ protected func ShowOutfitManager() -> Bool {
         this.PlayLibraryAnimation(n"default_wrapper_outro");
     }
 
-    this.GetChildWidgetByPath(n"outfit_manager/wrapper/preview").SetVisible(false);
+    this.GetChildWidgetByPath(n"wardrobe/wrapper/preview").SetVisible(false);
     this.PlaySlidePaperdollAnimationToOutfit();
 
     this.m_buttonHintsController.Hide();
@@ -105,18 +105,18 @@ protected func ShowOutfitManager() -> Bool {
 }
 
 // @addMethod(gameuiInventoryGameController)
-// protected cb func OnOutfitManagerShown(anim: ref<inkAnimProxy>) {
-//     LogDebug(s"OnOutfitManagerShown \(this.GetRootCompoundWidget().GetNumChildren())");
+// protected cb func OnWardrobeScreenShown(anim: ref<inkAnimProxy>) {
+//     LogDebug(s"OnWardrobeScreenShown \(this.GetRootCompoundWidget().GetNumChildren())");
 //     this.m_outfitManagerReady = true;
 // }
 
 @addMethod(gameuiInventoryGameController)
-protected func HideOutfitManager() -> Bool {
+protected func HideWardrobeScreen() -> Bool {
     if !this.m_outfitManagerReady {
         return false;
     }
 
-    let outfitManager = this.GetChildWidgetByPath(n"outfit_manager") as inkCompoundWidget;
+    let outfitManager = this.GetChildWidgetByPath(n"wardrobe") as inkCompoundWidget;
 
     this.m_outfitManagerReady = false;
     
@@ -131,7 +131,7 @@ protected func HideOutfitManager() -> Bool {
     animDef.AddInterpolator(alphaAnim);
 
     let animProxy = outfitManager.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
-    animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnOutfitManagerHidden");
+    animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnWardrobeScreenHidden");
 
     if Equals(this.m_mode, InventoryModes.Item) {
         this.SwapMode(InventoryModes.Default);
@@ -140,7 +140,7 @@ protected func HideOutfitManager() -> Bool {
 
     this.PlayLibraryAnimation(n"default_wrapper_Intro");
 
-    this.GetChildWidgetByPath(n"outfit_manager/wrapper/preview").SetVisible(false);
+    this.GetChildWidgetByPath(n"wardrobe/wrapper/preview").SetVisible(false);
     inkWidgetRef.SetVisible(this.m_paperDollWidget, true);
 
     this.PlaySlidePaperdollAnimation(PaperdollPositionAnimation.Center, false);
@@ -152,13 +152,13 @@ protected func HideOutfitManager() -> Bool {
 }
 
 @addMethod(gameuiInventoryGameController)
-protected cb func OnOutfitManagerHidden(anim: ref<inkAnimProxy>) {
-    this.GetRootCompoundWidget().RemoveChildByName(n"outfit_manager");
+protected cb func OnWardrobeScreenHidden(anim: ref<inkAnimProxy>) {
+    this.GetRootCompoundWidget().RemoveChildByName(n"wardrobe");
 }
 
 @addMethod(gameuiInventoryGameController)
 protected final func PlaySlidePaperdollAnimationToOutfit() {
-    let outfitPreview = this.GetChildWidgetByPath(n"outfit_manager/wrapper/preview");
+    let outfitPreview = this.GetChildWidgetByPath(n"wardrobe/wrapper/preview");
     let outfitPreviewMargin = outfitPreview.GetMargin();
 
     let translationInterpolator = new inkAnimTranslation();
@@ -179,7 +179,7 @@ protected final func PlaySlidePaperdollAnimationToOutfit() {
 @addMethod(gameuiInventoryGameController)
 protected cb func OnPaperDollSlideComplete(anim: ref<inkAnimProxy>) {
     inkWidgetRef.SetVisible(this.m_paperDollWidget, false);
-    this.GetChildWidgetByPath(n"outfit_manager/wrapper/preview").SetVisible(true);
+    this.GetChildWidgetByPath(n"wardrobe/wrapper/preview").SetVisible(true);
 }
 
 @wrapMethod(gameuiInventoryGameController)
