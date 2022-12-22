@@ -23,5 +23,9 @@ public final const func IsSlotOverriden(area: gamedataEquipmentArea) -> Bool {
 @wrapMethod(EquipmentSystemPlayerData)
 public final func OnRestored() {
     wrappedMethod();
+    
     this.UnequipWardrobeSet();
 }
+
+@replaceMethod(EquipmentSystemPlayerData)
+public final func EquipWardrobeSet(setID: gameWardrobeClothingSetIndex) {}
