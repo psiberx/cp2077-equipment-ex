@@ -1,7 +1,9 @@
 /.dev
 /.idea
 /.vscode
-/dist
+/archive/packed
+/archive/source/raw/**/*.json
+/archive/install_log.xml
+/build
 /*.log
-/Debug.reds
 ~$*
