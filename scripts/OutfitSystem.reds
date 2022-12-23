@@ -591,6 +591,20 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
+    public func EquipPreview(puppet: ref<gamePuppet>, itemID: ItemID) {
+        let slotID = this.GetItemSlot(itemID);
+        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+        this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
+        this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
+    }
+
+    public func UnequipPreview(puppet: ref<gamePuppet>, itemID: ItemID) {
+        let slotID = this.GetItemSlot(itemID);
+        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+        this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
+        this.m_transactionSystem.RemoveItem(puppet, previewID, 1);
+    }
+
     public func IsEquipped(name: CName) -> Bool {
         return this.m_state.IsActive() ? this.m_state.IsOutfit(name) : Equals(name, n"");
     }
