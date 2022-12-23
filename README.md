@@ -5,7 +5,7 @@
 - Accessible from Hub menu and apartment's closet
 - Compatible with vanilla and custom items
 
-## How to make compatible items
+## Compatible items
 
 Any item can support one base slot and one outfit slot at the same time,
 making the item compatible with both the game equipment system and the outfit system.
@@ -31,7 +31,7 @@ Items.MyNecklace:
 
 If user doesn't have Equipment-EX installed, the item will still work with the base slot.
 
-Supported slots:
+## Outfit slots
 
 | Slot name                   | Purpose                           |
 |:----------------------------|:----------------------------------|
@@ -66,3 +66,9 @@ Supported slots:
 | `OutfitSlots.Feet`          | Footwear                          |
 | `OutfitSlots.BodyInner`     | Tight-fitting Suits               |
 | `OutfitSlots.BodyOuter`     | Jumpsuits, Tracksuits             |
+
+When proposing a new slot, please follow these recommendations:
+
+- The purpose of the slot must be clear and distinguishable from other slots
+- The slot must represent a body part
+- If the slot cannot be bound to a body part, then the equipment category should be used
