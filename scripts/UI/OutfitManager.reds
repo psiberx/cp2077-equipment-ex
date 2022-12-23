@@ -77,13 +77,13 @@ class OutfitManagerController extends inkLogicController {
 
     protected func PopulateList() {
         let saveAction = new OutfitListEntryData();
-        saveAction.Title = "Save outfit";
+        saveAction.Title = GetLocalizedTextByKey(n"UI-Wardrobe-SaveSet");
         saveAction.Color = n"MainColors.ActiveBlue";
         saveAction.Action = OutfitListAction.Save;
         saveAction.Postition = 1;
 
         let unequipAction = new OutfitListEntryData();
-        unequipAction.Title = "No outfit";
+        unequipAction.Title = GetLocalizedTextByKey(n"UI-Wardrobe-NoOutfit");
         unequipAction.Action = OutfitListAction.Unequip;
         unequipAction.IsSelectable = true;
         unequipAction.IsSelected = !this.m_outfitSystem.IsActive();
@@ -177,7 +177,7 @@ class OutfitManagerController extends inkLogicController {
     }
 
     protected cb func ShowSaveOutfitPopup() {
-        this.m_popupToken = GenericMessageNotification.ShowInput(this.m_wardrobeScreen, "Save outfit", "Enter outfit name:", GenericMessageNotificationType.ConfirmCancel);
+        this.m_popupToken = GenericMessageNotification.ShowInput(this.m_wardrobeScreen, GetLocalizedTextByKey(n"UI-Wardrobe-SaveSet"), GetLocalizedTextByKey(n"UI-Wardrobe-NotificationSaveSet"), GenericMessageNotificationType.ConfirmCancel);
         this.m_popupToken.RegisterListener(this, n"OnSaveOutfitPopupClosed");
     }
 
@@ -188,7 +188,7 @@ class OutfitManagerController extends inkLogicController {
             let outfitName = StringToName(resultData.input);
 
             if this.m_outfitSystem.HasOutfit(outfitName) {
-                this.ShowOverwritefitPopup(outfitName);
+                this.ShowReplaceOutfitPopup(outfitName);
                 return;
             }
             
@@ -202,13 +202,13 @@ class OutfitManagerController extends inkLogicController {
         this.ResetPopupState();
     }
 
-    protected cb func ShowOverwritefitPopup(outfitName: CName) {
+    protected cb func ShowReplaceOutfitPopup(outfitName: CName) {
         this.m_popupOutfit = outfitName;
-        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedText("UI-Wardrobe-LabelWarning"), "Outfit with this name already exists, do you want to overwrite it?", GenericMessageNotificationType.ConfirmCancel);
-        this.m_popupToken.RegisterListener(this, n"OnOverwriteOutfitPopupClosed");
+        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedTextByKey(n"UI-Wardrobe-SaveSet"), GetLocalizedTextByKey(n"UI-Wardrobe-NotificationReplaceSet"), GenericMessageNotificationType.ConfirmCancel);
+        this.m_popupToken.RegisterListener(this, n"OnReplaceOutfitPopupClosed");
     }
 
-    protected cb func OnOverwriteOutfitPopupClosed(data: ref<inkGameNotificationData>) {
+    protected cb func OnReplaceOutfitPopupClosed(data: ref<inkGameNotificationData>) {
         let resultData = data as GenericMessageNotificationCloseData;
 
         if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
@@ -224,7 +224,7 @@ class OutfitManagerController extends inkLogicController {
 
     protected cb func ShowDeleteOutfitPopup(outfitName: CName) {
         this.m_popupOutfit = outfitName;
-        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedText("UI-Wardrobe-LabelWarning"), GetLocalizedText("UI-Wardrobe-NotificationDeleteSet"), GenericMessageNotificationType.ConfirmCancel);
+        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedTextByKey(n"UI-Wardrobe-Deleteset"), GetLocalizedTextByKey(n"UI-Wardrobe-NotificationDeleteSet"), GenericMessageNotificationType.ConfirmCancel);
         this.m_popupToken.RegisterListener(this, n"OnDeleteOutfitPopupClosed");
     }
 

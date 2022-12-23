@@ -17,7 +17,7 @@ struct ExtraSlotConfig {
     public let displayName: String;
 
     public static func Create(slotName: CName, garmentOffset: Int32, relatedSlotID: TweakDBID, displayName: String) -> ExtraSlotConfig {
-        return new ExtraSlotConfig(TDBID.Create(NameToString(slotName)), slotName, garmentOffset, relatedSlotID, displayName);
+        return new ExtraSlotConfig(TDBID.Create(NameToString(slotName)), slotName, garmentOffset, relatedSlotID, "Gameplay-" + StrReplace(NameToString(slotName), ".", "-"));
     }
 }
 
@@ -42,7 +42,6 @@ public abstract class OutfitConfig {
         BaseSlotConfig.Create(t"AttachmentSlots.Feet", gamedataEquipmentArea.Feet)
     ];
 
-    // TODO: Create localization keys
     public static func OutfitSlots() -> array<ExtraSlotConfig> = [
         // Head
         ExtraSlotConfig.Create(n"OutfitSlots.Headwear", 0, t"AttachmentSlots.Head", "Headwear"),
@@ -58,35 +57,35 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"OutfitSlots.EarRight", 0, t"", "Right Ear"),
 
         // Neck
-        ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0, t"", "Neckwear"), // Scarves / Ties
+        ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0, t"", "Neckwear"),
         ExtraSlotConfig.Create(n"OutfitSlots.NecklaceShort", -1, t"", "Short Necklace"),
         ExtraSlotConfig.Create(n"OutfitSlots.NecklaceLong", -1, t"", "Long Necklace"),
 
         // Torso
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoInner", -3, t"AttachmentSlots.Chest", "Inner Torso"), // Bras / Tops / T-Shirts
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoMiddle", -2, t"AttachmentSlots.Torso", "Middle Torso"), // Shirts / Vests
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoOuter", 1, t"AttachmentSlots.Torso", "Outer Torso"), // Jackets / Coats / Dresses
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoAux", 2, t"AttachmentSlots.Torso", "Aux Torso"), // Tactical Vests
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoInner", -3, t"AttachmentSlots.Chest", "Inner Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoMiddle", -2, t"AttachmentSlots.Torso", "Middle Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoOuter", 1, t"AttachmentSlots.Torso", "Outer Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoAux", 2, t"AttachmentSlots.Torso", "Aux Torso"),
 
         // Shoulders
         ExtraSlotConfig.Create(n"OutfitSlots.ShoulderLeft", -1, t"", "Left Shoulder"),
         ExtraSlotConfig.Create(n"OutfitSlots.ShoulderRight", -1, t"", "Right Shoulder"),
 
         // Wrists
-        ExtraSlotConfig.Create(n"OutfitSlots.WristLeft", -1, t"", "Left Wrist"), // Watches / Bands
+        ExtraSlotConfig.Create(n"OutfitSlots.WristLeft", -1, t"", "Left Wrist"),
         ExtraSlotConfig.Create(n"OutfitSlots.WristRight", -1, t"", "Right Wrist"),
 
         // Hands
-        ExtraSlotConfig.Create(n"OutfitSlots.HandLeft", -1, t"", "Left Hand"), // Gloves / Rings
+        ExtraSlotConfig.Create(n"OutfitSlots.HandLeft", -1, t"", "Left Hand"),
         ExtraSlotConfig.Create(n"OutfitSlots.HandRight", -1, t"", "Right Hand"),
 
         // Waist
-        ExtraSlotConfig.Create(n"OutfitSlots.Waist", 1, t"", "Waist"), // Belts
+        ExtraSlotConfig.Create(n"OutfitSlots.Waist", 1, t"", "Waist"),
 
         // Legs
-        ExtraSlotConfig.Create(n"OutfitSlots.LegsInner", -3, t"AttachmentSlots.Legs", "Inner Legs"), // Thights
-        ExtraSlotConfig.Create(n"OutfitSlots.LegsMiddle", -1, t"AttachmentSlots.Legs", "Middle Legs"), // Thight Pants / Thight Shorts
-        ExtraSlotConfig.Create(n"OutfitSlots.LegsOuter", 0, t"AttachmentSlots.Legs", "Outer Legs"), // Loose Pants / Loose Shorts / Skirts
+        ExtraSlotConfig.Create(n"OutfitSlots.LegsInner", -3, t"AttachmentSlots.Legs", "Inner Legs"),
+        ExtraSlotConfig.Create(n"OutfitSlots.LegsMiddle", -1, t"AttachmentSlots.Legs", "Middle Legs"),
+        ExtraSlotConfig.Create(n"OutfitSlots.LegsOuter", 0, t"AttachmentSlots.Legs", "Outer Legs"),
 
         // Thighs
         ExtraSlotConfig.Create(n"OutfitSlots.ThighLeft", -2, t"", "Left Thigh"),

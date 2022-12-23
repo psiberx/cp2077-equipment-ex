@@ -47,8 +47,6 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected cb func OnInitialize() -> Bool {
         super.OnInitialize();
 
-        (this.GetChildWidgetByPath(n"wrapper/wrapper/vendorPanel/vendorHeader/vendoHeaderWrapper/vendorNameWrapper/value") as inkText).SetLocalizedTextString("LocKey#83290");
-        
         this.m_player = this.GetPlayerControlledObject() as PlayerPuppet;
         this.m_outfitSystem = OutfitSystem.GetInstance(this.m_player.GetGame());
         this.m_inventoryHelper = InventoryHelper.GetInstance(this.m_player.GetGame());
@@ -57,7 +55,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_uiInventorySystem = UIInventoryScriptableSystem.GetInstance(this.m_player.GetGame());
 
         this.m_buttonHints = this.SpawnFromExternal(this.GetChildWidgetByPath(n"button_hints"), r"base\\gameplay\\gui\\common\\buttonhints.inkwidget", n"Root").GetController() as ButtonHints;
-        this.m_buttonHints.AddButtonHint(n"back", GetLocalizedText("Common-Access-Close"));
+        this.m_buttonHints.AddButtonHint(n"back", GetLocalizedTextByKey(n"Common-Access-Close"));
 
         this.m_outfitManager = this.SpawnFromLocal(this.GetChildWidgetByPath(n"wrapper/wrapper"), n"OutfitManager:EquipmentEx.OutfitManagerController").GetController() as OutfitManagerController;
         this.m_outfitManager.Setup(this.m_outfitSystem, this, this.m_buttonHints);
@@ -160,7 +158,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.m_searchInput = HubTextInput.Create();
         this.m_searchInput.SetName(n"SearchTextInput");
-        this.m_searchInput.SetDefaultText("Search by name");
+        this.m_searchInput.SetDefaultText(GetLocalizedTextByKey(n"UI-Wardrobe-SearchByName"));
         this.m_searchInput.SetLetterCase(textLetterCase.UpperCase);
         this.m_searchInput.SetMaxLength(24);
         this.m_searchInput.RegisterToCallback(n"OnInput", this, n"OnSearchFieldInput");
@@ -304,9 +302,9 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         
         if IsDefined(item) {
             if item.IsEquipped() {
-                this.m_buttonHints.AddButtonHint(n"unequip_item", GetLocalizedText("UI-UserActions-Unequip"));
+                this.m_buttonHints.AddButtonHint(n"unequip_item", GetLocalizedTextByKey(n"UI-UserActions-Unequip"));
             } else {
-                this.m_buttonHints.AddButtonHint(n"equip_item", GetLocalizedText("UI-UserActions-Equip"));
+                this.m_buttonHints.AddButtonHint(n"equip_item", GetLocalizedTextByKey(n"UI-UserActions-Equip"));
             }
         }
     }

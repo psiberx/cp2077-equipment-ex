@@ -673,7 +673,7 @@ public class OutfitSystem extends ScriptableSystem {
 
     public func GetSlotName(slotID: TweakDBID) -> String {
         let key = TweakDBInterface.GetAttachmentSlotRecord(slotID).LocalizedName();
-        let name = GetLocalizedText(key);
+        let name = GetLocalizedTextByKey(StringToName(key));
         return NotEquals(name, "") ? name : key;
     }
 
@@ -710,8 +710,6 @@ public class OutfitSystem extends ScriptableSystem {
     public static func GetInstance(game: GameInstance) -> ref<OutfitSystem> {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
     }
-
-    public static func Version() -> String = "0.6.0";
 }
 
 public class AttachmentSlotsCallback extends AttachmentSlotsScriptCallback {
