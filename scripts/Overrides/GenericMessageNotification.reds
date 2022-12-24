@@ -1,6 +1,9 @@
 import EquipmentEx.Codeware.UI.*
 
 @addField(GenericMessageNotificationData)
+public let params: ref<inkTextParams>;
+
+@addField(GenericMessageNotificationData)
 public let isInput: Bool;
 
 @addField(GenericMessageNotificationCloseData)
@@ -8,6 +11,17 @@ public let input: String;
 
 @addField(GenericMessageNotification)
 public let m_textInput: ref<TextInput>;
+
+@addMethod(GenericMessageNotification)
+public final static func Show(controller: ref<worlduiIGameController>, title: String, message: String, params: ref<inkTextParams>, type: GenericMessageNotificationType) -> ref<inkGameNotificationToken> {
+    let data = GenericMessageNotification.GetBaseData();
+    data.title = title;
+    data.message = message;
+    data.params = params;
+    data.type = type;
+
+    return controller.ShowGameNotification(data);
+}
 
 @addMethod(GenericMessageNotification)
 public final static func ShowInput(controller: ref<worlduiIGameController>, title: String, message: String, type: GenericMessageNotificationType) -> ref<inkGameNotificationToken> {
@@ -23,6 +37,10 @@ public final static func ShowInput(controller: ref<worlduiIGameController>, titl
 @wrapMethod(GenericMessageNotification)
 protected cb func OnInitialize() -> Bool {
     wrappedMethod();
+
+    if IsDefined(this.m_data.params) {
+        inkTextRef.SetText(this.m_message, this.m_data.message, this.m_data.params);
+    }
 
     if this.m_data.isInput {
         let content = this.GetChildWidgetByPath(n"notification/main/inkVerticalPanelWidget18") as inkCompoundWidget;

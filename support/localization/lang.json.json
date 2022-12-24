@@ -260,6 +260,13 @@
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-BodyOuter"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Equipment-EX requires:\\n- ArchiveXL {archive_xl_req} or higher\\n- TweakXL {tweak_xl_req} or higher\\n\\nDetected ArchiveXL {archive_xl_ver} and TweakXL {tweak_xl_ver}.\\n\\nPlease update the dependencies to use this mod.",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-NotificationRequirements"
             }
           ]
         }

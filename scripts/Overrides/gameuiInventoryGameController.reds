@@ -1,4 +1,4 @@
-import EquipmentEx.OutfitSystem
+import EquipmentEx.{EquipmentEx, OutfitSystem, RequirementsPopup}
 
 @addField(gameuiInventoryGameController)
 private let m_outfitSystem: wref<OutfitSystem>;
@@ -7,22 +7,23 @@ private let m_outfitSystem: wref<OutfitSystem>;
 private let m_wardrobeButton: wref<inkWidget>;
 
 @addField(gameuiInventoryGameController)
-private let m_outfitManagerReady: Bool;
+private let m_wardrobePopup: ref<inkGameNotificationToken>;
+
+@addField(gameuiInventoryGameController)
+private let m_wardrobeReady: Bool;
 
 @wrapMethod(gameuiInventoryGameController)
 protected cb func OnInitialize() -> Bool {
     wrappedMethod();
 
     this.m_outfitSystem = OutfitSystem.GetInstance(this.GetPlayerControlledObject().GetGame());
-
-    this.m_wardrobeButton.RegisterToCallback(n"OnClick", this, n"OnWardrobeScreenClick");
 }
 
 @wrapMethod(gameuiInventoryGameController)
 protected cb func OnUninitialize() -> Bool {
     wrappedMethod();
 
-    this.m_wardrobeButton.UnregisterFromCallback(n"OnClick", this, n"OnWardrobeScreenClick");
+    this.m_wardrobeButton.UnregisterFromCallback(n"OnClick", this, n"OnWardrobeBtnClick");
 }
 
 @replaceMethod(gameuiInventoryGameController)
@@ -32,6 +33,7 @@ private final func SetupSetButton() -> Void {
 
     // Spawn new button
     this.m_wardrobeButton = this.SpawnFromLocal(btnList, n"HyperlinkButton:EquipmentEx.WardrobeHubLinkController");
+    this.m_wardrobeButton.RegisterToCallback(n"OnClick", this, n"OnWardrobeBtnClick");
 
     // Adjust button container size
     let btnSpacing = btnList.GetChildMargin();
@@ -47,15 +49,20 @@ private final func SetupSetButton() -> Void {
 }
 
 @addMethod(gameuiInventoryGameController)
-protected cb func OnWardrobeScreenClick(evt: ref<inkPointerEvent>) -> Bool {
+protected cb func OnWardrobeBtnClick(evt: ref<inkPointerEvent>) -> Bool {
     if evt.IsAction(n"click") {
         this.ShowWardrobeScreen();
     }
 }
 
+@addMethod(gameuiInventoryGameController)
+protected cb func OnWardrobePopupClose(data: ref<inkGameNotificationData>) {
+    this.m_wardrobePopup = null;
+}
+
 @wrapMethod(gameuiInventoryGameController)
 protected cb func OnBack(userData: ref<IScriptable>) -> Bool {
-    if this.m_outfitManagerReady && IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
+    if this.m_wardrobeReady && IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
         return this.HideWardrobeScreen();
     } else {
         return wrappedMethod(userData);
@@ -64,6 +71,12 @@ protected cb func OnBack(userData: ref<IScriptable>) -> Bool {
 
 @addMethod(gameuiInventoryGameController)
 protected func ShowWardrobeScreen() -> Bool {
+    if !EquipmentEx.CheckRequirements() {
+        this.m_wardrobePopup = RequirementsPopup.Show(this);
+        this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
+        return false;
+    }
+
     if IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
         return false;
     }
@@ -84,7 +97,7 @@ protected func ShowWardrobeScreen() -> Bool {
     outfitManager.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
     // animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnWardrobeScreenShown");
 
-    this.m_outfitManagerReady = true;
+    this.m_wardrobeReady = true;
 
     if Equals(this.m_mode, InventoryModes.Item) {
         this.PlayShowHideItemChooserAnimation(false);
@@ -107,18 +120,18 @@ protected func ShowWardrobeScreen() -> Bool {
 // @addMethod(gameuiInventoryGameController)
 // protected cb func OnWardrobeScreenShown(anim: ref<inkAnimProxy>) {
 //     LogDebug(s"OnWardrobeScreenShown \(this.GetRootCompoundWidget().GetNumChildren())");
-//     this.m_outfitManagerReady = true;
+//     this.m_wardrobeReady = true;
 // }
 
 @addMethod(gameuiInventoryGameController)
 protected func HideWardrobeScreen() -> Bool {
-    if !this.m_outfitManagerReady {
+    if !this.m_wardrobeReady {
         return false;
     }
 
     let outfitManager = this.GetChildWidgetByPath(n"wardrobe") as inkCompoundWidget;
 
-    this.m_outfitManagerReady = false;
+    this.m_wardrobeReady = false;
     
     let alphaAnim = new inkAnimTransparency();
     alphaAnim.SetStartTransparency(1.0);
