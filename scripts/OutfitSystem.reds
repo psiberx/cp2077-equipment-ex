@@ -31,6 +31,7 @@ public class OutfitSystem extends ScriptableSystem {
 
         if this.m_state.IsActive() {
             this.HideEquipment();
+            this.MigrateState();
             this.AttachAllVisualsToSlots();
         }
     }
@@ -137,6 +138,21 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_state.ClearParts();
     }
 
+    private func MigrateState() {
+        for part in this.m_state.GetParts() {
+            let itemID = part.GetItemID();
+            let slotID = this.GetItemSlot(itemID);
+
+            if NotEquals(slotID, part.GetSlotID()) {
+                if this.IsOutfitSlot(slotID) {
+                    this.m_state.UpdatePart(itemID, slotID);
+                } else {
+                    this.m_state.RemovePart(itemID);
+                }
+            }
+        }
+    }
+
     private func AttachVisualToSlot(itemID: ItemID, slotID: TweakDBID) {
         let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
         this.m_transactionSystem.GivePreviewItemByItemID(this.m_player, itemID);
@@ -184,6 +200,7 @@ public class OutfitSystem extends ScriptableSystem {
         if IsDefined(part) {
             let itemID = part.GetItemID();
             let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+
             this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
             this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
         }
@@ -193,6 +210,7 @@ public class OutfitSystem extends ScriptableSystem {
         let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, slotID);
         if IsDefined(itemObject) {
             let itemID = itemObject.GetItemID();
+
             this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
             this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, itemID);
         }

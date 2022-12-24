@@ -16,7 +16,7 @@ struct ExtraSlotConfig {
     public let relatedSlotID: TweakDBID;
     public let displayName: String;
 
-    public static func Create(slotName: CName, garmentOffset: Int32, relatedSlotID: TweakDBID, displayName: String) -> ExtraSlotConfig {
+    public static func Create(slotName: CName, garmentOffset: Int32, opt relatedSlotID: TweakDBID) -> ExtraSlotConfig {
         return new ExtraSlotConfig(TDBID.Create(NameToString(slotName)), slotName, garmentOffset, relatedSlotID, "Gameplay-" + StrReplace(NameToString(slotName), ".", "-"));
     }
 }
@@ -44,63 +44,65 @@ public abstract class OutfitConfig {
 
     public static func OutfitSlots() -> array<ExtraSlotConfig> = [
         // Head
-        ExtraSlotConfig.Create(n"OutfitSlots.Headwear", 0, t"AttachmentSlots.Head", "Headwear"),
-        ExtraSlotConfig.Create(n"OutfitSlots.Balaclava", -4, t"AttachmentSlots.Head", "Balaclava"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Head", 0, t"AttachmentSlots.Head"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Balaclava", -4, t"AttachmentSlots.Head"),
 
         // Face
-        ExtraSlotConfig.Create(n"OutfitSlots.Mask", -1, t"AttachmentSlots.Eyes", "Mask"),
-        ExtraSlotConfig.Create(n"OutfitSlots.Glasses", 0, t"AttachmentSlots.Eyes", "Glasses"),
-        ExtraSlotConfig.Create(n"OutfitSlots.Wreath", 0, t"AttachmentSlots.Eyes", "Wreath"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Mask", -1, t"AttachmentSlots.Eyes"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Glasses", 0, t"AttachmentSlots.Eyes"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Wreath", 0, t"AttachmentSlots.Eyes"),
 
         // Ears
-        ExtraSlotConfig.Create(n"OutfitSlots.EarLeft", 0, t"", "Left Ear"),
-        ExtraSlotConfig.Create(n"OutfitSlots.EarRight", 0, t"", "Right Ear"),
+        ExtraSlotConfig.Create(n"OutfitSlots.EarLeft", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.EarRight", 0),
 
         // Neck
-        ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0, t"", "Neckwear"),
-        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceShort", -1, t"", "Short Necklace"),
-        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceLong", -1, t"", "Long Necklace"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceTight", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceShort", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceLong", -1),
 
         // Torso
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoInner", -3, t"AttachmentSlots.Chest", "Inner Torso"),
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoMiddle", -2, t"AttachmentSlots.Torso", "Middle Torso"),
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoOuter", 1, t"AttachmentSlots.Torso", "Outer Torso"),
-        ExtraSlotConfig.Create(n"OutfitSlots.TorsoAux", 2, t"AttachmentSlots.Torso", "Aux Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoTight", -4, t"AttachmentSlots.Chest"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoInner", -3, t"AttachmentSlots.Chest"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoMiddle", -2, t"AttachmentSlots.Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoOuter", 1, t"AttachmentSlots.Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.TorsoAux", 2, t"AttachmentSlots.Torso"),
 
         // Shoulders
-        ExtraSlotConfig.Create(n"OutfitSlots.ShoulderLeft", -1, t"", "Left Shoulder"),
-        ExtraSlotConfig.Create(n"OutfitSlots.ShoulderRight", -1, t"", "Right Shoulder"),
+        ExtraSlotConfig.Create(n"OutfitSlots.ShoulderLeft", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.ShoulderRight", -1),
 
         // Wrists
-        ExtraSlotConfig.Create(n"OutfitSlots.WristLeft", -1, t"", "Left Wrist"),
-        ExtraSlotConfig.Create(n"OutfitSlots.WristRight", -1, t"", "Right Wrist"),
+        ExtraSlotConfig.Create(n"OutfitSlots.WristLeft", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.WristRight", -1),
 
         // Hands
-        ExtraSlotConfig.Create(n"OutfitSlots.HandLeft", -1, t"", "Left Hand"),
-        ExtraSlotConfig.Create(n"OutfitSlots.HandRight", -1, t"", "Right Hand"),
+        ExtraSlotConfig.Create(n"OutfitSlots.HandLeft", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.HandRight", -1),
 
         // Waist
-        ExtraSlotConfig.Create(n"OutfitSlots.Waist", 1, t"", "Waist"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Waist", 1),
 
         // Legs
-        ExtraSlotConfig.Create(n"OutfitSlots.LegsInner", -3, t"AttachmentSlots.Legs", "Inner Legs"),
-        ExtraSlotConfig.Create(n"OutfitSlots.LegsMiddle", -1, t"AttachmentSlots.Legs", "Middle Legs"),
-        ExtraSlotConfig.Create(n"OutfitSlots.LegsOuter", 0, t"AttachmentSlots.Legs", "Outer Legs"),
+        ExtraSlotConfig.Create(n"OutfitSlots.LegsTight", -3, t"AttachmentSlots.Legs"),
+        ExtraSlotConfig.Create(n"OutfitSlots.LegsInner", -1, t"AttachmentSlots.Legs"),
+        ExtraSlotConfig.Create(n"OutfitSlots.LegsOuter", 0, t"AttachmentSlots.Legs"),
 
         // Thighs
-        ExtraSlotConfig.Create(n"OutfitSlots.ThighLeft", -2, t"", "Left Thigh"),
-        ExtraSlotConfig.Create(n"OutfitSlots.ThighRight", -2, t"", "Right Thigh"),
+        ExtraSlotConfig.Create(n"OutfitSlots.ThighLeft", -2),
+        ExtraSlotConfig.Create(n"OutfitSlots.ThighRight", -2),
         
         // Ankles
-        ExtraSlotConfig.Create(n"OutfitSlots.AnkleLeft", -2, t"", "Left Ankle"),
-        ExtraSlotConfig.Create(n"OutfitSlots.AnkleRight", -2, t"", "Right Ankle"),
+        ExtraSlotConfig.Create(n"OutfitSlots.AnkleLeft", -2),
+        ExtraSlotConfig.Create(n"OutfitSlots.AnkleRight", -2),
 
         // Feet
-        ExtraSlotConfig.Create(n"OutfitSlots.Feet", 0, t"AttachmentSlots.Feet", "Feet"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Feet", 0, t"AttachmentSlots.Feet"),
 
         // Full Body
-        ExtraSlotConfig.Create(n"OutfitSlots.BodyInner", -10, t"AttachmentSlots.Torso", "Inner Body"),
-        ExtraSlotConfig.Create(n"OutfitSlots.BodyOuter", 0, t"AttachmentSlots.Torso", "Outer Body")
+        ExtraSlotConfig.Create(n"OutfitSlots.BodyInner", -10, t"AttachmentSlots.Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.BodyOuter", 0, t"AttachmentSlots.Torso")
     ];
 
     public static func AppearanceSuffixes() -> array<AppearanceSuffixConfig> = [

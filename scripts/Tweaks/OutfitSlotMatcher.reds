@@ -1,55 +1,55 @@
 module EquipmentEx
 
-struct RecordMapping {
+struct RecordSlotMapping {
     public let slotID: TweakDBID;
     public let recordIDs: array<TweakDBID>;
 }
 
-struct EntityNameMapping {
+struct EntityNameSlotMapping {
     public let slotID: TweakDBID;
     public let entityName: CName;
 }
 
-struct AppearanceNameMapping {
+struct AppearanceNameSlotMapping {
     public let slotID: TweakDBID;
     public let appearanceTokens: array<String>;
 }
 
-struct EquipmentAreaMapping {
+struct EquipmentAreaSlotMapping {
     public let slotID: TweakDBID;
     public let equipmentAreas: array<TweakDBID>;
 }
 
-struct PriceModifierMapping {
+struct PriceModifierSlotMapping {
     public let slotID: TweakDBID;
     public let priceModifiers: array<TweakDBID>;
 }
 
 class OutfitSlotMatcher {
-    private let m_recordMappings: array<RecordMapping>;
-    private let m_entityMappings: array<EntityNameMapping>;
-    private let m_appearanceMappings: array<AppearanceNameMapping>;
-    private let m_equipmentMappings: array<EquipmentAreaMapping>;
-    private let m_priceMappings: array<PriceModifierMapping>;
+    private let m_recordMappings: array<RecordSlotMapping>;
+    private let m_entityMappings: array<EntityNameSlotMapping>;
+    private let m_appearanceMappings: array<AppearanceNameSlotMapping>;
+    private let m_equipmentMappings: array<EquipmentAreaSlotMapping>;
+    private let m_priceMappings: array<PriceModifierSlotMapping>;
     private let m_entityBans: array<CName>;
 
-    public func MapRecords(mappings: array<RecordMapping>) {
+    public func MapRecords(mappings: array<RecordSlotMapping>) {
         this.m_recordMappings = mappings;
     }
 
-    public func MapEntities(mappings: array<EntityNameMapping>) {
+    public func MapEntities(mappings: array<EntityNameSlotMapping>) {
         this.m_entityMappings = mappings;
     }
 
-    public func MapAppearances(mappings: array<AppearanceNameMapping>) {
+    public func MapAppearances(mappings: array<AppearanceNameSlotMapping>) {
         this.m_appearanceMappings = mappings;
     }
 
-    public func MapEquipmentAreas(mappings: array<EquipmentAreaMapping>) {
+    public func MapEquipmentAreas(mappings: array<EquipmentAreaSlotMapping>) {
         this.m_equipmentMappings = mappings;
     }
 
-    public func MapPrices(mappings: array<PriceModifierMapping>) {
+    public func MapPrices(mappings: array<PriceModifierSlotMapping>) {
         this.m_priceMappings = mappings;
     }
 
@@ -63,6 +63,10 @@ class OutfitSlotMatcher {
         let appearanceName = NameToString(item.AppearanceName());
         let priceModifiers = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".buyPrice");
         let equipmentArea = item.EquipArea().GetID();
+
+        if Equals(appearanceName, n"") {
+            return TDBID.None();
+        }
 
         if ArrayContains(this.m_entityBans, entityName) {
             return TDBID.None();

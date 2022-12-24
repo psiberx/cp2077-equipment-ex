@@ -15,13 +15,20 @@ class PatchCustomItems extends ScriptableTweak {
             n"player_outfit_item"
         ]);
 
+        slotMatcher.MapPrices([
+            new PriceModifierSlotMapping(t"OutfitSlots.Glasses", [t"Price.Glasses", t"Price.Visor"]),
+            new PriceModifierSlotMapping(t"OutfitSlots.Wreath", [t"Price.TechFaceClothing"]),
+            new PriceModifierSlotMapping(t"OutfitSlots.LegsOuter", [t"Price.Skirt"])
+        ]);
+
         slotMatcher.MapEquipmentAreas([
-            new EquipmentAreaMapping(t"OutfitSlots.Headwear", [t"EquipmentArea.HeadArmor"]),
-            new EquipmentAreaMapping(t"OutfitSlots.TorsoInner", [t"EquipmentArea.InnerChest"]),
-            new EquipmentAreaMapping(t"OutfitSlots.TorsoOuter", [t"EquipmentArea.ChestArmor"]),
-            new EquipmentAreaMapping(t"OutfitSlots.LegsMiddle", [t"EquipmentArea.LegArmor"]),
-            new EquipmentAreaMapping(t"OutfitSlots.Feet", [t"EquipmentArea.Feet"]),
-            new EquipmentAreaMapping(t"OutfitSlots.BodyInner", [t"EquipmentArea.Outfit"])
+            new EquipmentAreaSlotMapping(t"OutfitSlots.Head", [t"EquipmentArea.HeadArmor"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.Mask", [t"EquipmentArea.FaceArmor"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.TorsoInner", [t"EquipmentArea.InnerChest"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.TorsoOuter", [t"EquipmentArea.ChestArmor"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.LegsInner", [t"EquipmentArea.LegArmor"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.Feet", [t"EquipmentArea.Feet"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.BodyOuter", [t"EquipmentArea.Outfit"])
         ]);
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
@@ -48,6 +55,7 @@ class PatchCustomItems extends ScriptableTweak {
                         if updated {
                             TweakDBManager.UpdateRecord(item.GetID());
                         }
+                        
                         break;
                     }
                 }

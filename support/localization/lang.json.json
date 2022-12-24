@@ -46,10 +46,10 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Headwear",
+              "femaleVariant": "Head",
               "maleVariant": "",
               "primaryKey": 0,
-              "secondaryKey": "Gameplay-OutfitSlots-Headwear"
+              "secondaryKey": "Gameplay-OutfitSlots-Head"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
@@ -102,6 +102,13 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Tight Necklace",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-NecklaceTight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Short Necklace",
               "maleVariant": "",
               "primaryKey": 0,
@@ -113,6 +120,13 @@
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceLong"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Tight Torso",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoTight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
@@ -190,6 +204,13 @@
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-Waist"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Tight Legs",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-LegsTight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
