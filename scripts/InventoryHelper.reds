@@ -3,9 +3,7 @@ module EquipmentEx
 public class InventoryHelper extends ScriptableSystem {
     private let m_player: wref<GameObject>;
     private let m_transactionSystem: wref<TransactionSystem>;
-
     private let m_stash: wref<Stash>;
-    private let m_preview: wref<inkInventoryPuppetPreviewGameController>;
     
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
         this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerControlledGameObject();
@@ -63,14 +61,6 @@ public class InventoryHelper extends ScriptableSystem {
         this.GetStashItems(items);
 
         return items;
-    }
-
-    public func AddPreview(preview: ref<inkInventoryPuppetPreviewGameController>) {
-        this.m_preview = preview;
-    }
-
-    public func GetPreview() -> wref<inkInventoryPuppetPreviewGameController> {
-        return this.m_preview;
     }
 
     public static func GetInstance(game: GameInstance) -> ref<InventoryHelper> {

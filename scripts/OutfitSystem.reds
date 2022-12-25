@@ -220,6 +220,20 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_transactionSystem.RefreshAttachment(this.m_player, slotID);
     }
 
+    private func HideEquipment() {
+        this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit));
+
+        for baseSlot in OutfitConfig.BaseSlots() {
+            this.m_equipmentData.ClearVisuals(baseSlot.equipmentArea);
+        }
+    }
+
+    private func ShowEquipment() {
+        for baseSlot in OutfitConfig.BaseSlots() {
+            this.m_equipmentData.UnequipVisuals(baseSlot.equipmentArea);
+        }
+    }
+
     private func CloneEquipment(opt ignoreItemID: ItemID, opt ignoreSlotID: TweakDBID) {
         for baseSlotID in this.m_baseSlots {
             let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, baseSlotID);
@@ -236,18 +250,17 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    private func HideEquipment() {
-        this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit));
+    private func GetEquipmentParts() -> array<ref<OutfitPart>> {
+        let parts: array<ref<OutfitPart>>;
 
         for baseSlot in OutfitConfig.BaseSlots() {
-            this.m_equipmentData.ClearVisuals(baseSlot.equipmentArea);
+            let itemID = this.m_equipmentData.GetActiveItem(baseSlot.equipmentArea);
+            if ItemID.IsValid(itemID) && !this.m_equipmentData.ShouldSlotBeHidden(baseSlot.equipmentArea) {
+                ArrayPush(parts, OutfitPart.Create(itemID, baseSlot.slotID));
+            }
         }
-    }
 
-    private func ShowEquipment() {
-        for baseSlot in OutfitConfig.BaseSlots() {
-            this.m_equipmentData.UnequipVisuals(baseSlot.equipmentArea);
-        }
+        return parts;
     }
 
     private func UpdateBlackboard(slotID: TweakDBID) {
@@ -623,32 +636,49 @@ public class OutfitSystem extends ScriptableSystem {
         return itemID;
     }
 
-    public func EquipPreviewItem(puppet: ref<gamePuppet>, itemID: ItemID) {
+    public func EquipPuppetItem(puppet: ref<gamePuppet>, itemID: ItemID) {
         let slotID = this.GetItemSlot(itemID);
         let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+
         this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
         this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
     }
 
-    public func UnequipPreviewItem(puppet: ref<gamePuppet>, itemID: ItemID) {
+    public func UnequipPuppetItem(puppet: ref<gamePuppet>, itemID: ItemID) {
         let slotID = this.GetItemSlot(itemID);
         let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+
         this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
         this.m_transactionSystem.RemoveItem(puppet, previewID, 1);
     }
 
-    public func EquipPreviewOutfit(puppet: ref<gamePuppet>, opt items: script_ref<array<ItemID>>) {
-        if !IsDefined(puppet) || !this.m_state.IsActive() {
-            return;
+    public func EquipPuppetOutfit(puppet: ref<gamePuppet>, opt items: script_ref<array<ItemID>>) {
+        if this.m_state.IsActive() {
+            this.EquipPuppetParts(puppet, this.m_state.GetParts(), items);
+        } else {
+            this.EquipPuppetParts(puppet, this.GetEquipmentParts(), items);
         }
+    }
 
+    public func EquipPuppetOutfit(puppet: ref<gamePuppet>, outfitName: CName, opt items: script_ref<array<ItemID>>) {
+        if NotEquals(outfitName, n"") {
+            let outfit = this.m_state.GetOutfit(outfitName);
+            if IsDefined(outfit) {
+                this.EquipPuppetParts(puppet, outfit.GetParts(), items);
+            }
+        } else {
+            this.EquipPuppetParts(puppet, this.GetEquipmentParts(), items);
+        }
+    }
+
+    private func EquipPuppetParts(puppet: ref<gamePuppet>, parts: array<ref<OutfitPart>>, opt items: script_ref<array<ItemID>>) {
         for slotID in this.m_managedSlots {
             this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
         }
 
-        for part in this.m_state.GetParts() {
+        for part in parts {
             let itemID = part.GetItemID();
-            let slotID = part.GetSlotID();
+            let slotID = this.GetItemSlot(itemID); // part.GetSlotID();
 
             let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
             this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
@@ -658,7 +688,7 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    public func UpdatePreviewFromBlackboard(puppet: ref<gamePuppet>) {
+    public func UpdatePuppetFromBlackboard(puppet: ref<gamePuppet>) {
         if !IsDefined(puppet) || !this.m_state.IsActive() {
             return;
         }

@@ -5,6 +5,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_player: wref<PlayerPuppet>;
     protected let m_outfitSystem: wref<OutfitSystem>;
     protected let m_inventoryHelper: wref<InventoryHelper>;
+    protected let m_paperdollHelper: wref<PaperdollHelper>;
     protected let m_delaySystem: wref<DelaySystem>;
     protected let m_uiScriptableSystem: wref<UIScriptableSystem>;
     protected let m_uiInventorySystem: wref<UIInventoryScriptableSystem>;
@@ -50,6 +51,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_player = this.GetPlayerControlledObject() as PlayerPuppet;
         this.m_outfitSystem = OutfitSystem.GetInstance(this.m_player.GetGame());
         this.m_inventoryHelper = InventoryHelper.GetInstance(this.m_player.GetGame());
+        this.m_paperdollHelper = PaperdollHelper.GetInstance(this.m_player.GetGame());
         this.m_delaySystem = GameInstance.GetDelaySystem(this.m_player.GetGame());
         this.m_uiScriptableSystem = UIScriptableSystem.GetInstance(this.m_player.GetGame());
         this.m_uiInventorySystem = UIInventoryScriptableSystem.GetInstance(this.m_player.GetGame());
@@ -360,7 +362,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             let zoomArea = evt.GetAxisData() < 0.0 ? InventoryPaperdollZoomArea.Default : InventoryPaperdollZoomArea.Head;
             let setCameraSetupEvent = new gameuiPuppetPreview_SetCameraSetupEvent();
             setCameraSetupEvent.setupIndex = Cast<Uint32>(EnumInt(zoomArea));
-            this.m_inventoryHelper.GetPreview().QueueEvent(setCameraSetupEvent);
+            this.m_paperdollHelper.GetPreview().QueueEvent(setCameraSetupEvent);
         }
     }
 
@@ -406,7 +408,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
 
         if this.m_isPreviewMouseHold && evt.IsAction(n"mouse_x") {
-            let previewPuppet = this.m_inventoryHelper.GetPreview();
+            let previewPuppet = this.m_paperdollHelper.GetPreview();
 
             let ratio: Float;
             let offset: Float = evt.GetAxisData();

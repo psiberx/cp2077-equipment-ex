@@ -13,11 +13,11 @@ class OutfitOffsetMatcher {
     }
     
     public func Match(item: ref<Clothing_Record>) -> Int32 {
-        let appearanceName = NameToString(item.AppearanceName());
-
-        if Equals(appearanceName, n"") {
+        if Equals(item.AppearanceName(), n"") {
             return 0;
         }
+
+        let appearanceName = NameToString(item.AppearanceName());
 
         // Appearance exact match
         for mapping in this.m_appearanceMappings {

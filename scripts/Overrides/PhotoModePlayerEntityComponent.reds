@@ -1,13 +1,17 @@
-import EquipmentEx.OutfitSystem
+import EquipmentEx.{OutfitSystem,PaperdollHelper}
 
 @addField(PhotoModePlayerEntityComponent)
 private let m_outfitSystem: wref<OutfitSystem>;
+
+@addField(PhotoModePlayerEntityComponent)
+private let m_paperdollHelper: wref<PaperdollHelper>;
 
 @wrapMethod(PhotoModePlayerEntityComponent)
 private final func OnGameAttach() {
     wrappedMethod();
 
     this.m_outfitSystem = OutfitSystem.GetInstance(this.GetOwner().GetGame());
+    this.m_paperdollHelper = PaperdollHelper.GetInstance(this.GetOwner().GetGame());
 }
 
 @wrapMethod(PhotoModePlayerEntityComponent)
@@ -15,7 +19,8 @@ private final func SetupInventory(isCurrentPlayerObjectCustomizable: Bool) {
     wrappedMethod(isCurrentPlayerObjectCustomizable);
 
     if this.m_outfitSystem.IsActive() {
-        this.m_outfitSystem.EquipPreviewOutfit(this.fakePuppet, this.loadingItems);
+        this.m_outfitSystem.EquipPuppetOutfit(this.fakePuppet, this.loadingItems);
+        this.m_paperdollHelper.AddPuppet(this.fakePuppet);
     }
 }
 

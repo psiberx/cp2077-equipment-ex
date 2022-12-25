@@ -63,19 +63,20 @@ class OutfitSlotMatcher {
     }
     
     public func Match(item: ref<Clothing_Record>) -> TweakDBID {
-        let recordID = item.GetID();
-        let entityName = item.EntityName();
-        let appearanceName = NameToString(item.AppearanceName());
-        let priceModifiers = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".buyPrice");
-        let equipmentArea = item.EquipArea().GetID();
-
-        if Equals(appearanceName, n"") {
+        if Equals(item.AppearanceName(), n"") {
             return TDBID.None();
         }
+
+        let entityName = item.EntityName();
 
         if ArrayContains(this.m_entityBans, entityName) {
             return TDBID.None();
         }
+
+        let recordID = item.GetID();
+        let appearanceName = NameToString(item.AppearanceName());
+        let priceModifiers = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".buyPrice");
+        let equipmentArea = item.EquipArea().GetID();
 
         // Record exact match
         for mapping in this.m_recordMappings {
