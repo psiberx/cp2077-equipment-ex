@@ -15,7 +15,7 @@ private final func SetupInventory(isCurrentPlayerObjectCustomizable: Bool) {
     wrappedMethod(isCurrentPlayerObjectCustomizable);
 
     if this.m_outfitSystem.IsActive() {
-        this.m_outfitSystem.UpdatePuppetFromState(this.fakePuppet, this.loadingItems);
+        this.m_outfitSystem.EquipPreviewOutfit(this.fakePuppet, this.loadingItems);
     }
 }
 

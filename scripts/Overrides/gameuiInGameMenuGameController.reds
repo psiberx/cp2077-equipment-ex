@@ -15,7 +15,7 @@ protected cb func OnEquipmentChanged(value: Variant) -> Bool {
     wrappedMethod(value);
 
     if this.m_outfitSystem.IsActive() {
-        this.m_outfitSystem.UpdatePuppetFromBlackboard(this.GetPuppet(n"inventory"));
+        this.m_outfitSystem.UpdatePreviewFromBlackboard(this.GetPuppet(n"inventory"));
     }
 }
 
@@ -24,6 +24,6 @@ protected cb func OnEquipmentChanged(value: Variant) -> Bool {
 //     wrappedMethod(sceneName, puppet);
 // 
 //     if this.m_outfitSystem.IsActive() {
-//         this.m_outfitSystem.UpdatePuppetFromState(puppet);
+//         this.m_outfitSystem.EquipPreviewOutfit(puppet);
 //     }
 // }

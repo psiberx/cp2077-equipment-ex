@@ -250,6 +250,61 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
+    private func UpdateBlackboard(slotID: TweakDBID) {
+        this.UpdateBlackboard(ItemID.None(), slotID);
+    }
+
+    private func UpdateBlackboard(itemID: ItemID, slotID: TweakDBID) {
+        this.m_equipmentBlackboard.SetInt(this.m_equipmentDef.areaChangedSlotIndex, 0);
+        this.m_equipmentBlackboard.SetInt(this.m_equipmentDef.areaChanged, EnumInt(gamedataEquipmentArea.Invalid), true);
+
+        this.m_equipmentBlackboard.SetVariant(this.m_equipmentDef.itemEquipped, ToVariant(itemID), true);
+
+        let modifiedArea: SPaperdollEquipData;
+        modifiedArea.equipped = ItemID.IsValid(itemID);
+        modifiedArea.placementSlot = slotID;
+        this.m_equipmentBlackboard.SetVariant(this.m_equipmentDef.lastModifiedArea, ToVariant(modifiedArea), true);
+
+        this.m_equipmentBlackboard.FireCallbacks();
+    }
+    
+    private func TriggerActivationEvent(opt outfitName: CName) {
+        let event = new OutfitUpdated();
+        event.isActive = true;
+        event.outfitName = outfitName;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
+    }
+
+    private func TriggerDeactivationEvent() {
+        let event = new OutfitUpdated();
+        event.isActive = false;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
+    }
+
+    private func TriggerAttachmentEvent(itemID: ItemID, slotID: TweakDBID) {
+        let event = new OutfitPartUpdated();
+        event.itemID = itemID;
+        event.itemName = this.GetItemName(itemID);
+        event.slotID = slotID;
+        event.slotName = this.GetSlotName(slotID);
+        event.isEquipped = true;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
+    }
+
+    private func TriggerDetachmentEvent(itemID: ItemID, slotID: TweakDBID) {
+        let event = new OutfitPartUpdated();
+        event.itemID = itemID;
+        event.itemName = this.GetItemName(itemID);
+        event.slotID = slotID;
+        event.slotName = this.GetSlotName(slotID);
+        event.isEquipped = false;
+
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);       
+    }
+
     public func IsActive() -> Bool {
         return this.m_state.IsActive();
     }
@@ -466,163 +521,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    public func GiveItem(recordID: TweakDBID) -> ItemID {
-        let itemID: ItemID;
-        let itemData = this.m_transactionSystem.GetItemDataByTDBID(this.m_player, recordID);
-
-        if IsDefined(itemData) {
-            itemID = itemData.GetID();
-        } else {
-            itemID = ItemID.FromTDBID(recordID);
-            this.m_transactionSystem.GiveItem(this.m_player, itemID, 1, TweakDBInterface.GetItemRecord(recordID).Tags());
-        }
-
-        return itemID;
-    }
-
-    public func GiveItem(itemID: ItemID) -> ItemID {
-        let recordID: TweakDBID;
-        let itemData = this.m_transactionSystem.GetItemData(this.m_player, itemID);
-
-        if IsDefined(itemData) {
-            itemID = itemData.GetID();
-        } else {
-            recordID = ItemID.GetTDBID(itemID);
-            itemData = this.m_transactionSystem.GetItemDataByTDBID(this.m_player, recordID);
-
-            if IsDefined(itemData) {
-                itemID = itemData.GetID();
-            } else {
-                this.m_transactionSystem.GiveItem(this.m_player, itemID, 1, TweakDBInterface.GetItemRecord(recordID).Tags());
-            }
-        }
-
-        return itemID;
-    }
-
-    private func TriggerActivationEvent(opt outfitName: CName) {
-        let event = new OutfitUpdated();
-        event.isActive = true;
-        event.outfitName = outfitName;
-
-        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
-    }
-
-    private func TriggerDeactivationEvent() {
-        let event = new OutfitUpdated();
-        event.isActive = false;
-
-        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
-    }
-
-    private func TriggerAttachmentEvent(itemID: ItemID, slotID: TweakDBID) {
-        let event = new OutfitPartUpdated();
-        event.itemID = itemID;
-        event.itemName = this.GetItemName(itemID);
-        event.slotID = slotID;
-        event.slotName = this.GetSlotName(slotID);
-        event.isEquipped = true;
-
-        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);
-    }
-
-    private func TriggerDetachmentEvent(itemID: ItemID, slotID: TweakDBID) {
-        let event = new OutfitPartUpdated();
-        event.itemID = itemID;
-        event.itemName = this.GetItemName(itemID);
-        event.slotID = slotID;
-        event.slotName = this.GetSlotName(slotID);
-        event.isEquipped = false;
-
-        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);       
-    }
-
-    private func UpdateBlackboard(slotID: TweakDBID) {
-        this.UpdateBlackboard(ItemID.None(), slotID);
-    }
-
-    private func UpdateBlackboard(itemID: ItemID, slotID: TweakDBID) {
-        this.m_equipmentBlackboard.SetInt(this.m_equipmentDef.areaChangedSlotIndex, 0);
-        this.m_equipmentBlackboard.SetInt(this.m_equipmentDef.areaChanged, EnumInt(gamedataEquipmentArea.Invalid), true);
-
-        this.m_equipmentBlackboard.SetVariant(this.m_equipmentDef.itemEquipped, ToVariant(itemID), true);
-
-        let modifiedArea: SPaperdollEquipData;
-        modifiedArea.equipped = ItemID.IsValid(itemID);
-        modifiedArea.placementSlot = slotID;
-        this.m_equipmentBlackboard.SetVariant(this.m_equipmentDef.lastModifiedArea, ToVariant(modifiedArea), true);
-
-        this.m_equipmentBlackboard.FireCallbacks();
-    }
-
-    public func UpdatePuppetFromBlackboard(puppet: ref<gamePuppet>) {
-        if !IsDefined(puppet) || !this.m_state.IsActive() {
-            return;
-        }
-
-        let modifiedArea = FromVariant<SPaperdollEquipData>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.lastModifiedArea)); 
-        let slotID = modifiedArea.placementSlot;      
-
-        if !this.IsOutfitSlot(slotID) {
-            return;
-        }
-
-        let itemID = FromVariant<ItemID>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.itemEquipped));
-        let itemObject = this.m_transactionSystem.GetItemInSlot(puppet, slotID);
-
-        if IsDefined(itemObject) {
-            let previewID = itemObject.GetItemID();
-
-            if Equals(previewID, itemID) {
-                return;
-            }
-
-            this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
-            this.m_transactionSystem.RemoveItem(puppet, previewID, 1);
-        }
-
-        if ItemID.IsValid(itemID) && modifiedArea.equipped {
-            let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
-            this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
-            this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
-        }
-    }
-
-    public func UpdatePuppetFromState(puppet: ref<gamePuppet>, opt items: script_ref<array<ItemID>>) {
-        if !IsDefined(puppet) || !this.m_state.IsActive() {
-            return;
-        }
-
-        for slotID in this.m_managedSlots {
-            this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
-        }
-
-        for part in this.m_state.GetParts() {
-            let itemID = part.GetItemID();
-            let slotID = part.GetSlotID();
-
-            let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
-            this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
-            this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
-
-            ArrayPush(Deref(items), previewID);
-        }
-    }
-
-    public func EquipPreview(puppet: ref<gamePuppet>, itemID: ItemID) {
-        let slotID = this.GetItemSlot(itemID);
-        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
-        this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
-        this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
-    }
-
-    public func UnequipPreview(puppet: ref<gamePuppet>, itemID: ItemID) {
-        let slotID = this.GetItemSlot(itemID);
-        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
-        this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
-        this.m_transactionSystem.RemoveItem(puppet, previewID, 1);
-    }
-
     public func IsEquipped(name: CName) -> Bool {
         return this.m_state.IsActive() ? this.m_state.IsOutfit(name) : Equals(name, n"");
     }
@@ -691,6 +589,108 @@ public class OutfitSystem extends ScriptableSystem {
         return outfits;
     }
 
+    public func GiveItem(recordID: TweakDBID) -> ItemID {
+        let itemID: ItemID;
+        let itemData = this.m_transactionSystem.GetItemDataByTDBID(this.m_player, recordID);
+
+        if IsDefined(itemData) {
+            itemID = itemData.GetID();
+        } else {
+            itemID = ItemID.FromTDBID(recordID);
+            this.m_transactionSystem.GiveItem(this.m_player, itemID, 1, TweakDBInterface.GetItemRecord(recordID).Tags());
+        }
+
+        return itemID;
+    }
+
+    public func GiveItem(itemID: ItemID) -> ItemID {
+        let recordID: TweakDBID;
+        let itemData = this.m_transactionSystem.GetItemData(this.m_player, itemID);
+
+        if IsDefined(itemData) {
+            itemID = itemData.GetID();
+        } else {
+            recordID = ItemID.GetTDBID(itemID);
+            itemData = this.m_transactionSystem.GetItemDataByTDBID(this.m_player, recordID);
+
+            if IsDefined(itemData) {
+                itemID = itemData.GetID();
+            } else {
+                this.m_transactionSystem.GiveItem(this.m_player, itemID, 1, TweakDBInterface.GetItemRecord(recordID).Tags());
+            }
+        }
+
+        return itemID;
+    }
+
+    public func EquipPreviewItem(puppet: ref<gamePuppet>, itemID: ItemID) {
+        let slotID = this.GetItemSlot(itemID);
+        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+        this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
+        this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
+    }
+
+    public func UnequipPreviewItem(puppet: ref<gamePuppet>, itemID: ItemID) {
+        let slotID = this.GetItemSlot(itemID);
+        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+        this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
+        this.m_transactionSystem.RemoveItem(puppet, previewID, 1);
+    }
+
+    public func EquipPreviewOutfit(puppet: ref<gamePuppet>, opt items: script_ref<array<ItemID>>) {
+        if !IsDefined(puppet) || !this.m_state.IsActive() {
+            return;
+        }
+
+        for slotID in this.m_managedSlots {
+            this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
+        }
+
+        for part in this.m_state.GetParts() {
+            let itemID = part.GetItemID();
+            let slotID = part.GetSlotID();
+
+            let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+            this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
+            this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
+
+            ArrayPush(Deref(items), previewID);
+        }
+    }
+
+    public func UpdatePreviewFromBlackboard(puppet: ref<gamePuppet>) {
+        if !IsDefined(puppet) || !this.m_state.IsActive() {
+            return;
+        }
+
+        let modifiedArea = FromVariant<SPaperdollEquipData>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.lastModifiedArea)); 
+        let slotID = modifiedArea.placementSlot;      
+
+        if !this.IsOutfitSlot(slotID) {
+            return;
+        }
+
+        let itemID = FromVariant<ItemID>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.itemEquipped));
+        let itemObject = this.m_transactionSystem.GetItemInSlot(puppet, slotID);
+
+        if IsDefined(itemObject) {
+            let previewID = itemObject.GetItemID();
+
+            if Equals(previewID, itemID) {
+                return;
+            }
+
+            this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
+            this.m_transactionSystem.RemoveItem(puppet, previewID, 1);
+        }
+
+        if ItemID.IsValid(itemID) && modifiedArea.equipped {
+            let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+            this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
+            this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
+        }
+    }
+
     public func IsBaseSlot(slotID: TweakDBID) -> Bool {
         return ArrayContains(this.m_baseSlots, slotID);
     }
@@ -703,16 +703,6 @@ public class OutfitSystem extends ScriptableSystem {
         return ArrayContains(this.m_managedSlots, slotID);
     }
 
-    public func GetSlotName(slotID: TweakDBID) -> String {
-        let key = TweakDBInterface.GetAttachmentSlotRecord(slotID).LocalizedName();
-        let name = GetLocalizedTextByKey(StringToName(key));
-        return NotEquals(name, "") ? name : key;
-    }
-
-    public func GetItemName(itemID: ItemID) -> String {
-        return ItemID.IsValid(itemID) ? GetLocalizedTextByKey(TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemID)).DisplayName()) : "";
-    }
-
     public func GetOutfitSlots() -> array<TweakDBID> {
         return this.m_outfitSlots;
     }
@@ -723,6 +713,16 @@ public class OutfitSystem extends ScriptableSystem {
             ArrayPush(slots, part.GetSlotID());
         }
         return slots;
+    }
+
+    public func GetSlotName(slotID: TweakDBID) -> String {
+        let key = TweakDBInterface.GetAttachmentSlotRecord(slotID).LocalizedName();
+        let name = GetLocalizedTextByKey(StringToName(key));
+        return NotEquals(name, "") ? name : key;
+    }
+
+    public func GetItemName(itemID: ItemID) -> String {
+        return ItemID.IsValid(itemID) ? GetLocalizedTextByKey(TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemID)).DisplayName()) : "";
     }
 
     private func GetLegsStateSuffix(itemD: ItemID, owner: wref<GameObject>, suffixRecord: ref<ItemsFactoryAppearanceSuffixBase_Record>) -> String {
