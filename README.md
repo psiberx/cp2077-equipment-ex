@@ -73,7 +73,7 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.NecklaceTight` | Chokers                                          | 
 | `OutfitSlots.NecklaceShort` | Short Necklaces                                  | 
 | `OutfitSlots.NecklaceLong`  | Long Necklaces                                   |  
-| `OutfitSlots.TorsoTight`    | Bras, Tight Long-sleeves                         |  
+| `OutfitSlots.TorsoUnder`    | Bras, Tight Long-sleeves                         |  
 | `OutfitSlots.TorsoInner`    | Tops, T-Shirts, Tight Shirts, Tight Dresses      |  
 | `OutfitSlots.TorsoMiddle`   | Waistcoats, Blazers, Loose Shirts, Loose Dresses |     
 | `OutfitSlots.TorsoOuter`    | Jackets, Coats                                   |           
@@ -85,16 +85,18 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.HandLeft`      | Gloves, Rings                                    |
 | `OutfitSlots.HandRight`     | Gloves, Rings                                    |
 | `OutfitSlots.Waist`         | Belts                                            |
-| `OutfitSlots.LegsTight`     | Tights, Leggings                                 |
-| `OutfitSlots.LegsInner`     | Tight Pants, Tight Shorts                        |
+| `OutfitSlots.LegsInner`     | Tights, Leggings                                 |
+| `OutfitSlots.LegsMiddle`    | Tight Pants, Tight Shorts                        |
 | `OutfitSlots.LegsOuter`     | Loose Pants, Loose Shorts, Skirts                |
 | `OutfitSlots.ThighLeft`     |                                                  |
 | `OutfitSlots.ThighRight`    |                                                  |
 | `OutfitSlots.AnkleLeft`     |                                                  |
 | `OutfitSlots.AnkleRight`    |                                                  |
 | `OutfitSlots.Feet`          | Footwear                                         |
-| `OutfitSlots.BodyInner`     | Tight Suits                                      |
-| `OutfitSlots.BodyOuter`     | Jumpsuits, Tracksuits                            |
+| `OutfitSlots.BodyUnder`     | Netrunning Suits                                 |
+| `OutfitSlots.BodyInner`     |                                                  |
+| `OutfitSlots.BodyMiddle`    | Jumpsuits, Tracksuits                            |
+| `OutfitSlots.BodyOuter`     |                                                  |
 
 When proposing a new slot, please follow these recommendations:
 
@@ -115,7 +117,7 @@ then the slot will be automatically assigned according to this table:
 | `Items.GenericFaceClothing`       | `OutfitSlots.Mask`       |
 | `Items.GenericInnerChestClothing` | `OutfitSlots.TorsoInner` |
 | `Items.GenericOuterChestClothing` | `OutfitSlots.TorsoOuter` |
-| `Items.GenericLegClothing`        | `OutfitSlots.LegsInner`  |
+| `Items.GenericLegClothing`        | `OutfitSlots.LegsMiddle` |
 | `Items.Skirt`                     | `OutfitSlots.LegsOuter`  |
 | `Items.GenericFootClothing`       | `OutfitSlots.Feet`       |
-| `Items.Outfit`                    | `OutfitSlots.BodyOuter`  |
+| `Items.Outfit`                    | `OutfitSlots.BodyMiddle` |

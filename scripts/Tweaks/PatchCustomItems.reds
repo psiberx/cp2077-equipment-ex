@@ -26,7 +26,7 @@ class PatchCustomItems extends ScriptableTweak {
             new EquipmentAreaSlotMapping(t"OutfitSlots.Mask", [t"EquipmentArea.FaceArmor"]),
             new EquipmentAreaSlotMapping(t"OutfitSlots.TorsoInner", [t"EquipmentArea.InnerChest"]),
             new EquipmentAreaSlotMapping(t"OutfitSlots.TorsoOuter", [t"EquipmentArea.ChestArmor"]),
-            new EquipmentAreaSlotMapping(t"OutfitSlots.LegsInner", [t"EquipmentArea.LegArmor"]),
+            new EquipmentAreaSlotMapping(t"OutfitSlots.LegsMiddle", [t"EquipmentArea.LegArmor"]),
             new EquipmentAreaSlotMapping(t"OutfitSlots.Feet", [t"EquipmentArea.Feet"]),
             new EquipmentAreaSlotMapping(t"OutfitSlots.BodyOuter", [t"EquipmentArea.Outfit"])
         ]);

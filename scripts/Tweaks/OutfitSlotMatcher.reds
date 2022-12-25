@@ -25,6 +25,11 @@ struct PriceModifierSlotMapping {
     public let priceModifiers: array<TweakDBID>;
 }
 
+struct SlotMappingMatch {
+    public let slotID: TweakDBID;
+    public let score: Int32;
+}
+
 class OutfitSlotMatcher {
     private let m_recordMappings: array<RecordSlotMapping>;
     private let m_entityMappings: array<EntityNameSlotMapping>;
@@ -88,19 +93,27 @@ class OutfitSlotMatcher {
             }
         }
 
+        // Appearance partial match
+        let match: SlotMappingMatch;
+        for mapping in this.m_appearanceMappings {
+            for appearanceToken in mapping.appearanceTokens {
+                if StrFindFirst(appearanceName, appearanceToken) >= 0 {
+                    // return mapping.slotID;
+                    if StrLen(appearanceToken) > match.score {
+                        match.score = StrLen(appearanceToken);
+                        match.slotID = mapping.slotID;
+                    }
+                }
+            }
+        }
+        if match.score > 0 {
+            return match.slotID;
+        }
+
         // Price exact match
         for mapping in this.m_priceMappings {
             for priceModifier in mapping.priceModifiers {
                 if ArrayContains(priceModifiers, priceModifier) {
-                    return mapping.slotID;
-                }
-            }
-        }
-
-        // Appearance partial match
-        for mapping in this.m_appearanceMappings {
-            for appearanceToken in mapping.appearanceTokens {
-                if StrFindFirst(appearanceName, appearanceToken) >= 0 {
                     return mapping.slotID;
                 }
             }

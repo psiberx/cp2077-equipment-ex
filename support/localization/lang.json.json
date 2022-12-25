@@ -46,6 +46,13 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Equipment-EX requires:\\n- ArchiveXL {archive_xl_req} or higher\\n- TweakXL {tweak_xl_req} or higher\\n\\nDetected ArchiveXL {archive_xl_ver} and TweakXL {tweak_xl_ver}.\\n\\nPlease update the dependencies to use this mod.",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-NotificationRequirements"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Head",
               "maleVariant": "",
               "primaryKey": 0,
@@ -102,56 +109,56 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Tight Necklace",
+              "femaleVariant": "Necklace / Tight",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceTight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Short Necklace",
+              "femaleVariant": "Necklace / Short",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceShort"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Long Necklace",
+              "femaleVariant": "Necklace / Long",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceLong"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Tight Torso",
+              "femaleVariant": "Torso / Under",
               "maleVariant": "",
               "primaryKey": 0,
-              "secondaryKey": "Gameplay-OutfitSlots-TorsoTight"
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoUnder"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Inner Torso",
+              "femaleVariant": "Torso/ Inner",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-TorsoInner"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Middle Torso",
+              "femaleVariant": "Torso / Middle",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-TorsoMiddle"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Outer Torso",
+              "femaleVariant": "Torso / Outer",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-TorsoOuter"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Aux Torso",
+              "femaleVariant": "Torso / Aux",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-TorsoAux"
@@ -207,28 +214,21 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Tight Legs",
-              "maleVariant": "",
-              "primaryKey": 0,
-              "secondaryKey": "Gameplay-OutfitSlots-LegsTight"
-            },
-            {
-              "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Inner Legs",
+              "femaleVariant": "Legs / Inner",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-LegsInner"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Middle Legs",
+              "femaleVariant": "Legs / Middle",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-LegsMiddle"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Outer Legs",
+              "femaleVariant": "Legs / Outer",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-LegsOuter"
@@ -270,24 +270,31 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Inner Body",
+              "femaleVariant": "Body / Under",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-BodyUnder"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Body / Inner",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-BodyInner"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Outer Body",
+              "femaleVariant": "Body / Middle",
               "maleVariant": "",
               "primaryKey": 0,
-              "secondaryKey": "Gameplay-OutfitSlots-BodyOuter"
+              "secondaryKey": "Gameplay-OutfitSlots-BodyMiddle"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Equipment-EX requires:\\n- ArchiveXL {archive_xl_req} or higher\\n- TweakXL {tweak_xl_req} or higher\\n\\nDetected ArchiveXL {archive_xl_ver} and TweakXL {tweak_xl_ver}.\\n\\nPlease update the dependencies to use this mod.",
+              "femaleVariant": "Body / Outer",
               "maleVariant": "",
               "primaryKey": 0,
-              "secondaryKey": "UI-EquipmentEx-NotificationRequirements"
+              "secondaryKey": "Gameplay-OutfitSlots-BodyOuter"
             }
           ]
         }
