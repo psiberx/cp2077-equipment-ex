@@ -18,9 +18,10 @@ private final func OnGameAttach() {
 private final func SetupInventory(isCurrentPlayerObjectCustomizable: Bool) {
     wrappedMethod(isCurrentPlayerObjectCustomizable);
 
+    this.m_paperdollHelper.AddPuppet(this.fakePuppet);
+
     if this.m_outfitSystem.IsActive() {
         this.m_outfitSystem.EquipPuppetOutfit(this.fakePuppet, this.loadingItems);
-        this.m_paperdollHelper.AddPuppet(this.fakePuppet);
     }
 }
 
