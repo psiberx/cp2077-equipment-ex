@@ -587,16 +587,12 @@ public class OutfitSystem extends ScriptableSystem {
     public func GetOutfits() -> array<CName> {
         let outfits: array<CName>;
         
-        // for outfit in this.m_state.GetOutfits() {
-        //     let index = 0;
-        //     while index < ArraySize(outfits) && StrCmp(NameToString(outfit.GetName()), NameToString(outfits[index])) > 0 {
-        //         index += 1;
-        //     }
-        //     ArrayInsert(outfits, index, outfit.GetName());
-        // }
-
         for outfit in this.m_state.GetOutfits() {
-            ArrayPush(outfits, outfit.GetName());
+            let index = 0;
+            while index < ArraySize(outfits) && StrCmp(NameToString(outfit.GetName()), NameToString(outfits[index])) > 0 {
+                index += 1;
+            }
+            ArrayInsert(outfits, index, outfit.GetName());
         }
 
         return outfits;
@@ -678,7 +674,11 @@ public class OutfitSystem extends ScriptableSystem {
 
         for part in parts {
             let itemID = part.GetItemID();
-            let slotID = this.GetItemSlot(itemID); // part.GetSlotID();
+            let slotID = part.GetSlotID();
+
+            if !this.IsBaseSlot(slotID) {
+                slotID = this.GetItemSlot(itemID);
+            }
 
             let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
             this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
