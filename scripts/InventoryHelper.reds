@@ -3,11 +3,13 @@ module EquipmentEx
 public class InventoryHelper extends ScriptableSystem {
     private let m_player: wref<GameObject>;
     private let m_transactionSystem: wref<TransactionSystem>;
+    private let m_wardrobeSystem: wref<WardrobeSystem>;
     private let m_stash: wref<Stash>;
     
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
         this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerControlledGameObject();
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
+        this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.GetGameInstance());
     }
 
     public func GetStash() -> wref<Stash> {
@@ -24,11 +26,16 @@ public class InventoryHelper extends ScriptableSystem {
         return this.m_stash;
     }
 
-    public func GetStashItems(out items: array<wref<gameItemData>>) {
-        this.m_transactionSystem.GetItemList(this.m_stash, items);
+    public func GetStashItems(out items: array<ref<gameItemData>>) {
+        let stashItems: array<wref<gameItemData>>;
+        this.m_transactionSystem.GetItemList(this.m_stash, stashItems);
+
+        for itemData in stashItems {
+            ArrayPush(items, itemData);
+        }
     }
 
-    public func GetPlayerItems(out items: array<wref<gameItemData>>, opt excludes: array<ItemModParams>) {
+    public func GetPlayerItems(out items: array<ref<gameItemData>>, opt excludes: array<ItemModParams>) {
         let playerItems: array<wref<gameItemData>>;
         this.m_transactionSystem.GetItemList(this.m_player, playerItems);
 
@@ -55,10 +62,28 @@ public class InventoryHelper extends ScriptableSystem {
         }
     }
 
-    public func GetPlayerAndStashItems(opt excludes: array<ItemModParams>) -> array<wref<gameItemData>> {
-        let items: array<wref<gameItemData>>;
-        this.GetPlayerItems(items, excludes);
-        this.GetStashItems(items);
+    public func GetWardrobeItems(out items: array<ref<gameItemData>>) {
+        for itemID in this.m_wardrobeSystem.GetStoredItemIDs() {
+            let itemData = this.m_transactionSystem.GetItemData(this.m_player, itemID);
+
+            if IsDefined(itemData) {
+                ArrayPush(items, itemData);
+            } else {
+                ArrayPush(items, Inventory.CreateItemData(new ItemModParams(itemID, 1), this.m_player));
+            }
+        }
+    }
+
+    public func GetAvailableItems(opt excludes: array<ItemModParams>) -> array<ref<gameItemData>> {
+        let items: array<ref<gameItemData>>;
+        let settings = new Settings();
+
+        if Equals(settings.wardrobeItemSource, WardrobeItemSource.WardrobeStore) {
+            this.GetWardrobeItems(items);
+        } else {
+            this.GetPlayerItems(items, excludes);
+            this.GetStashItems(items);
+        }
 
         return items;
     }

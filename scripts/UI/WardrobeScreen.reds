@@ -185,9 +185,9 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected func PopulateInventoryGrid() {
-        let allItems = this.m_inventoryHelper.GetPlayerAndStashItems(this.m_itemDropQueue);
+        let allItems = this.m_inventoryHelper.GetAvailableItems(this.m_itemDropQueue);
         let finalItems: array<ref<IScriptable>>;
-        let slotItems: array<wref<gameItemData>>;
+        let slotItems: array<ref<gameItemData>>;
         let searchQuery = StrLower(this.m_searchInput.GetText());
         let groupIndex: Int32;
         let itemIndex: Int32;
