@@ -4,7 +4,6 @@ class PatchOriginaltems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
         let slotMatcher = OutfitSlotMatcher.Create();
-        let offsetMatcher = OutfitOffsetMatcher.Create();
 
         slotMatcher.IgnoreEntities([
             n"player_outfit_item"
@@ -72,6 +71,13 @@ class PatchOriginaltems extends ScriptableTweak {
             ])
         ]);
 
+        let offsetMatcher = OutfitOffsetMatcher.Create();
+
+        offsetMatcher.MapEntities([
+            new EntityNameOffsetMapping(-1500, n"player_underwear_top_item"),
+            new EntityNameOffsetMapping(-1500, n"player_underwear_bottom_item")
+        ]);
+
         offsetMatcher.MapAppearances([
             new AppearanceNameOffsetMapping(2000, ["t2_shirt_02_", "t2_vest_19_"]),
             new AppearanceNameOffsetMapping(4000, ["t2_jacket_11_", "set_01_nomad_01_t2_"]),
@@ -80,32 +86,37 @@ class PatchOriginaltems extends ScriptableTweak {
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
-            let slotID = slotMatcher.Match(item);
+            let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
+            let garmentOffset = item.GarmentOffset();
+            let updated = false;
 
-            if TDBID.IsValid(slotID) {
+            let outfitSlotID = slotMatcher.Match(item);
+            if TDBID.IsValid(outfitSlotID) {
                 for outfitSlot in outfitSlots {
-                    if outfitSlot.slotID == slotID {
-                        let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
-
+                    if outfitSlot.slotID == outfitSlotID {
                         if !ArrayContains(placementSlots, outfitSlot.slotID) {
                             ArrayPush(placementSlots, outfitSlot.slotID);
-                            TweakDBManager.SetFlat(item.GetID() + t".placementSlots", placementSlots);
+                            updated = true;
                         }
-
-                        let itemOffset = offsetMatcher.Match(item);
-                        let garmentOffset = outfitSlot.garmentOffset;
-                        if itemOffset >= 0 || garmentOffset < 0 {
-                            garmentOffset += itemOffset;
+                        if outfitSlot.garmentOffset != 0 {
+                            garmentOffset = outfitSlot.garmentOffset;
+                            updated = true;
                         }
-
-                        if garmentOffset != item.GarmentOffset() {
-                            TweakDBManager.SetFlat(item.GetID() + t".garmentOffset", garmentOffset);
-                        }
-                        
-                        TweakDBManager.UpdateRecord(item.GetID());
                         break;
                     }
                 }
+            }
+
+            let outfitOffset = offsetMatcher.Match(item);
+            if outfitOffset >= 0 || garmentOffset <= 0 {
+                garmentOffset += outfitOffset;
+                updated = true;
+            }
+
+            if updated {
+                TweakDBManager.SetFlat(item.GetID() + t".placementSlots", placementSlots);
+                TweakDBManager.SetFlat(item.GetID() + t".garmentOffset", garmentOffset);
+                TweakDBManager.UpdateRecord(item.GetID());
             }
         }
     }
