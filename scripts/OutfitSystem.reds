@@ -781,12 +781,19 @@ public class OutfitSystem extends ScriptableSystem {
             return "";
         }
 
-        let isLifted = this.m_state.IsActive()
-            ? !this.m_transactionSystem.IsSlotEmpty(this.m_player, t"OutfitSlots.Feet") 
-                || this.m_transactionSystem.IsSlotEmptySpawningItem(this.m_player, t"OutfitSlots.Feet")
-            : !this.m_transactionSystem.IsSlotEmpty(this.m_player, t"AttachmentSlots.Feet") 
-                || this.m_transactionSystem.IsSlotEmptySpawningItem(this.m_player, t"AttachmentSlots.Feet");
-        
+        let isLifted = false;
+
+        if this.m_state.IsActive() {
+            if this.m_state.HasPart(t"OutfitSlots.Feet") {
+                isLifted = true;
+            }
+        } else {
+            let itemID = this.m_equipmentData.GetActiveItem(gamedataEquipmentArea.Feet);
+            if ItemID.IsValid(itemID) || this.m_equipmentData.IsSlotHidden(gamedataEquipmentArea.Feet) {
+                isLifted = true;
+            }
+        }
+
         return isLifted ? "Lifted" : "Flat";
     }
 
