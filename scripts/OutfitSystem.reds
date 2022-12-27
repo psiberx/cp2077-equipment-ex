@@ -15,6 +15,7 @@ public class OutfitSystem extends ScriptableSystem {
 
     private let m_equipmentDef: wref<UI_EquipmentDef>;
     private let m_equipmentBlackboard: wref<IBlackboard>;
+    private let m_equipmentHash: Uint64;
 
     private func OnAttach() {
         this.InitializeState();
@@ -226,12 +227,16 @@ public class OutfitSystem extends ScriptableSystem {
         for baseSlot in OutfitConfig.BaseSlots() {
             this.m_equipmentData.ClearVisuals(baseSlot.equipmentArea);
         }
+
+        this.UpdateEquipmentHash();
     }
 
     private func ShowEquipment() {
         for baseSlot in OutfitConfig.BaseSlots() {
             this.m_equipmentData.UnequipVisuals(baseSlot.equipmentArea);
         }
+
+        this.ResetEquipmentHash();
     }
 
     private func CloneEquipment(opt ignoreItemID: ItemID, opt ignoreSlotID: TweakDBID) {
@@ -248,6 +253,8 @@ public class OutfitSystem extends ScriptableSystem {
                 }
             }
         }
+
+        this.UpdateEquipmentHash();
     }
 
     private func GetEquipmentParts() -> array<ref<OutfitPart>> {
@@ -261,6 +268,14 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         return parts;
+    }
+
+    private func ResetEquipmentHash() {
+        this.m_equipmentHash = 0ul;
+    }
+
+    private func UpdateEquipmentHash() {
+        this.m_equipmentHash = OutfitSet.MakeHash(this.GetEquipmentParts());
     }
 
     private func UpdateBlackboard(slotID: TweakDBID) {
@@ -535,7 +550,9 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func IsEquipped(name: CName) -> Bool {
-        return this.m_state.IsActive() ? this.m_state.IsOutfit(name) : Equals(name, n"");
+    	return this.m_state.IsActive()
+    		? this.m_state.IsOutfit(name)
+    		: Equals(name, n"");
     }
 
     public func HasOutfit(name: CName) -> Bool {
@@ -649,7 +666,11 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func EquipPuppetOutfit(puppet: ref<gamePuppet>, opt items: script_ref<array<ItemID>>) {
-        if this.m_state.IsActive() {
+        this.EquipPuppetOutfit(puppet, this.m_state.IsActive(), items);
+    }
+
+    public func EquipPuppetOutfit(puppet: ref<gamePuppet>, useOutfit: Bool, opt items: script_ref<array<ItemID>>) {
+        if useOutfit {
             this.EquipPuppetParts(puppet, this.m_state.GetParts(), items);
         } else {
             this.EquipPuppetParts(puppet, this.GetEquipmentParts(), items);

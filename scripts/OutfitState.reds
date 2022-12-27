@@ -290,6 +290,10 @@ class OutfitState {
         return IsDefined(outfit) ? this.m_hash == outfit.GetHash() : false;
     }
 
+    public func IsOutfit(hash: Uint64) -> Bool {
+        return this.m_hash == hash;
+    }
+
     public func UpdateHash() {
         this.m_hash = OutfitSet.MakeHash(this.m_parts);
     }

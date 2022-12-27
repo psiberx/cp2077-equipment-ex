@@ -4,7 +4,9 @@ enum PhotoModeUI {
     CharacterPage = 2,
     VisibilityAttribute = 27,
     ExpressionAttribute = 28,
-    OutfitAttribute = 3301
+    OutfitAttribute = 3301,
+    NoOutfitOption = 3302,
+    CurrentOutfitOption = 3303
 }
 
 @addField(gameuiPhotoModeMenuController)
@@ -39,23 +41,34 @@ protected cb func OnShow(reversedUI: Bool) -> Bool {
     let outfitMenuItem = this.GetMenuItem(this.m_outfitAttribute);
     if IsDefined(outfitMenuItem) {
         let outfits = this.m_outfitSystem.GetOutfits();
+        let active = this.m_outfitSystem.IsActive();
         let options: array<PhotoModeOptionSelectorData>;
         let current: Int32 = 0;
         
-        ArrayResize(options, ArraySize(outfits) + 1);
+        ArrayResize(options, ArraySize(outfits) + (active ? 2 : 1));
 
         options[0].optionText = GetLocalizedTextByKey(n"UI-Wardrobe-NoOutfit");
+        options[0].optionData = EnumInt(PhotoModeUI.NoOutfitOption);
 
-        let i = 1;
+        if active {
+            options[1].optionText = GetLocalizedTextByKey(n"UI-Wardrobe-CurrentOutfit");
+            options[1].optionData = EnumInt(PhotoModeUI.CurrentOutfitOption);
+        }
+
+        let i = (active ? 2 : 1);
         for outfitName in outfits {
             options[i].optionText = NameToString(outfitName); // StrUpper()
             options[i].optionData = i;
 
             if this.m_outfitSystem.IsEquipped(outfitName) {
-                current = i;
+                current = options[i].optionData;
             }
 
             i += 1;
+        }
+
+        if current == 0 {
+            current = options[active ? 1 : 0].optionData;
         }
 
         outfitMenuItem.m_photoModeController = this;
@@ -84,8 +97,18 @@ protected cb func OnSetAttributeOptionEnabled(attribute: Uint32, enabled: Bool) 
 @addMethod(gameuiPhotoModeMenuController)
 public func OnAttributeOptionSelected(attribute: Uint32, option: PhotoModeOptionSelectorData) {
     if Equals(attribute, PhotoModeUI.OutfitAttribute) {
-        let outfitName = option.optionData > 0 ? StringToName(option.optionText) : n"";
-        this.m_outfitSystem.EquipPuppetOutfit(this.m_paperdollHelper.GetPuppet(), outfitName);
+        switch option.optionData {
+            case EnumInt(PhotoModeUI.NoOutfitOption):
+                this.m_outfitSystem.EquipPuppetOutfit(this.m_paperdollHelper.GetPuppet(), false);
+                break;
+            case EnumInt(PhotoModeUI.CurrentOutfitOption):
+                this.m_outfitSystem.EquipPuppetOutfit(this.m_paperdollHelper.GetPuppet(), true);
+                break;
+            default:
+                let outfitName = StringToName(option.optionText);
+                this.m_outfitSystem.EquipPuppetOutfit(this.m_paperdollHelper.GetPuppet(), outfitName);
+                break;
+        }
     }
 }
 
