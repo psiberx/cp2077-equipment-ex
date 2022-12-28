@@ -22,9 +22,21 @@ public final const func IsSlotOverriden(area: gamedataEquipmentArea) -> Bool {
 
 @wrapMethod(EquipmentSystemPlayerData)
 public final func OnRestored() {
+    this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.m_owner.GetGame());
+
+    if NotEquals(this.m_wardrobeSystem.GetActiveClothingSetIndex(), gameWardrobeClothingSetIndex.INVALID) {
+        this.m_wardrobeSystem.SetActiveClothingSetIndex(gameWardrobeClothingSetIndex.INVALID);
+        this.m_lastActiveWardrobeSet = gameWardrobeClothingSetIndex.INVALID;
+
+        let i = 0;
+        while i <= ArraySize(this.m_clothingVisualsInfo) {
+            this.m_clothingVisualsInfo[i].isHidden = false;
+            this.m_clothingVisualsInfo[i].visualItem = ItemID.None();
+            i += 1;
+        }
+    }
+
     wrappedMethod();
-    
-    this.UnequipWardrobeSet();
 }
 
 @replaceMethod(EquipmentSystemPlayerData)
