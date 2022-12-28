@@ -83,7 +83,7 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerControlledGameObject();
         this.m_equipmentData = EquipmentSystem.GetData(this.m_player);
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
-        this.m_attachmentSlotsListener = this.m_transactionSystem.RegisterAttachmentSlotListener(this.m_player, AttachmentSlotsCallback.Create(this));
+        this.m_attachmentSlotsListener = this.m_transactionSystem.RegisterAttachmentSlotListener(this.m_player, PlayerSlotsCallback.Create(this));
     }
 
     private func UninitializeSystems() {
@@ -778,33 +778,12 @@ public class OutfitSystem extends ScriptableSystem {
         return ItemID.IsValid(itemID) ? GetLocalizedTextByKey(TweakDBInterface.GetItemRecord(ItemID.GetTDBID(itemID)).DisplayName()) : "";
     }
 
-    private func GetLegsStateSuffix(itemD: ItemID, owner: wref<GameObject>, suffixRecord: ref<ItemsFactoryAppearanceSuffixBase_Record>) -> String {
-        if Equals((this.m_player as gamePuppet).GetResolvedGenderName(), n"Male") {
-            return "";
-        }
-
-        let isLifted = false;
-
-        if this.m_state.IsActive() {
-            if this.m_state.HasPart(t"OutfitSlots.Feet") {
-                isLifted = true;
-            }
-        } else {
-            let itemID = this.m_equipmentData.GetActiveItem(gamedataEquipmentArea.Feet);
-            if ItemID.IsValid(itemID) || this.m_equipmentData.IsSlotHidden(gamedataEquipmentArea.Feet) {
-                isLifted = true;
-            }
-        }
-
-        return isLifted ? "Lifted" : "Flat";
-    }
-
     public static func GetInstance(game: GameInstance) -> ref<OutfitSystem> {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
     }
 }
 
-public class AttachmentSlotsCallback extends AttachmentSlotsScriptCallback {
+public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     private let m_system: wref<OutfitSystem>;
 
     public func OnItemEquipped(slotID: TweakDBID, itemID: ItemID) -> Void {
@@ -825,8 +804,8 @@ public class AttachmentSlotsCallback extends AttachmentSlotsScriptCallback {
         }
     }
 
-    public static func Create(system: ref<OutfitSystem>) -> ref<AttachmentSlotsCallback> {
-        let self = new AttachmentSlotsCallback();
+    public static func Create(system: ref<OutfitSystem>) -> ref<PlayerSlotsCallback> {
+        let self = new PlayerSlotsCallback();
         self.m_system = system;
 
         return self;

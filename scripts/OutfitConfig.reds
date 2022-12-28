@@ -13,11 +13,11 @@ struct ExtraSlotConfig {
     public let slotID: TweakDBID;
     public let slotName: CName;
     public let garmentOffset: Int32;
-    public let relatedSlotID: TweakDBID;
+    public let parentID: TweakDBID;
     public let displayName: String;
 
-    public static func Create(slotName: CName, garmentOffset: Int32, opt relatedSlotID: TweakDBID) -> ExtraSlotConfig {
-        return new ExtraSlotConfig(TDBID.Create(NameToString(slotName)), slotName, garmentOffset, relatedSlotID, "Gameplay-" + StrReplace(NameToString(slotName), ".", "-"));
+    public static func Create(slotName: CName, garmentOffset: Int32, opt parentID: TweakDBID) -> ExtraSlotConfig {
+        return new ExtraSlotConfig(TDBID.Create(NameToString(slotName)), slotName, garmentOffset, parentID, "Gameplay-" + StrReplace(NameToString(slotName), ".", "-"));
     }
 }
 

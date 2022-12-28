@@ -8,8 +8,8 @@ class RegisterOutfitSlots extends ScriptableTweak {
             TweakDBManager.CreateRecord(outfitSlot.slotID, n"AttachmentSlot_Record");
             TweakDBManager.SetFlat(outfitSlot.slotID + t".localizedName", outfitSlot.displayName);
 
-            if TDBID.IsValid(outfitSlot.relatedSlotID) {
-                TweakDBManager.SetFlat(outfitSlot.slotID + t".parentSlot", outfitSlot.relatedSlotID);
+            if TDBID.IsValid(outfitSlot.parentID) {
+                TweakDBManager.SetFlat(outfitSlot.slotID + t".parentSlot", outfitSlot.parentID);
             }
 
             TweakDBManager.UpdateRecord(outfitSlot.slotID);
