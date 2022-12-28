@@ -12,9 +12,7 @@ protected cb func OnInitialize() -> Bool {
 
 @wrapMethod(gameuiInGameMenuGameController)
 protected cb func OnEquipmentChanged(value: Variant) -> Bool {
-    wrappedMethod(value);
-
-    if this.m_outfitSystem.IsActive() {
-        this.m_outfitSystem.UpdatePuppetFromBlackboard(this.GetPuppet(n"inventory"));
+    if !this.m_outfitSystem.UpdatePuppetFromBlackboard(this.GetPuppet(n"inventory")) {
+        wrappedMethod(value);
     }
 }

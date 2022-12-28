@@ -709,16 +709,16 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    public func UpdatePuppetFromBlackboard(puppet: ref<gamePuppet>) {
-        if !IsDefined(puppet) || !this.m_state.IsActive() {
-            return;
+    public func UpdatePuppetFromBlackboard(puppet: ref<gamePuppet>) -> Bool {
+        if !IsDefined(puppet) {
+            return false;
         }
 
-        let modifiedArea = FromVariant<SPaperdollEquipData>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.lastModifiedArea)); 
-        let slotID = modifiedArea.placementSlot;      
+        let modifiedArea = FromVariant<SPaperdollEquipData>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.lastModifiedArea));
+        let slotID = modifiedArea.placementSlot;
 
         if !this.IsOutfitSlot(slotID) {
-            return;
+            return this.IsBaseSlot(slotID) ? this.m_state.IsActive() : false;
         }
 
         let itemID = FromVariant<ItemID>(this.m_equipmentBlackboard.GetVariant(this.m_equipmentDef.itemEquipped));
@@ -728,7 +728,7 @@ public class OutfitSystem extends ScriptableSystem {
             let previewID = itemObject.GetItemID();
 
             if Equals(previewID, itemID) {
-                return;
+                return true;
             }
 
             this.m_transactionSystem.RemoveItemFromSlot(puppet, slotID);
@@ -740,6 +740,8 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_transactionSystem.GivePreviewItemByItemID(puppet, itemID);
             this.m_transactionSystem.AddItemToSlot(puppet, slotID, previewID, true);
         }
+
+        return true;
     }
 
     public func IsBaseSlot(slotID: TweakDBID) -> Bool {
