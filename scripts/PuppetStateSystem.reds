@@ -58,13 +58,20 @@ public class PuppetStateSystem extends ScriptableSystem {
     }
 
     private func OnAttachmentChange(request: ref<PuppetAttachmentChangeRequest>) {
-        if this.IsFeetSlot(request.slotID) || this.IsFeetCovering(request.itemID) {
-            this.UpdateLegsState(request.puppet);
-            this.RefreshItemAppearances(request.puppet);
+        if this.IsFeetSlot(request.slotID) || this.IsFeetCovering(request.puppet, request.itemID) {
+            if this.UpdateLegsState(request.puppet) {
+                this.RefreshItemAppearances(request.puppet);
+            }
         }
 
         if request.isEquipped && this.IsLegsSlot(request.slotID) {
             this.RefreshItemAppearance(request.puppet, request.itemID);
+        }
+    }
+
+    private func OnAppearanceChange(request: ref<PuppetAppearanceChangeRequest>) {
+        if this.UpdateLegsState(request.puppet) {
+            this.RefreshItemAppearances(request.puppet);
         }
     }
 
@@ -85,8 +92,13 @@ public class PuppetStateSystem extends ScriptableSystem {
         }
     }
 
-    private func UpdateLegsState(puppet: wref<ScriptedPuppet>) {
-        puppet.m_legsState = this.ResolveLegsState(puppet);
+    private func UpdateLegsState(puppet: wref<ScriptedPuppet>) -> Bool {
+        let state = this.ResolveLegsState(puppet);
+        let updated = NotEquals(puppet.m_legsState, state);
+
+        puppet.m_legsState = state;
+
+        return updated;
     }
 
     private func ResolveLegsState(puppet: wref<ScriptedPuppet>) -> LegsState {
@@ -97,7 +109,7 @@ public class PuppetStateSystem extends ScriptableSystem {
                 let itemObject = this.m_transactionSystem.GetItemInSlot(puppet, slotID);
                 let itemAppearance = this.m_transactionSystem.GetItemAppearance(puppet, itemObject.GetItemID());
 
-                if NotEquals(itemAppearance, n"empty_appearance_default") {
+                if NotEquals(itemAppearance, n"") && NotEquals(itemAppearance, n"empty_appearance_default") {
                     state = LegsState.Lifted;
                     break;
                 }                
@@ -115,8 +127,8 @@ public class PuppetStateSystem extends ScriptableSystem {
         return ArrayContains(this.m_feetSlots, slotID);
     }
 
-    private func IsFeetCovering(itemID: ItemID) -> Bool {
-        return false; // hide_S1
+    private func IsFeetCovering(puppet: wref<ScriptedPuppet>, itemID: ItemID) -> Bool {
+        return this.m_transactionSystem.MatchVisualTagByItemID(itemID, puppet, n"hide_S1");
     }
 
     public func GetLegsStateSuffix(itemD: ItemID, owner: wref<GameObject>, suffixRecord: ref<ItemsFactoryAppearanceSuffixBase_Record>) -> String {
