@@ -108,6 +108,6 @@ public abstract class OutfitConfig {
     ];
 
     public static func AppearanceSuffixes() -> array<AppearanceSuffixConfig> = [
-        AppearanceSuffixConfig.Create(n"itemsFactoryAppearanceSuffix.LegsState", n"EquipmentEx.OutfitSystem", n"GetLegsStateSuffix")
+        AppearanceSuffixConfig.Create(n"itemsFactoryAppearanceSuffix.LegsState", n"EquipmentEx.PuppetStateSystem", n"GetLegsStateSuffix")
     ];
 }
