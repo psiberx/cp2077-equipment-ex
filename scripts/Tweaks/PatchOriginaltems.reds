@@ -74,8 +74,8 @@ class PatchOriginaltems extends ScriptableTweak {
         let offsetMatcher = OutfitOffsetMatcher.Create();
 
         offsetMatcher.MapEntities([
-            new EntityNameOffsetMapping(-1500, n"player_underwear_top_item"),
-            new EntityNameOffsetMapping(-1500, n"player_underwear_bottom_item")
+            new EntityNameOffsetMapping(-1050, n"player_underwear_top_item"),
+            new EntityNameOffsetMapping(-1050, n"player_underwear_bottom_item")
         ]);
 
         offsetMatcher.MapAppearances([

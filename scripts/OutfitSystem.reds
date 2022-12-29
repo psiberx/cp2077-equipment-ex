@@ -262,8 +262,12 @@ public class OutfitSystem extends ScriptableSystem {
 
         for baseSlot in OutfitConfig.BaseSlots() {
             let itemID = this.m_equipmentData.GetActiveItem(baseSlot.equipmentArea);
-            if ItemID.IsValid(itemID) && !this.m_equipmentData.ShouldSlotBeHidden(baseSlot.equipmentArea) {
-                ArrayPush(parts, OutfitPart.Create(itemID, baseSlot.slotID));
+            if ItemID.IsValid(itemID) {
+                let visualTag = this.m_equipmentData.GetVisualTagByAreaType(baseSlot.equipmentArea);
+                let forceHide = this.m_equipmentData.IsVisualTagActive(visualTag);
+                if !forceHide {
+                    ArrayPush(parts, OutfitPart.Create(itemID, baseSlot.slotID));
+                }
             }
         }
 
