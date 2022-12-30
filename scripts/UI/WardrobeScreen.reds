@@ -111,6 +111,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_outfitManager.RegisterToCallback(n"OnLeave", this, n"OnManagerHoverOut");
         
         this.m_previewWrapper.RegisterToCallback(n"OnPress", this, n"OnPreviewPress");
+        this.m_previewWrapper.RegisterToCallback(n"OnAxis", this, n"OnPreviewAxis");
         this.m_previewWrapper.RegisterToCallback(n"OnRelative", this, n"OnPreviewRelative");
         this.m_previewWrapper.RegisterToCallback(n"OnEnter", this, n"OnPreviewHoverOver");
         this.m_previewWrapper.RegisterToCallback(n"OnLeave", this, n"OnPreviewHoverOut");
@@ -118,6 +119,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.RegisterToGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.RegisterToGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
         this.RegisterToGlobalInputCallback(n"OnPreOnRelative", this, n"OnGlobalRelative");
+        this.RegisterToGlobalInputCallback(n"OnPreOnAxis", this, n"OnGlobalAxis");
 
         this.InitializeInventoryGrid();
         this.InitializeSearchField();
@@ -145,6 +147,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.UnregisterFromGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelative", this, n"OnGlobalRelative");
+        this.UnregisterFromGlobalInputCallback(n"OnPreOnAxis", this, n"OnGlobalAxis");
 
         this.m_inventoryBlackboard.UnregisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemAdded, this.m_itemAddedCallback);
         this.m_inventoryBlackboard.UnregisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemRemoved, this.m_itemRemovedCallback);
@@ -347,6 +350,27 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_isCursorOverManager = false;
     }
 
+    protected cb func OnPreviewHoverOver(evt: ref<inkPointerEvent>) -> Bool {
+        if this.m_player.PlayerLastUsedKBM() {
+            this.m_buttonHints.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
+            this.m_buttonHints.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
+        } else {
+            this.m_buttonHints.AddButtonHint(n"right_stick_y", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
+            this.m_buttonHints.AddButtonHint(n"right_stick_x", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
+        }
+
+        this.m_isCursorOverPreview = true;
+    }
+
+    protected cb func OnPreviewHoverOut(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_buttonHints.RemoveButtonHint(n"mouse_wheel");
+        this.m_buttonHints.RemoveButtonHint(n"mouse_left");
+        this.m_buttonHints.RemoveButtonHint(n"right_stick_y");
+        this.m_buttonHints.RemoveButtonHint(n"right_stick_x");
+
+        this.m_isCursorOverPreview = false;
+    }
+
     protected cb func OnPreviewPress(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_left") {
             this.m_isPreviewMouseHold = true;
@@ -357,29 +381,20 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
+    protected cb func OnPreviewAxis(evt: ref<inkPointerEvent>) -> Bool {
+        if evt.IsAction(n"right_stick_x") {
+            this.RotatePreview(evt.GetAxisData(), 0.5);
+        }
+
+        if evt.IsAction(n"right_stick_y") && AbsF(evt.GetAxisData()) >= 0.85 {
+            this.SetPreviewCamera(evt.GetAxisData() > 0.0);
+        }
+    }
+
     protected cb func OnPreviewRelative(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_wheel") && evt.GetAxisData() != 0.0 {
-            let zoomArea = evt.GetAxisData() < 0.0 ? InventoryPaperdollZoomArea.Default : InventoryPaperdollZoomArea.Head;
-            let setCameraSetupEvent = new gameuiPuppetPreview_SetCameraSetupEvent();
-            setCameraSetupEvent.setupIndex = Cast<Uint32>(EnumInt(zoomArea));
-            this.m_paperdollHelper.GetPreview().QueueEvent(setCameraSetupEvent);
+            this.SetPreviewCamera(evt.GetAxisData() > 0.0);
         }
-    }
-
-    protected cb func OnPreviewHoverOver(evt: ref<inkPointerEvent>) -> Bool {
-        if this.m_player.PlayerLastUsedKBM() {
-            this.m_buttonHints.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
-            this.m_buttonHints.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
-        }
-
-        this.m_isCursorOverPreview = true;
-    }
-
-    protected cb func OnPreviewHoverOut(evt: ref<inkPointerEvent>) -> Bool {
-        this.m_buttonHints.RemoveButtonHint(n"mouse_wheel");
-        this.m_buttonHints.RemoveButtonHint(n"mouse_left");
-
-        this.m_isCursorOverPreview = false;
     }
 
     protected cb func OnGlobalPress(evt: ref<inkPointerEvent>) -> Bool {
@@ -402,25 +417,44 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
+    protected cb func OnGlobalAxis(evt: ref<inkPointerEvent>) -> Bool {
+        if evt.IsAction(n"right_stick_x") || evt.IsAction(n"right_stick_y") {
+            this.m_inventoryScrollController.SetEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
+        }
+    }
+
     protected cb func OnGlobalRelative(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_wheel") {
             this.m_inventoryScrollController.SetEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
         }
 
         if this.m_isPreviewMouseHold && evt.IsAction(n"mouse_x") {
-            let previewPuppet = this.m_paperdollHelper.GetPreview();
-
-            let ratio: Float;
-            let offset: Float = evt.GetAxisData();
-
-            if offset > 0.00 {
-                ratio = ClampF(offset / previewPuppet.m_maxMousePointerOffset, 0.50, 1.00);
-            } else {
-                ratio = ClampF(offset / previewPuppet.m_maxMousePointerOffset, -1.00, -0.50);
-            }
-
-            previewPuppet.Rotate(ratio * previewPuppet.m_mouseRotationSpeed);
+            this.RotatePreview(evt.GetAxisData(), 1.0, true);
         }
+    }
+
+    protected func RotatePreview(offset: Float, speed: Float, opt clamp: Bool) {
+        let puppet = this.m_paperdollHelper.GetPreview();
+
+        if clamp {
+            if offset > 0.00 {
+                offset = ClampF(offset / puppet.m_maxMousePointerOffset, 0.50, 1.00);
+            } else {
+                offset = ClampF(offset / puppet.m_maxMousePointerOffset, -1.00, -0.50);
+            }
+        }
+
+        puppet.Rotate(offset * speed * puppet.m_mouseRotationSpeed);
+    }
+
+    protected func SetPreviewCamera(zoomIn: Bool) {
+        let puppet = this.m_paperdollHelper.GetPreview();
+        let zoomArea = zoomIn ? InventoryPaperdollZoomArea.Head : InventoryPaperdollZoomArea.Default;
+
+        let setCameraSetupEvent = new gameuiPuppetPreview_SetCameraSetupEvent();
+        setCameraSetupEvent.setupIndex = Cast<Uint32>(EnumInt(zoomArea));
+
+        puppet.QueueEvent(setCameraSetupEvent);
     }
 }
 
