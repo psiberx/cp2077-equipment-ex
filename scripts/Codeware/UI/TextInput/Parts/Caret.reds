@@ -40,8 +40,8 @@ public class Caret extends inkCustomController {
     protected func CreateWidgets() -> Void {
         let caret: ref<inkRectangle> = new inkRectangle();
         caret.SetName(n"caret");
-		caret.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
-		caret.BindProperty(n"tintColor", n"MainColors.White");
+        caret.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
+        caret.BindProperty(n"tintColor", n"MainColors.White");
         caret.SetRenderTransformPivot(new Vector2(0.0, 0.0));
 
         this.m_caret = caret;

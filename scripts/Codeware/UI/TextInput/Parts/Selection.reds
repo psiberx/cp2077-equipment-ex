@@ -38,8 +38,8 @@ public class Selection extends inkCustomController {
         selection.SetName(n"selection");
         selection.SetVisible(false);
         selection.SetOpacity(0.2);
-		selection.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
-		selection.BindProperty(n"tintColor", n"MainColors.Blue");
+        selection.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
+        selection.BindProperty(n"tintColor", n"MainColors.Blue");
         selection.SetRenderTransformPivot(new Vector2(0.0, 0.0));
 
         this.m_selection = selection;

@@ -554,9 +554,9 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func IsEquipped(name: CName) -> Bool {
-    	return this.m_state.IsActive()
-    		? this.m_state.IsOutfit(name)
-    		: Equals(name, n"");
+        return this.m_state.IsActive()
+            ? this.m_state.IsOutfit(name)
+            : Equals(name, n"");
     }
 
     public func HasOutfit(name: CName) -> Bool {

@@ -427,16 +427,16 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 class UpdateInventoryGridCallback extends DelayCallback {
     protected let m_controller: wref<WardrobeScreenController>;
 
-	public func Call() {
+    public func Call() {
         if IsDefined(this.m_controller) {
             this.m_controller.UpdateScrollPosition();
             this.m_controller.PopulateInventoryGrid();
         }
-	}
+    }
 
     public static func Create(controller: ref<WardrobeScreenController>) -> ref<UpdateInventoryGridCallback> {
-		let self = new UpdateInventoryGridCallback();
-		self.m_controller = controller;
-		return self;
-	}
+        let self = new UpdateInventoryGridCallback();
+        self.m_controller = controller;
+        return self;
+    }
 }

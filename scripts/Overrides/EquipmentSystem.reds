@@ -62,17 +62,17 @@ class EquipmentSystemReattachItem extends DelayCallback {
     protected let m_slotID: TweakDBID;
     protected let m_itemID: ItemID;
 
-	public func Call() -> Void {
+    public func Call() -> Void {
         let transactionSystem = GameInstance.GetTransactionSystem(this.m_data.m_owner.GetGame());
         transactionSystem.AddItemToSlot(this.m_data.m_owner, this.m_slotID, this.m_itemID, true);
-	}
+    }
 
     public static func Create(data: ref<EquipmentSystemPlayerData>, slotID: TweakDBID, itemID: ItemID) -> ref<EquipmentSystemReattachItem> {
-		let self = new EquipmentSystemReattachItem();
-		self.m_data = data;
+        let self = new EquipmentSystemReattachItem();
+        self.m_data = data;
         self.m_slotID = slotID;
         self.m_itemID = itemID;
 
-		return self;
-	}
+        return self;
+    }
 }

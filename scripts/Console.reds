@@ -105,7 +105,7 @@ public abstract class EquipmentEx {
         }
     }
 
-	private static func Print(const str: script_ref<String>) {
-		LogChannel(n"DEBUG", str);
-	}
+    private static func Print(const str: script_ref<String>) {
+        LogChannel(n"DEBUG", str);
+    }
 }

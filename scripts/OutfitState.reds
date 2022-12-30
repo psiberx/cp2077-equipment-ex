@@ -105,20 +105,20 @@ class OutfitSet {
         }
 
         let hash = 14695981039346656037ul; // 0xcbf29ce484222325
-		let prime = 1099511628211ul; // 0x00000100000001B3
+        let prime = 1099511628211ul; // 0x00000100000001B3
         let base = 256ul;
 
         for item in items {
             let i = 8;
             while i > 0 {
                 hash = hash ^ (item % base);
-		    	hash *= prime;
+                hash *= prime;
                 item /= base;
                 i -= 1;
             }
         }
 
-		return hash;
+        return hash;
     }
 }
 
