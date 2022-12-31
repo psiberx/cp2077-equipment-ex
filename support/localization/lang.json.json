@@ -25,6 +25,13 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Current outfit",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-Wardrobe-CurrentOutfit"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Enter outfit name:",
               "maleVariant": "",
               "primaryKey": 0,
@@ -46,10 +53,45 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Item Source",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Preferred source of items for outfit manager: \u0022Inventory + Stash\u0022 will only use the current items in your inventory and stashes, \u0022Wardrobe Store\u0022 will use every item you have ever obtained in the game (including dropped and disassembled items).",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-Description"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Inventory + Stash",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-InventoryAndStash"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Wardrobe Store",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-WardrobeStore"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Equipment-EX requires:\\n- ArchiveXL {archive_xl_req} or higher\\n- TweakXL {tweak_xl_req} or higher\\n\\nDetected ArchiveXL {archive_xl_ver} and TweakXL {tweak_xl_ver}.\\n\\nPlease update the dependencies to use this mod.",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "UI-EquipmentEx-NotificationRequirements"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Equipment-EX has detected a conflicting mod.\\n\\nThe following mods may cause problems or block the functionality of this mod:\\n- Wardrobe accessories\\n\\nPlease disable or remove conflicting mods if you wish to use this mod.",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-NotificationConflicts"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
@@ -137,7 +179,7 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Torso/ Inner",
+              "femaleVariant": "Torso / Inner",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-TorsoInner"
