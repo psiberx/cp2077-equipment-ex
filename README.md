@@ -16,19 +16,26 @@
 
 ### Installation
 
-1. Download [the latest release](https://github.com/psiberx/cp2077-equipment-ex/releases) archive
-2. Extract the archive into the Cyberpunk 2077 installation directory
+1. Insall all requirements
+2. Download [the latest release](https://github.com/psiberx/cp2077-equipment-ex/releases) archive
+3. Extract the archive into the Cyberpunk 2077 installation directory
 
 ### How to use
 
 - The outfit manager is accessible through the new "Wardrobe" button in the Inventory menu or from wardrobe call in V's apartments
-- On the right side of the screen, you will see all your carried and stashed gear grouped by slots
+- On the right side of the screen, you will see all compatible gear grouped by slots
 - Clicking on any item will activate outfit mode, which applies the visuals of the selected items to your character over equipped gear
 - On the left side of the screen, you will see a list of your outfits
 - The "Save outfit" button becomes available when outfit mode is active
 - To equip a previously saved outfit, just click on the name in the list
 - To delete an outfit, hover over the outfit and press the hotkey from the hint
 - To disable the outfit mode, you can select "No outfit" or unequip the outfit from the Inventory menu
+
+### Settings
+
+| Name        | Description                                                                                                                                                                                                                                                       |
+|:------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Item Source | Sets the preferred source of items for outfit manager:<br>"Inventory + Stash" will only use the current items in your inventory and stashes<br>"Wardrobe Store" will use every item you have ever obtained in the game (including dropped and disassembled items) |
 
 ## Documentation
 
