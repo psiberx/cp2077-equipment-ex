@@ -79,6 +79,7 @@ class PatchOriginaltems extends ScriptableTweak {
         ]);
 
         offsetMatcher.MapAppearances([
+            new AppearanceNameOffsetMapping(5, ["t2_vest_13_"]),
             new AppearanceNameOffsetMapping(2000, ["t2_shirt_02_", "t2_vest_19_"]),
             new AppearanceNameOffsetMapping(4000, ["t2_jacket_11_", "set_01_nomad_01_t2_"]),
             new AppearanceNameOffsetMapping(-1000, ["t2_", "t1_formal_", "t1_shirt_01_", "t1_shirt_02_", "t1_undershirt_", "set_01_media_01_t1_", "t1_jumpsuit_", "set_01_netrunner_01_t1_"])
@@ -108,7 +109,7 @@ class PatchOriginaltems extends ScriptableTweak {
             }
 
             let outfitOffset = offsetMatcher.Match(item);
-            if outfitOffset >= 0 || garmentOffset <= 0 {
+            if outfitOffset != 0 && (outfitOffset > 0 || garmentOffset <= 0) {
                 garmentOffset += outfitOffset;
                 updated = true;
             }

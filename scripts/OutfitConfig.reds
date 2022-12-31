@@ -60,9 +60,9 @@ public abstract class OutfitConfig {
 
         // Neck
         ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0),
-        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceTight", -1),
-        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceShort", -1),
-        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceLong", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceTight", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceShort", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.NecklaceLong", 0),
 
         // Torso
         ExtraSlotConfig.Create(n"OutfitSlots.TorsoUnder", -4, t"AttachmentSlots.Chest"),
