@@ -246,8 +246,8 @@ public class OutfitSystem extends ScriptableSystem {
                 let itemID = itemObject.GetItemID();
                 if NotEquals(itemID, ignoreItemID){
                     let slotID = this.GetItemSlot(itemID);
-                    if NotEquals(slotID, ignoreSlotID) {
-                        this.EquipItem(itemID);
+                    if this.IsOutfitSlot(slotID) && NotEquals(slotID, ignoreSlotID) {
+                        this.EquipItem(itemID, slotID);
                         this.RefreshSlotAttachment(slotID);
                     }
                 }
