@@ -15,10 +15,17 @@ protected cb func OnInitialize() -> Bool {
     } else {
         this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController");
     }
+
+    this.m_introAnimProxy = new inkAnimProxy();
 }
 
 @replaceMethod(WardrobeUIGameController)
 protected cb func OnBack(userData: ref<IScriptable>) -> Bool {
+    this.m_menuEventDispatcher.SpawnEvent(n"OnWardrobeClose");
+}
+
+@replaceMethod(WardrobeUIGameController)
+private final func CloseWardrobe() -> Void {
     this.m_menuEventDispatcher.SpawnEvent(n"OnWardrobeClose");
 }
 
