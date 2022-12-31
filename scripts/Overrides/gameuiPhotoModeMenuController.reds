@@ -31,7 +31,7 @@ protected cb func OnInitialize() -> Bool {
 protected cb func OnAddMenuItem(label: String, attribute: Uint32, page: Uint32) -> Bool {
     wrappedMethod(label, attribute, page);
 
-    if Equals(page, PhotoModeUI.CharacterPage) && Equals(attribute, PhotoModeUI.VisibilityAttribute) {
+    if Equals(page, Cast<Uint32>(EnumInt(PhotoModeUI.CharacterPage))) && Equals(attribute, Cast<Uint32>(EnumInt(PhotoModeUI.VisibilityAttribute))) {
         this.AddMenuItem(StrUpper(GetLocalizedTextByKey(n"UI-Inventory-Labels-Outfit")), this.m_outfitAttribute, page, false);
     }
 }
@@ -86,7 +86,7 @@ protected cb func OnShow(reversedUI: Bool) -> Bool {
 protected cb func OnSetAttributeOptionEnabled(attribute: Uint32, enabled: Bool) -> Bool {
     wrappedMethod(attribute, enabled);
 
-    if Equals(attribute, PhotoModeUI.ExpressionAttribute) {
+    if Equals(attribute, Cast<Uint32>(EnumInt(PhotoModeUI.ExpressionAttribute))) {
         let outfitMenuItem = this.GetMenuItem(this.m_outfitAttribute);
         if IsDefined(outfitMenuItem) {
             outfitMenuItem.SetIsEnabled(enabled);
@@ -96,7 +96,7 @@ protected cb func OnSetAttributeOptionEnabled(attribute: Uint32, enabled: Bool) 
 
 @addMethod(gameuiPhotoModeMenuController)
 public func OnAttributeOptionSelected(attribute: Uint32, option: PhotoModeOptionSelectorData) {
-    if Equals(attribute, PhotoModeUI.OutfitAttribute) {
+    if Equals(attribute, Cast<Uint32>(EnumInt(PhotoModeUI.OutfitAttribute))) {
         switch option.optionData {
             case EnumInt(PhotoModeUI.NoOutfitOption):
                 this.m_outfitSystem.EquipPuppetOutfit(this.m_paperdollHelper.GetPuppet(), false);
