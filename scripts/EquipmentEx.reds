@@ -19,6 +19,8 @@ public abstract class EquipmentEx {
         }
         
         let dataManager = new InventoryDataManagerV2();
+        dataManager.Initialize(GetPlayer(game));
+
         let questsSystem = GameInstance.GetQuestsSystem(game);
         let transmogEnabled = questsSystem.GetFact(n"transmog_enabled");
         questsSystem.SetFact(n"transmog_enabled", 7);
