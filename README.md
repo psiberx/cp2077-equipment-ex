@@ -36,9 +36,9 @@
 
 ### Mod settings
 
-| Name             | Description                                                                                                                                                                                                                                                       |
-|:-----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Item&nbsp;Source | Sets the preferred source of items for outfit manager:<br>"Inventory + Stash" will only use the current items in your inventory and stashes<br>"Wardrobe Store" will use every item you have ever obtained in the game (including dropped and disassembled items) |
+| Name             | Description                                                                                                                                                                                                                                                          |
+|:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Item&nbsp;Source | Selects the preferred source of items for outfit manager:<br>"Inventory + Stash" will only use the current items in your inventory and stashes<br>"Wardrobe Store" will use every item you have ever obtained in the game (including dropped and disassembled items) |
 
 ## Documentation
 
