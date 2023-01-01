@@ -88,7 +88,7 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Equipment-EX has detected a conflicting mod.\\n\\nThe following mods may cause problems or block the functionality of this mod:\\n- Wardrobe accessories\\n\\nPlease disable or remove conflicting mods if you wish to use this mod.",
+              "femaleVariant": "Equipment-EX has detected a conflicting mod.\\n\\nThe following mods may cause problems or block the functionality of this mod:\\n{conflicts}\\nPlease disable or remove conflicting mods if you wish to use this mod.",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "UI-EquipmentEx-NotificationConflicts"
