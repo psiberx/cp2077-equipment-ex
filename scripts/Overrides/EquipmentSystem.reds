@@ -40,10 +40,29 @@ public final func OnRestored() {
 }
 
 @replaceMethod(EquipmentSystemPlayerData)
+public final func OnQuestDisableWardrobeSetRequest(request: ref<QuestDisableWardrobeSetRequest>) {
+    this.m_outfitSystem.Deactivate();
+}
+
+@replaceMethod(EquipmentSystemPlayerData)
+public final func OnQuestRestoreWardrobeSetRequest(request: ref<QuestRestoreWardrobeSetRequest>) {
+    this.m_outfitSystem.Reactivate();
+}
+
+@replaceMethod(EquipmentSystemPlayerData)
+public final func OnQuestEnableWardrobeSetRequest(request: ref<QuestEnableWardrobeSetRequest>) {}
+
+@replaceMethod(EquipmentSystemPlayerData)
+public final func QuestHideSlot(area: gamedataEquipmentArea) {}
+
+@replaceMethod(EquipmentSystemPlayerData)
+public final func QuestRestoreSlot(area: gamedataEquipmentArea) {}
+
+@replaceMethod(EquipmentSystemPlayerData)
 public final func EquipWardrobeSet(setID: gameWardrobeClothingSetIndex) {}
 
 @wrapMethod(EquipmentSystemPlayerData)
-private final func ResetItemAppearance(area: gamedataEquipmentArea, opt force: Bool) -> Void {
+private final func ResetItemAppearance(area: gamedataEquipmentArea, opt force: Bool) {
     wrappedMethod(area, force);
 
     if Equals(area, gamedataEquipmentArea.Feet) && !this.IsSlotHidden(area) && !this.IsSlotOverriden(area) {
@@ -62,7 +81,7 @@ class EquipmentSystemReattachItem extends DelayCallback {
     protected let m_slotID: TweakDBID;
     protected let m_itemID: ItemID;
 
-    public func Call() -> Void {
+    public func Call() {
         let transactionSystem = GameInstance.GetTransactionSystem(this.m_data.m_owner.GetGame());
         transactionSystem.AddItemToSlot(this.m_data.m_owner, this.m_slotID, this.m_itemID, true);
     }

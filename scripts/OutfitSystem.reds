@@ -42,18 +42,6 @@ public class OutfitSystem extends ScriptableSystem {
         this.ConvertWardrobeSets();
     }
 
-    private func OnQuestDisableWardrobeSetRequest(request: ref<QuestDisableWardrobeSetRequest>) {
-        this.Deactivate();
-    }
-
-    private func OnQuestEnableWardrobeSetRequest(request: ref<QuestEnableWardrobeSetRequest>) {
-        // this.Activate();
-    }
-
-    private func OnQuestRestoreWardrobeSetRequest(request: ref<QuestRestoreWardrobeSetRequest>) {
-        this.Reactivate();
-    }
-
     private func InitializeState() {
         if !IsDefined(this.m_state) {
             this.m_state = new OutfitState();
