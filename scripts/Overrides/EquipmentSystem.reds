@@ -1,6 +1,9 @@
 import EquipmentEx.OutfitSystem
 
 @addField(EquipmentSystemPlayerData)
+private let m_visualsLocked: Bool;
+
+@addField(EquipmentSystemPlayerData)
 private let m_outfitSystem: wref<OutfitSystem>;
 
 @wrapMethod(EquipmentSystemPlayerData)
@@ -8,6 +11,16 @@ public final func OnAttach() {
     wrappedMethod();
     
     this.m_outfitSystem = OutfitSystem.GetInstance(this.m_owner.GetGame());
+}
+
+@addMethod(EquipmentSystemPlayerData)
+public func LockVisualChanges() {
+    this.m_visualsLocked = true;
+}
+
+@addMethod(EquipmentSystemPlayerData)
+public func UnlockVisualChanges() {
+    this.m_visualsLocked = false;
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
@@ -74,6 +87,20 @@ public final func QuestHideSlot(area: gamedataEquipmentArea) {}
 
 @replaceMethod(EquipmentSystemPlayerData)
 public final func QuestRestoreSlot(area: gamedataEquipmentArea) {}
+
+@wrapMethod(EquipmentSystemPlayerData)
+private final func ClearItemAppearanceEvent(area: gamedataEquipmentArea) {
+    if !this.m_visualsLocked {
+        wrappedMethod(area);
+    }
+}
+
+@wrapMethod(EquipmentSystemPlayerData)
+private final func ResetItemAppearanceEvent(area: gamedataEquipmentArea) {
+    if !this.m_visualsLocked {
+        wrappedMethod(area);
+    }
+}
 
 @wrapMethod(EquipmentSystemPlayerData)
 private final func ResetItemAppearance(area: gamedataEquipmentArea, opt force: Bool) {
