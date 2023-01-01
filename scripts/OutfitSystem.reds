@@ -325,11 +325,27 @@ public class OutfitSystem extends ScriptableSystem {
         GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);       
     }
 
+    public func IsDisabled() -> Bool {
+        return this.m_state.IsDisabled();
+    }
+
+    public func Enable() {
+        this.m_state.SetDisabled(false);
+    }
+
+    public func Disable() {
+        this.m_state.SetDisabled(true);
+    }
+
     public func IsActive() -> Bool {
         return this.m_state.IsActive();
     }
 
     public func Activate() {
+        if this.m_state.IsDisabled() {
+            return;
+        }
+
         if !this.m_state.IsActive() {
             this.HideEquipment();
 
@@ -343,6 +359,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ActivateWithoutClone() {
+        if this.m_state.IsDisabled() {
+            return;
+        }
+
         if !this.m_state.IsActive() {
             this.HideEquipment();
 
@@ -354,6 +374,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ActivateWithoutSlot(slotID: TweakDBID) {
+        if this.m_state.IsDisabled() {
+            return;
+        }
+
         if !this.m_state.IsActive() {
             this.HideEquipment();
 
@@ -367,6 +391,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ActivateWithoutItem(itemID: ItemID) {
+        if this.m_state.IsDisabled() {
+            return;
+        }
+
         if !this.m_state.IsActive() {
             this.HideEquipment();
 
@@ -380,6 +408,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func Reactivate() {
+        if this.m_state.IsDisabled() {
+            return;
+        }
+
         if !this.m_state.IsActive() {
             this.HideEquipment();
 
@@ -464,6 +496,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func EquipItem(itemID: ItemID, opt slotID: TweakDBID) -> Bool {
+        if this.m_state.IsDisabled() {
+            return false;
+        }
+
         if TDBID.IsValid(slotID) {
             if !this.IsEquippable(itemID, slotID) {
                 return false;
@@ -487,6 +523,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipItem(recordID: TweakDBID) -> Bool {
+        if this.m_state.IsDisabled() {
+            return false;
+        }
+
         let itemData = this.m_transactionSystem.GetItemDataByTDBID(this.m_player, recordID);
 
         if !IsDefined(itemData) {
@@ -497,6 +537,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipItem(itemID: ItemID) -> Bool {
+        if this.m_state.IsDisabled() {
+            return false;
+        }
+
         this.ActivateWithoutItem(itemID);
         
         let part = this.m_state.GetPart(itemID);
@@ -514,6 +558,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipSlot(slotID: TweakDBID) -> Bool {
+        if this.m_state.IsDisabled() {
+            return false;
+        }
+
         this.ActivateWithoutSlot(slotID);
 
         let part = this.m_state.GetPart(slotID);
@@ -531,6 +579,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipAll() {
+        if this.m_state.IsDisabled() {
+            return;
+        }
+
         this.Activate();
 
         for part in this.m_state.GetParts() {
@@ -552,6 +604,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func LoadOutfit(name: CName) -> Bool {
+        if this.m_state.IsDisabled() {
+            return false;
+        }
+
         let outfit = this.m_state.GetOutfit(name);
 
         if !IsDefined(outfit) {

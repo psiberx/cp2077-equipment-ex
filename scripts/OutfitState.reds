@@ -123,10 +123,19 @@ class OutfitSet {
 }
 
 class OutfitState {
+    private persistent let m_disabled: Bool;
     private persistent let m_active: Bool;
     private persistent let m_parts: array<ref<OutfitPart>>;
     private persistent let m_outfits: array<ref<OutfitSet>>;
     private let m_hash: Uint64;
+
+    public func IsDisabled() -> Bool {
+        return this.m_disabled;
+    }
+
+    public func SetDisabled(state: Bool) {
+        this.m_disabled = state;
+    }
 
     public func IsActive() -> Bool {
         return this.m_active;

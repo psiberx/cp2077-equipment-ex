@@ -41,25 +41,39 @@ public final func OnRestored() {
 
 @replaceMethod(EquipmentSystemPlayerData)
 public final func OnQuestDisableWardrobeSetRequest(request: ref<QuestDisableWardrobeSetRequest>) {
-    this.m_outfitSystem.Deactivate();
+    if this.m_outfitSystem.IsActive() {
+        this.m_outfitSystem.Deactivate();
+        this.m_lastActiveWardrobeSet = gameWardrobeClothingSetIndex.Slot1;
+    }
+
+    if request.blockReequipping {
+        this.m_outfitSystem.Disable();
+    }
 }
 
 @replaceMethod(EquipmentSystemPlayerData)
 public final func OnQuestRestoreWardrobeSetRequest(request: ref<QuestRestoreWardrobeSetRequest>) {
-    this.m_outfitSystem.Reactivate();
+    this.m_outfitSystem.Enable();
+
+    if NotEquals(this.m_lastActiveWardrobeSet, gameWardrobeClothingSetIndex.INVALID) {
+        this.m_outfitSystem.Reactivate();
+        this.m_lastActiveWardrobeSet = gameWardrobeClothingSetIndex.INVALID;
+    }
 }
 
 @replaceMethod(EquipmentSystemPlayerData)
-public final func OnQuestEnableWardrobeSetRequest(request: ref<QuestEnableWardrobeSetRequest>) {}
+public final func OnQuestEnableWardrobeSetRequest(request: ref<QuestEnableWardrobeSetRequest>) {
+    this.m_outfitSystem.Enable();
+}
+
+@replaceMethod(EquipmentSystemPlayerData)
+public final func EquipWardrobeSet(setID: gameWardrobeClothingSetIndex) {}
 
 @replaceMethod(EquipmentSystemPlayerData)
 public final func QuestHideSlot(area: gamedataEquipmentArea) {}
 
 @replaceMethod(EquipmentSystemPlayerData)
 public final func QuestRestoreSlot(area: gamedataEquipmentArea) {}
-
-@replaceMethod(EquipmentSystemPlayerData)
-public final func EquipWardrobeSet(setID: gameWardrobeClothingSetIndex) {}
 
 @wrapMethod(EquipmentSystemPlayerData)
 private final func ResetItemAppearance(area: gamedataEquipmentArea, opt force: Bool) {
