@@ -131,3 +131,10 @@ then the slot will be automatically assigned according to this table:
 | `Items.Skirt`                     | `OutfitSlots.LegsOuter`  |
 | `Items.GenericFootClothing`       | `OutfitSlots.Feet`       |
 | `Items.Outfit`                    | `OutfitSlots.BodyMiddle` |
+
+## Translations
+
+If you want to translate this mod into your language, get translation template JSON 
+[`support/localization/lang.json.json`](https://github.com/psiberx/cp2077-equipment-ex/blob/master/support/localization/lang.json.json), 
+translate all `femaleVariant` values, and send it to us.
+Your translation will be added to the mod, and you will be credited on the mod page.
