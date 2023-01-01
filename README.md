@@ -10,13 +10,16 @@
 
 ### Requirements
 
+- Cyberpunk 2077 1.61
+- [RED4ext](https://github.com/WopsS/RED4ext) 1.9.0+
 - [ArchiveXL](https://github.com/psiberx/cp2077-archive-xl) 1.3.4+
 - [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.1.1+
 - [redscript](https://github.com/jac3km4/redscript) 0.5.9+
+- (Optional) [Mod Settings](https://github.com/jackhumbert/mod_settings) 0.0.9+
 
 ### Installation
 
-1. Insall all requirements
+1. Install all requirements
 2. Download [the latest release](https://github.com/psiberx/cp2077-equipment-ex/releases) archive
 3. Extract the archive into the Cyberpunk 2077 installation directory
 
@@ -31,11 +34,11 @@
 - To delete an outfit, hover over the outfit and press the hotkey from the hint
 - To disable the outfit mode, you can select "No outfit" or unequip the outfit from the Inventory menu
 
-### Settings
+### Mod settings
 
-| Name        | Description                                                                                                                                                                                                                                                       |
-|:------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Item Source | Sets the preferred source of items for outfit manager:<br>"Inventory + Stash" will only use the current items in your inventory and stashes<br>"Wardrobe Store" will use every item you have ever obtained in the game (including dropped and disassembled items) |
+| Name             | Description                                                                                                                                                                                                                                                       |
+|:-----------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Item&nbsp;Source | Sets the preferred source of items for outfit manager:<br>"Inventory + Stash" will only use the current items in your inventory and stashes<br>"Wardrobe Store" will use every item you have ever obtained in the game (including dropped and disassembled items) |
 
 ## Documentation
 
