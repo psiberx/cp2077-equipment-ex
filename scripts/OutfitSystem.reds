@@ -7,6 +7,7 @@ public class OutfitSystem extends ScriptableSystem {
     private let m_baseSlots: array<TweakDBID>;
     private let m_outfitSlots: array<TweakDBID>;
     private let m_managedSlots: array<TweakDBID>;
+    private let m_managedAreas: array<gamedataEquipmentArea>;
 
     private let m_player: wref<GameObject>;
     private let m_equipmentData: wref<EquipmentSystemPlayerData>;
@@ -55,6 +56,7 @@ public class OutfitSystem extends ScriptableSystem {
         for baseSlot in OutfitConfig.BaseSlots() {
             ArrayPush(this.m_baseSlots, baseSlot.slotID);
             ArrayPush(this.m_managedSlots, baseSlot.slotID);
+            ArrayPush(this.m_managedAreas, baseSlot.equipmentArea);
         }
         for outfitSlot in OutfitConfig.OutfitSlots() {
             ArrayPush(this.m_outfitSlots, outfitSlot.slotID);
@@ -807,6 +809,10 @@ public class OutfitSystem extends ScriptableSystem {
 
     public func IsManagedSlot(slotID: TweakDBID) -> Bool {
         return ArrayContains(this.m_managedSlots, slotID);
+    }
+
+    public func IsManagedArea(area: gamedataEquipmentArea) -> Bool {
+        return ArrayContains(this.m_managedAreas, area);
     }
 
     public func GetOutfitSlots() -> array<TweakDBID> {
