@@ -15,7 +15,7 @@
 - [ArchiveXL](https://github.com/psiberx/cp2077-archive-xl) 1.3.4+
 - [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.1.1+
 - [redscript](https://github.com/jac3km4/redscript) 0.5.9+
-- (Optional) [Mod Settings](https://github.com/jackhumbert/mod_settings) 0.0.9+
+- (Optional) [Mod Settings](https://github.com/jackhumbert/mod_settings) 0.0.10+
 
 ### Installation
 
@@ -138,4 +138,10 @@ then the slot will be automatically assigned according to this table:
 If you want to translate this mod into your language, get translation template JSON 
 [`support/localization/lang.json.json`](https://github.com/psiberx/cp2077-equipment-ex/blob/master/support/localization/lang.json.json), 
 translate all `femaleVariant` values, and send it to us.
+Please try to make a translation as close to the English version as possible.
 Your translation will be added to the mod, and you will be credited on the mod page.
+
+Available translations:
+
+- English
+- Russian (by @Locked15)
