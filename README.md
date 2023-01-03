@@ -33,6 +33,7 @@
 - To equip a previously saved outfit, just click on the name in the list
 - To delete an outfit, hover over the outfit and press the hotkey from the hint
 - To disable the outfit mode, you can select "No outfit" or unequip the outfit from the Inventory menu
+- In photo mode, you will find the option to change outfits on the fly in the pose section
 
 ### Mod settings
 
