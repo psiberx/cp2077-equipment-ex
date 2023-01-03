@@ -80,7 +80,7 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.Wreath`        | Wreaths                                          |
 | `OutfitSlots.EarLeft`       | Earrings                                         |
 | `OutfitSlots.EarRight`      | Earrings                                         |
-| `OutfitSlots.Neckwear`      | Scarves, Collars, Ties                           |
+| `OutfitSlots.Neckwear`      | Scarves, Collars                                 |
 | `OutfitSlots.NecklaceTight` | Chokers                                          | 
 | `OutfitSlots.NecklaceShort` | Short Necklaces                                  | 
 | `OutfitSlots.NecklaceLong`  | Long Necklaces                                   |  
