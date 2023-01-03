@@ -144,7 +144,7 @@ To activate a new suffix, you must add it to `appearanceSuffixes` as usual:
 Items.MyTights:
   $base: Items.GenericLegClothing
   appearanceSuffixes: 
-   - !append itemsFactoryAppearanceSuffix.LegsState
+    - !append itemsFactoryAppearanceSuffix.LegsState
 ```
 
 | Character | Footwear   | Suffix    |
