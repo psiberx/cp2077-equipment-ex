@@ -11,9 +11,9 @@
 ### Requirements
 
 - Cyberpunk 2077 1.61
-- [RED4ext](https://github.com/WopsS/RED4ext) 1.9.0+
 - [ArchiveXL](https://github.com/psiberx/cp2077-archive-xl) 1.3.4+
 - [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.1.1+
+- [RED4ext](https://github.com/WopsS/RED4ext) 1.9.0+
 - [redscript](https://github.com/jac3km4/redscript) 0.5.9+
 - (Optional) [Mod Settings](https://github.com/jackhumbert/mod_settings) 0.0.10+
 
@@ -112,8 +112,8 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 When proposing a new slot, please follow these recommendations:
 
 - The purpose of the slot must be clear and distinguishable from other slots
-- The slot must represent a body part
-- If the slot cannot be bound to a body part, then the equipment category should be used
+- The slot must represent an area or layer for only one item equipped at a time
+- The slot must be named after a body part if possible, or equipment category otherwise
 
 ### Auto conversions
 
@@ -132,6 +132,27 @@ then the slot will be automatically assigned according to this table:
 | `Items.Skirt`                     | `OutfitSlots.LegsOuter`  |
 | `Items.GenericFootClothing`       | `OutfitSlots.Feet`       |
 | `Items.Outfit`                    | `OutfitSlots.BodyMiddle` |
+
+### Appearance suffixes
+
+The mod adds a new appearance suffix that represents the state of the legs of female characters.
+It can be used to properly render tights depending on whether the character is wearing shoes.
+
+To activate a new suffix, you must add it to `appearanceSuffixes` as usual:
+
+```yaml
+Items.MyTights:
+  $base: Items.GenericLegClothing
+  appearanceSuffixes: 
+   - !append itemsFactoryAppearanceSuffix.LegsState
+```
+
+| Character | Footwear   | Suffix    |
+|:----------|:-----------|:----------|
+| Female    | Unequipped | `&Flat`   |
+| Female    | Equipped   | `&Lifted` |
+| Male      | Unequipped | (empty)   |
+| Male      | Equipped   | (empty)   |
 
 ## Translations
 
