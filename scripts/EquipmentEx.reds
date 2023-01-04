@@ -1,7 +1,7 @@
 module EquipmentEx
 
 public abstract class EquipmentEx {
-    public static func Version() -> String = "0.8.0";
+    public static func Version() -> String = "0.8.1";
 
     public static func RequiredArchiveXL() -> String = "1.3.4";
     public static func RequiredTweakXL() -> String = "1.1.0";

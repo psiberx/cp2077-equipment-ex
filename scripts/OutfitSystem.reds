@@ -13,6 +13,7 @@ public class OutfitSystem extends ScriptableSystem {
     private let m_equipmentData: wref<EquipmentSystemPlayerData>;
     private let m_transactionSystem: wref<TransactionSystem>;
     private let m_attachmentSlotsListener: ref<AttachmentSlotsScriptListener>;
+    private let m_delaySystem: wref<DelaySystem>;
 
     private let m_equipmentDef: wref<UI_EquipmentDef>;
     private let m_equipmentBlackboard: wref<IBlackboard>;
@@ -30,11 +31,12 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func OnRestored(saveVersion: Int32, gameVersion: Int32) {
         this.InitializePlayerAndSystems();
+        this.MigrateState();
 
         if this.m_state.IsActive() {
             this.HideEquipment();
-            this.MigrateState();
-            this.AttachAllVisualsToSlots();
+
+            this.m_delaySystem.DelayCallback(DelayedRestoreCallback.Create(this), 1.0 / 30.0, false);
         }
     }
 
@@ -74,6 +76,7 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_equipmentData = EquipmentSystem.GetData(this.m_player);
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
         this.m_attachmentSlotsListener = this.m_transactionSystem.RegisterAttachmentSlotListener(this.m_player, PlayerSlotsCallback.Create(this));
+        this.m_delaySystem = GameInstance.GetDelaySystem(this.GetGameInstance());
     }
 
     private func UninitializeSystems() {
@@ -193,7 +196,7 @@ public class OutfitSystem extends ScriptableSystem {
             let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
 
             this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
-            this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
+            this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, slotID, previewID), 1.0 / 30.0, false);
         }
     }
 
@@ -866,6 +869,42 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     public static func Create(system: ref<OutfitSystem>) -> ref<PlayerSlotsCallback> {
         let self = new PlayerSlotsCallback();
         self.m_system = system;
+
+        return self;
+    }
+}
+
+class DelayedRestoreCallback extends DelayCallback {
+    private let m_system: wref<OutfitSystem>;
+
+    public func Call() {
+        this.m_system.AttachAllVisualsToSlots();
+    }
+
+    public static func Create(system: ref<OutfitSystem>) -> ref<DelayedRestoreCallback> {
+        let self = new DelayedRestoreCallback();
+        self.m_system = system;
+
+        return self;
+    }
+}
+
+class DelayedAttachCallback extends DelayCallback {
+    private let m_transactionSystem: wref<TransactionSystem>;
+    private let m_player: wref<GameObject>;
+    private let m_slotID: TweakDBID;
+    private let m_itemID: ItemID;
+
+    public func Call() {
+        this.m_transactionSystem.AddItemToSlot(this.m_player, this.m_slotID, this.m_itemID, true);
+    }
+
+    public static func Create(transactionSystem: wref<TransactionSystem>, player: wref<GameObject>, slotID: TweakDBID, itemID: ItemID) -> ref<DelayedAttachCallback> {
+        let self = new DelayedAttachCallback();
+        self.m_transactionSystem = transactionSystem;
+        self.m_player = player;
+        self.m_slotID = slotID;
+        self.m_itemID = itemID;
 
         return self;
     }
