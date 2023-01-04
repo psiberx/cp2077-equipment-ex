@@ -166,3 +166,4 @@ Available translations:
 
 - English
 - Russian (by @Locked15)
+- Czech (by @starfis)

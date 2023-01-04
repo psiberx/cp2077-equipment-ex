@@ -2,3 +2,4 @@ localization:
   onscreens:
     en-us: equipment_ex\localization\en-us.json
     ru-ru: equipment_ex\localization\ru-ru.json
+    cz-cz: equipment_ex\localization\cz-cz.json
