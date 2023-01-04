@@ -36,3 +36,24 @@ protected func RefreshUI() {
         inkWidgetRef.SetMargin(this.m_wardrobeInfoContainer, new inkMargin(12.0, 0, 0, 12.0));
     }
 }
+
+@wrapMethod(InventoryItemDisplayController)
+public func Setup(inventoryItem: wref<UIInventoryItem>, displayContextData: wref<ItemDisplayContextData>, opt enoughMoney: Bool, opt owned: Bool, opt isUpgradable: Bool, opt overrideQuantity: Int32) {
+    this.m_outfitSystem = OutfitSystem.GetInstance(inventoryItem.m_manager.m_uiScriptableSystem.GetGameInstance());
+
+    wrappedMethod(inventoryItem, displayContextData, enoughMoney, owned, isUpgradable, overrideQuantity);
+}
+
+@wrapMethod(InventoryItemDisplayController)
+protected func NewUpdateEquipped(itemData: ref<UIInventoryItem>) {
+    if this.m_displayContextData.IsWardrobe() && this.m_outfitSystem.IsActive() {
+        itemData.TEMP_isEquippedPrefetched = true;
+        itemData.TEMP_isEquipped = this.m_outfitSystem.IsEquipped(itemData.ID);
+    }
+
+    wrappedMethod(itemData);
+
+    if this.m_displayContextData.IsWardrobe() {
+        itemData.TEMP_isEquippedPrefetched = false;
+    }
+}

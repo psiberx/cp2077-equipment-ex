@@ -101,9 +101,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         // Display Context
 
         this.m_itemDisplayContext = ItemDisplayContextData.Make(this.m_player, ItemDisplayContext.GearPanel);
-
-        // this.m_inventoryManager = new InventoryDataManagerV2();
-        // this.m_inventoryManager.Initialize(this.m_player);
+        this.m_itemDisplayContext.SetWardrobe(true);
 
         // Listeners
 
@@ -131,9 +129,6 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.PlaySound(n"GameMenu", n"OnClose");
 
         this.m_delaySystem.CancelDelay(this.m_inventoryGridUpdateDelayID);
-
-        // this.m_inventoryManager.ClearInventoryItemDataCache();
-        // this.m_inventoryManager.UnInitialize();
 
         this.m_uiInventorySystem.FlushFullscreenCache();
 
