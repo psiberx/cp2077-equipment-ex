@@ -57,3 +57,10 @@ protected func NewUpdateEquipped(itemData: ref<UIInventoryItem>) {
         itemData.TEMP_isEquippedPrefetched = false;
     }
 }
+
+@wrapMethod(InventoryItemDisplayController)
+protected func NewUpdateRequirements(itemData: ref<UIInventoryItem>) {
+    if !this.m_displayContextData.IsWardrobe() {
+        wrappedMethod(itemData);
+    }
+}
