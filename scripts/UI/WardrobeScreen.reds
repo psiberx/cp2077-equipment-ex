@@ -101,7 +101,6 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         // Display Context
 
         this.m_itemDisplayContext = ItemDisplayContextData.Make(this.m_player, ItemDisplayContext.GearPanel);
-        this.m_itemDisplayContext.SetWardrobe(true);
 
         // Listeners
 
@@ -213,7 +212,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
                 for itemData in slotItems {
                     let uiItemData = new InventoryGridItemData();
-                    uiItemData.Item = UIInventoryItem.Make(this.m_player, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
+                    uiItemData.Item = UIInventoryItem.Make(this.m_player, slotID, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
                     uiItemData.DisplayContextData = this.m_itemDisplayContext;
                     uiItemData.SlotIndex = groupIndex;
                     uiItemData.ItemIndex = itemIndex;
