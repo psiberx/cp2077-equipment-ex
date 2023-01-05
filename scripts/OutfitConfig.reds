@@ -70,6 +70,7 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"OutfitSlots.TorsoMiddle", -2, t"AttachmentSlots.Torso"),
         ExtraSlotConfig.Create(n"OutfitSlots.TorsoOuter", 2, t"AttachmentSlots.Torso"),
         ExtraSlotConfig.Create(n"OutfitSlots.TorsoAux", 4, t"AttachmentSlots.Torso"),
+        ExtraSlotConfig.Create(n"OutfitSlots.Back", 3),
 
         // Shoulders
         ExtraSlotConfig.Create(n"OutfitSlots.ShoulderLeft", -1),
