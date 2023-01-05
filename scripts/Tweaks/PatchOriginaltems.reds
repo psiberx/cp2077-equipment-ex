@@ -3,6 +3,7 @@ module EquipmentEx
 class PatchOriginaltems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
+        let outfitSlotMap = OutfitConfig.OutfitSlotMap();
         let slotMatcher = OutfitSlotMatcher.Create();
 
         slotMatcher.IgnoreEntities([
@@ -91,8 +92,21 @@ class PatchOriginaltems extends ScriptableTweak {
             let garmentOffset = item.GarmentOffset();
             let updated = false;
 
+            let alreadyTweaked = false;
+            for placementSlot in placementSlots {
+                if outfitSlotMap.KeyExist(TDBID.ToNumber(placementSlot)) {
+                    let slot = outfitSlots[outfitSlotMap.Get(TDBID.ToNumber(placementSlot))];
+
+                    LogChannel(n"Debug", s"Found already tweaked vanilla item \(slot.displayName): \(NameToString(slot.slotName))");
+                    garmentOffset = slot.garmentOffset;
+                    updated = true;
+                    alreadyTweaked = true;
+                    break;
+                }
+            }
+
             let outfitSlotID = slotMatcher.Match(item);
-            if TDBID.IsValid(outfitSlotID) {
+            if TDBID.IsValid(outfitSlotID) && !alreadyTweaked {
                 for outfitSlot in outfitSlots {
                     if outfitSlot.slotID == outfitSlotID {
                         if !ArrayContains(placementSlots, outfitSlot.slotID) {
