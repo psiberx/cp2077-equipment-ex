@@ -63,6 +63,11 @@ class OutfitSlotMatcher {
     }
     
     public func Match(item: ref<Clothing_Record>) -> TweakDBID {
+        let slotID = GetSlotOverride(item);
+        if TDBID.IsValid(slotID) {
+            return slotID;
+        }
+
         if Equals(item.AppearanceName(), n"") {
             return TDBID.None();
         }
@@ -140,4 +145,15 @@ class OutfitSlotMatcher {
     public static func Create() -> ref<OutfitSlotMatcher> {
         return new OutfitSlotMatcher();
     }
+}
+
+@if(ModuleExists("EquipmentEx.DevMode"))
+func GetSlotOverride(item: ref<Clothing_Record>) -> TweakDBID {
+    return TDBID.None();
+}
+
+@if(!ModuleExists("EquipmentEx.DevMode"))
+func GetSlotOverride(item: ref<Clothing_Record>) -> TweakDBID {
+    let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
+    return ArraySize(placementSlots) > 1 ? ArrayLast(placementSlots) : TDBID.None();
 }

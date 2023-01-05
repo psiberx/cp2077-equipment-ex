@@ -3,7 +3,6 @@ module EquipmentEx
 class PatchOriginaltems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
-        let outfitSlotMap = OutfitConfig.OutfitSlotMap();
         let slotMatcher = OutfitSlotMatcher.Create();
 
         slotMatcher.IgnoreEntities([
@@ -92,31 +91,14 @@ class PatchOriginaltems extends ScriptableTweak {
             let garmentOffset = item.GarmentOffset();
             let updated = false;
 
-            let alreadyTweaked = false;
-            for placementSlot in placementSlots {
-                if outfitSlotMap.KeyExist(TDBID.ToNumber(placementSlot)) {
-                    let slot = outfitSlots[outfitSlotMap.Get(TDBID.ToNumber(placementSlot))];
-
-                    LogChannel(n"Debug", s"Found already tweaked vanilla item \(slot.displayName): \(NameToString(slot.slotName))");
-                    garmentOffset = slot.garmentOffset;
-                    updated = true;
-                    alreadyTweaked = true;
-                    break;
-                }
-            }
-
             let outfitSlotID = slotMatcher.Match(item);
-            if TDBID.IsValid(outfitSlotID) && !alreadyTweaked {
+            if TDBID.IsValid(outfitSlotID) {
                 for outfitSlot in outfitSlots {
                     if outfitSlot.slotID == outfitSlotID {
-                        if !ArrayContains(placementSlots, outfitSlot.slotID) {
-                            ArrayPush(placementSlots, outfitSlot.slotID);
-                            updated = true;
-                        }
-                        if outfitSlot.garmentOffset != 0 {
-                            garmentOffset = outfitSlot.garmentOffset;
-                            updated = true;
-                        }
+                        ArrayRemove(placementSlots, outfitSlot.slotID);
+                        ArrayPush(placementSlots, outfitSlot.slotID);
+                        garmentOffset = outfitSlot.garmentOffset;
+                        updated = true;
                         break;
                     }
                 }
