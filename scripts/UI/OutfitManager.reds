@@ -144,7 +144,7 @@ class OutfitManagerController extends inkLogicController {
     }
 
     protected cb func OnOutfitListEntryClick(evt: ref<OutfitListEntryClick>) {
-        if evt.action.IsAction(n"click") {
+        if evt.action.IsAction(n"click") && this.AccessOutfitSystem() {
             this.PlaySound(n"Button", n"OnPress");
 
             switch evt.entry.Action {
@@ -163,7 +163,7 @@ class OutfitManagerController extends inkLogicController {
             return;
         }
 
-        if evt.action.IsAction(n"drop_item") {
+        if evt.action.IsAction(n"drop_item") && this.AccessOutfitSystem() {
             this.ShowDeleteOutfitPopup(evt.entry.Name);
         }
     }
@@ -272,5 +272,17 @@ class OutfitManagerController extends inkLogicController {
 
     protected cb func OnScrollChanged(value: Vector2) {
         this.RefreshList();
+    }
+
+    protected func AccessOutfitSystem() -> Bool {
+        if this.m_outfitSystem.IsBlocked() {
+            let notification = new UIMenuNotificationEvent();
+            notification.m_notificationType = UIMenuNotificationType.InventoryActionBlocked;           
+            this.QueueEvent(notification);
+
+            return false;
+        }
+
+        return true;
     }
 }

@@ -313,14 +313,14 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
     protected cb func OnInventoryClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
         if evt.actionName.IsAction(n"equip_item") {
-            if !evt.uiInventoryItem.IsEquipped() {
+            if !evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
                 if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
                     this.ShowItemButtonHints(evt.uiInventoryItem);
                 }
             }
         } else {
             if evt.actionName.IsAction(n"unequip_item") {
-                if evt.uiInventoryItem.IsEquipped() {
+                if evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
                     if this.m_outfitSystem.UnequipItem(evt.uiInventoryItem.ID) {
                         this.ShowItemButtonHints(evt.uiInventoryItem);
                     }
@@ -415,7 +415,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnGlobalHold(evt: ref<inkPointerEvent>) -> Bool {
-        if evt.IsAction(n"disassemble_item") && evt.GetHoldProgress() >= 1.0 {
+        if evt.IsAction(n"disassemble_item") && evt.GetHoldProgress() >= 1.0 && this.AccessOutfitSystem() {
             this.m_outfitSystem.UnequipAll();
         }
     }
@@ -458,6 +458,18 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         setCameraSetupEvent.setupIndex = Cast<Uint32>(EnumInt(zoomArea));
 
         puppet.QueueEvent(setCameraSetupEvent);
+    }
+
+    protected func AccessOutfitSystem() -> Bool {
+        if this.m_outfitSystem.IsBlocked() {
+            let notification = new UIMenuNotificationEvent();
+            notification.m_notificationType = UIMenuNotificationType.InventoryActionBlocked;           
+            this.QueueEvent(notification);
+
+            return false;
+        }
+
+        return true;
     }
 }
 

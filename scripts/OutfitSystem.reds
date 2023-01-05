@@ -334,6 +334,19 @@ public class OutfitSystem extends ScriptableSystem {
         GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);       
     }
 
+    public func IsBlocked() -> Bool {
+        if this.m_state.IsDisabled() {
+            return true;
+        }
+
+        let outfitItem = this.m_transactionSystem.GetItemInSlot(this.m_player, t"AttachmentSlots.Outfit");
+        if IsDefined(outfitItem) && outfitItem.GetItemData().HasTag(n"UnequipBlocked") {
+            return true;
+        }
+
+        return false;
+    }
+
     public func IsDisabled() -> Bool {
         return this.m_state.IsDisabled();
     }
@@ -351,7 +364,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func Activate() {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return;
         }
 
@@ -368,7 +381,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ActivateWithoutClone() {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return;
         }
 
@@ -383,7 +396,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ActivateWithoutSlot(slotID: TweakDBID) {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return;
         }
 
@@ -400,7 +413,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ActivateWithoutItem(itemID: ItemID) {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return;
         }
 
@@ -417,7 +430,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func Reactivate() {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return;
         }
 
@@ -505,7 +518,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func EquipItem(itemID: ItemID, opt slotID: TweakDBID) -> Bool {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return false;
         }
 
@@ -532,7 +545,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipItem(recordID: TweakDBID) -> Bool {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return false;
         }
 
@@ -546,7 +559,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipItem(itemID: ItemID) -> Bool {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return false;
         }
 
@@ -567,7 +580,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipSlot(slotID: TweakDBID) -> Bool {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return false;
         }
 
@@ -588,7 +601,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func UnequipAll() {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return;
         }
 
@@ -615,7 +628,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func LoadOutfit(name: CName) -> Bool {
-        if this.m_state.IsDisabled() {
+        if this.IsBlocked() {
             return false;
         }
 
