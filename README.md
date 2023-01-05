@@ -164,6 +164,8 @@ Your translation will be added to the mod, and you will be credited on the mod p
 
 Available translations:
 
-- English
-- Russian (by @Locked15)
-- Czech (by @starfis)
+- English (`en-us`)
+- Czech (`cz-cz`) by [@starfis](https://www.nexusmods.com/cyberpunk2077/users/933641)
+- German (`de-de`) by [@Vorgash](https://www.nexusmods.com/users/3957237)
+- Russian (`ru-ru`) by [@Locked15](https://github.com/Locked15)
+- Simplified Chinese (`zh-cn`) by [@Zo70](https://www.nexusmods.com/cyberpunk2077/users/158442118)
