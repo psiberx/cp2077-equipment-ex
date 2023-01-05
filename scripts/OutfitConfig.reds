@@ -109,6 +109,19 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"OutfitSlots.BodyOuter", 10, t"AttachmentSlots.Torso")
     ];
 
+    public static func OutfitSlotMap() -> ref<inkIntHashMap> {
+        let map = new inkIntHashMap();
+        let outfitSlots = OutfitConfig.OutfitSlots();
+
+        let i = 0;
+        for slot in outfitSlots {
+            map.Insert(TDBID.ToNumber(slot.slotID), i);
+            i += 1;
+        }
+
+        return map;
+    }
+
     public static func AppearanceSuffixes() -> array<AppearanceSuffixConfig> = [
         AppearanceSuffixConfig.Create(n"itemsFactoryAppearanceSuffix.LegsState", n"EquipmentEx.PuppetStateSystem", n"GetLegsStateSuffix")
     ];
