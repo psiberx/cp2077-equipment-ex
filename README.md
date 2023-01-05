@@ -81,16 +81,17 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.EarLeft`       | Earrings                                         |
 | `OutfitSlots.EarRight`      | Earrings                                         |
 | `OutfitSlots.Neckwear`      | Scarves, Collars                                 |
-| `OutfitSlots.NecklaceTight` | Chokers                                          | 
-| `OutfitSlots.NecklaceShort` | Short Necklaces                                  | 
-| `OutfitSlots.NecklaceLong`  | Long Necklaces                                   |  
-| `OutfitSlots.TorsoUnder`    | Bras, Tight Long-sleeves                         |  
-| `OutfitSlots.TorsoInner`    | Tops, T-Shirts, Tight Shirts, Tight Dresses      |  
-| `OutfitSlots.TorsoMiddle`   | Waistcoats, Blazers, Loose Shirts, Loose Dresses |     
-| `OutfitSlots.TorsoOuter`    | Jackets, Coats                                   |           
-| `OutfitSlots.TorsoAux`      | Vests, Harnesses, Puffers                        |                      
-| `OutfitSlots.ShoulderLeft`  |                                                  |                    
-| `OutfitSlots.ShoulderRight` |                                                  |                   
+| `OutfitSlots.NecklaceTight` | Chokers                                          |
+| `OutfitSlots.NecklaceShort` | Short Necklaces                                  |
+| `OutfitSlots.NecklaceLong`  | Long Necklaces                                   |
+| `OutfitSlots.TorsoUnder`    | Bras, Tight Long-sleeves                         |
+| `OutfitSlots.TorsoInner`    | Tops, T-Shirts, Tight Shirts, Tight Dresses      |
+| `OutfitSlots.TorsoMiddle`   | Waistcoats, Blazers, Loose Shirts, Loose Dresses |
+| `OutfitSlots.TorsoOuter`    | Jackets, Coats                                   |
+| `OutfitSlots.TorsoAux`      | Vests, Harnesses, Puffers                        |
+| `OutfitSlots.Back`          | Backpacks                                        |
+| `OutfitSlots.ShoulderLeft`  |                                                  |
+| `OutfitSlots.ShoulderRight` |                                                  |
 | `OutfitSlots.WristLeft`     | Watches, Bands                                   |
 | `OutfitSlots.WristRight`    | Watches, Bands                                   |
 | `OutfitSlots.HandLeft`      | Gloves, Rings                                    |
