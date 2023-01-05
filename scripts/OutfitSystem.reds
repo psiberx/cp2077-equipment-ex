@@ -593,13 +593,15 @@ public class OutfitSystem extends ScriptableSystem {
             return;
         }
 
-        this.Activate();
-
-        for part in this.m_state.GetParts() {
-            if this.IsOutfitSlot(part.GetSlotID()) {
-                this.RemoveItemFromState(part.GetItemID());
-                this.DetachVisualFromSlot(part.GetItemID(), part.GetSlotID());
+        if this.m_state.IsActive() {
+            for part in this.m_state.GetParts() {
+                if this.IsOutfitSlot(part.GetSlotID()) {
+                    this.RemoveItemFromState(part.GetItemID());
+                    this.DetachVisualFromSlot(part.GetItemID(), part.GetSlotID());
+                }
             }
+        } else {
+            this.ActivateWithoutClone();
         }
     }
 

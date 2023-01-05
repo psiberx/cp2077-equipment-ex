@@ -58,6 +58,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.m_buttonHints = this.SpawnFromExternal(this.GetChildWidgetByPath(n"button_hints"), r"base\\gameplay\\gui\\common\\buttonhints.inkwidget", n"Root").GetController() as ButtonHints;
         this.m_buttonHints.AddButtonHint(n"back", GetLocalizedTextByKey(n"Common-Access-Close"));
+        this.m_buttonHints.AddButtonHint(n"disassemble_item", "[" + GetLocalizedText("Gameplay-Devices-Interactions-Helpers-Hold") + "] " + GetLocalizedTextByKey(n"UI-UserActions-Unequip") + " " + GetLocalizedTextByKey(n"UI-Filters-AllItems"));
 
         this.m_outfitManager = this.SpawnFromLocal(this.GetChildWidgetByPath(n"wrapper/wrapper"), n"OutfitManager:EquipmentEx.OutfitManagerController").GetController() as OutfitManagerController;
         this.m_outfitManager.Setup(this.m_outfitSystem, this, this.m_buttonHints);
@@ -115,6 +116,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.RegisterToGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.RegisterToGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
+        this.RegisterToGlobalInputCallback(n"OnPostOnHold", this, n"OnGlobalHold");
         this.RegisterToGlobalInputCallback(n"OnPreOnRelative", this, n"OnGlobalRelative");
         this.RegisterToGlobalInputCallback(n"OnPreOnAxis", this, n"OnGlobalAxis");
 
@@ -140,6 +142,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.UnregisterFromGlobalInputCallback(n"OnPostOnPress", this, n"OnGlobalPress");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelease", this, n"OnGlobalRelease");
+        this.UnregisterFromGlobalInputCallback(n"OnPostOnHold", this, n"OnGlobalHold");
         this.UnregisterFromGlobalInputCallback(n"OnPostOnRelative", this, n"OnGlobalRelative");
         this.UnregisterFromGlobalInputCallback(n"OnPreOnAxis", this, n"OnGlobalAxis");
 
@@ -408,6 +411,12 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             this.QueueEvent(cursorEvent);
 
             evt.Consume();
+        }
+    }
+
+    protected cb func OnGlobalHold(evt: ref<inkPointerEvent>) -> Bool {
+        if evt.IsAction(n"disassemble_item") && evt.GetHoldProgress() >= 1.0 {
+            this.m_outfitSystem.UnequipAll();
         }
     }
 
