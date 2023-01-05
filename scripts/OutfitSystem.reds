@@ -42,7 +42,7 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
         this.InitializePlayerAndSystems();
-        this.ConvertWardrobeSets();
+        this.ConvertClothingSets();
     }
 
     private func InitializeState() {
@@ -85,10 +85,9 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    private func ConvertWardrobeSets() {
+    private func ConvertClothingSets() {
         if this.m_firstUse {
-            let wardrobeSystem = GameInstance.GetWardrobeSystem(this.GetGameInstance());
-            let clothingSets = wardrobeSystem.GetClothingSets();
+            let clothingSets = ExtractClothingSets(this.GetGameInstance());
 
             for clothingSet in clothingSets {
                 let outfitParts: array<ref<OutfitPart>>;
@@ -105,7 +104,7 @@ public class OutfitSystem extends ScriptableSystem {
                 }
 
                 if ArraySize(outfitParts) > 0 {
-                    let outfitName = StringToName("Wardrobe Set " + ToString(EnumInt(clothingSet.setID) + 1));
+                    let outfitName = StringToName("Wardrobe Set " + ToString(clothingSet.setID));
                     this.m_state.SaveOutfit(outfitName, outfitParts, false, this.GetTimestamp());
                 }
             }
