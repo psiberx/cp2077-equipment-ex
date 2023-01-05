@@ -19,3 +19,12 @@ public final func IsEquipped() -> Bool {
 
     return wrappedMethod();
 }
+
+@wrapMethod(UIInventoryItem)
+public final func IsTransmogItem() -> Bool {
+    if this.IsForWardrobe()  {
+        return false;
+    }
+
+    return wrappedMethod();
+}

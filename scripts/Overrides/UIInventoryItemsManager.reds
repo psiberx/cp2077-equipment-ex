@@ -15,3 +15,8 @@ public final static func Make(player: wref<PlayerPuppet>, transactionSystem: ref
 public final func IsItemEquippedInSlot(itemID: ItemID, slotID: TweakDBID) -> Bool {
     return this.m_outfitSystem.IsActive() ? this.m_outfitSystem.IsEquipped(itemID) : this.IsItemEquipped(itemID);
 }
+
+@wrapMethod(UIInventoryItemsManager)
+public final func IsItemTransmog(itemID: ItemID) -> Bool {
+    return this.m_outfitSystem.IsActive() && this.m_outfitSystem.IsEquipped(itemID);
+}
