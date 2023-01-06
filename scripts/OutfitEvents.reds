@@ -1,5 +1,7 @@
 module EquipmentEx
 
+public class OutfitListReload extends Event {}
+
 public class OutfitUpdated extends Event {
     public let isActive: Bool;
     public let outfitName: CName;

@@ -274,6 +274,10 @@ class OutfitManagerController extends inkLogicController {
         this.RefreshList();
     }
 
+    protected cb func OnOutfitListReload(evt: ref<OutfitListReload>) {
+        this.PopulateList();
+    }
+
     protected func AccessOutfitSystem() -> Bool {
         if this.m_outfitSystem.IsBlocked() {
             let notification = new UIMenuNotificationEvent();

@@ -673,6 +673,11 @@ public class OutfitSystem extends ScriptableSystem {
         return this.m_state.DeleteOutfit(name);
     }
 
+    public func DeleteAllOutfits() -> Bool {
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new OutfitListReload());
+        return this.m_state.DeleteAllOutfits();
+    }
+
     public func GetOutfits() -> array<CName> {
         let outfits: array<CName>;
         
