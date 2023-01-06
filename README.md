@@ -89,7 +89,7 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.TorsoMiddle`   | Waistcoats, Blazers, Loose Shirts, Loose Dresses |
 | `OutfitSlots.TorsoOuter`    | Jackets, Coats                                   |
 | `OutfitSlots.TorsoAux`      | Vests, Harnesses, Puffers                        |
-| `OutfitSlots.Back`          | Backpacks                                        |
+| `OutfitSlots.Back`          | Backpacks, Swords                                |
 | `OutfitSlots.ShoulderLeft`  |                                                  |
 | `OutfitSlots.ShoulderRight` |                                                  |
 | `OutfitSlots.WristLeft`     | Watches, Bands                                   |
