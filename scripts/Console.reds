@@ -88,6 +88,11 @@ public abstract class EquipmentEx {
         OutfitSystem.GetInstance(game).DeleteOutfit(name);
     }
 
+    public static func DeleteAllOutfits(game: GameInstance) {
+        OutfitSystem.GetInstance(game).DeleteAllOutfits();
+        EquipmentEx.Print("All outfits deleted");
+    }
+
     public static func PrintOutfits(game: GameInstance) {
         let outfitSystem = OutfitSystem.GetInstance(game);
         let outfitNames = outfitSystem.GetOutfits();

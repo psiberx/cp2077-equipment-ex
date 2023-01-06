@@ -293,6 +293,15 @@ class OutfitState {
         return true;
     }
 
+    public func DeleteAllOutfits() -> Bool {
+        if ArraySize(this.m_outfits) > 0 {
+            ArrayClear(this.m_outfits);
+            return true;
+        }
+
+        return false;
+    }
+
     public func IsOutfit(name: CName) -> Bool {
         let outfit = this.GetOutfit(name);
 
