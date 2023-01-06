@@ -155,6 +155,27 @@ Items.MyTights:
 | Male      | Unequipped | (empty)   |
 | Male      | Equipped   | (empty)   |
 
+### Console commands
+
+| Command                                 | Description                                                                                                                                       |
+|:----------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|
+| `EquipmentEx.Activate()`                | Activates outfit mode and clones current equipment                                                                                                |
+| `EquipmentEx.Reactivate()`              | Reactivates outfit mode with a last used outfit                                                                                                   |
+| `EquipmentEx.Deactivate()`              | Deactivates outfit mode                                                                                                                           |
+| `EquipmentEx.EquipItem(itemID)`         | Equips an item by provided item id<br>Usage: `EquipmentEx.EquipItem("Items.SomeItemId")`                                                          |
+| `EquipmentEx.EquipItem(itemID, slotID)` | Equips an item into selected slot by provided item and slot ids<br>Usage: `EquipmentEx.EquipItem("Items.SomeItemId", "OutfitSlots.Head")`         |
+| `EquipmentEx.UnequipItem(itemID)`       | Unequips an item by provided item id<br>Usage: `EquipmentEx.UnequipItem("Items.SomeItemId")`                                                      |
+| `EquipmentEx.UnequipSlot(slotID)`       | Unequips an item from selected slot by provided item and slot ids<br>Usage: `EquipmentEx.UnequipSlot("Items.SomeItemId", "OutfitSlots.Head")    ` |
+| `EquipmentEx.UnequipAll()`              | Unequips all items                                                                                                                                |
+| `EquipmentEx.PrintItems()`              | Prints all equipped item names for the active outfit                                                                                              |
+| `EquipmentEx.ExportItems()`             | Prints a set of console commands which you can use any time later to recreate your current outfit                                                 |
+| `EquipmentEx.LoadOutfit(name)`          | Loads an outfit by provided name<br>Usage: `EquipmentEx.LoadOutfit("My fancy outfit")`                                                            |
+| `EquipmentEx.SaveOutfit(name)`          | Creates new outfit with provided name<br>Usage: `EquipmentEx.SaveOutfit("My fancy outfit")`                                                       |
+| `EquipmentEx.CopyOutfit(name, from)`    | Creates an outfit copy by provided base and new outfit names<br>Usage: `EquipmentEx.CopyOutfit("My new outfit", "My old outfit")`                 |
+| `EquipmentEx.DeleteOutfit(name)`        | Deletes an outfit by provided name<br>Usage: `EquipmentEx.DeleteOutfit("My fancy outfit")`                                                        |
+| `EquipmentEx.DeleteAllOutfits()`        | Deletes all created outfits                                                                                                                       |
+| `EquipmentEx.PrintOutfits()`            | Prints all created outfit names                                                                                                                   |
+
 ## Translations
 
 If you want to translate this mod into your language, get translation template JSON 
