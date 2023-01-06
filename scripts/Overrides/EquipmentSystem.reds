@@ -1,7 +1,7 @@
 import EquipmentEx.OutfitSystem
 
 @addField(EquipmentSystemPlayerData)
-private let m_visualsLocked: Bool;
+private let m_visualChangesAllowed: Bool;
 
 @addField(EquipmentSystemPlayerData)
 private let m_outfitSystem: wref<OutfitSystem>;
@@ -15,12 +15,12 @@ public final func OnAttach() {
 
 @addMethod(EquipmentSystemPlayerData)
 public func LockVisualChanges() {
-    this.m_visualsLocked = true;
+    this.m_visualChangesAllowed = false;
 }
 
 @addMethod(EquipmentSystemPlayerData)
 public func UnlockVisualChanges() {
-    this.m_visualsLocked = false;
+    this.m_visualChangesAllowed = true;
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
@@ -35,12 +35,15 @@ public final const func IsSlotOverriden(area: gamedataEquipmentArea) -> Bool {
 
 @wrapMethod(EquipmentSystemPlayerData)
 public final func OnRestored() {
+    this.m_outfitSystem = OutfitSystem.GetInstance(this.m_owner.GetGame());
     this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.m_owner.GetGame());
 
     if NotEquals(this.m_wardrobeSystem.GetActiveClothingSetIndex(), gameWardrobeClothingSetIndex.INVALID) {
         this.m_wardrobeSystem.SetActiveClothingSetIndex(gameWardrobeClothingSetIndex.INVALID);
         this.m_lastActiveWardrobeSet = gameWardrobeClothingSetIndex.INVALID;
+    }
 
+    if !this.m_outfitSystem.IsActive() {
         let i = 0;
         while i <= ArraySize(this.m_clothingVisualsInfo) {
             this.m_clothingVisualsInfo[i].isHidden = false;
@@ -83,6 +86,9 @@ public final func OnQuestEnableWardrobeSetRequest(request: ref<QuestEnableWardro
 public final func EquipWardrobeSet(setID: gameWardrobeClothingSetIndex) {}
 
 @replaceMethod(EquipmentSystemPlayerData)
+public final func UnequipWardrobeSet() {}
+
+@replaceMethod(EquipmentSystemPlayerData)
 public final func QuestHideSlot(area: gamedataEquipmentArea) {}
 
 @replaceMethod(EquipmentSystemPlayerData)
@@ -90,14 +96,14 @@ public final func QuestRestoreSlot(area: gamedataEquipmentArea) {}
 
 @wrapMethod(EquipmentSystemPlayerData)
 private final func ClearItemAppearanceEvent(area: gamedataEquipmentArea) {
-    if !this.m_visualsLocked {
+    if this.m_visualChangesAllowed || !this.m_outfitSystem.IsActive() {
         wrappedMethod(area);
     }
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
 private final func ResetItemAppearanceEvent(area: gamedataEquipmentArea) {
-    if !this.m_visualsLocked {
+    if this.m_visualChangesAllowed || !this.m_outfitSystem.IsActive() {
         wrappedMethod(area);
     }
 }

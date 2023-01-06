@@ -7,7 +7,7 @@ public class InventoryHelper extends ScriptableSystem {
     private let m_stash: wref<Stash>;
     
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
-        this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerControlledGameObject();
+        this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerMainGameObject();
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
         this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.GetGameInstance());
     }
@@ -31,7 +31,9 @@ public class InventoryHelper extends ScriptableSystem {
         this.m_transactionSystem.GetItemList(this.m_stash, stashItems);
 
         for itemData in stashItems {
-            ArrayPush(items, itemData);
+            if !InventoryDataManagerV2.IsItemBlacklisted(itemData) {
+                ArrayPush(items, itemData);
+            }
         }
     }
 

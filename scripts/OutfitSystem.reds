@@ -72,7 +72,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func InitializePlayerAndSystems() {
-        this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerControlledGameObject();
+        this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerMainGameObject();
         this.m_equipmentData = EquipmentSystem.GetData(this.m_player);
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
         this.m_attachmentSlotsListener = this.m_transactionSystem.RegisterAttachmentSlotListener(this.m_player, PlayerSlotsCallback.Create(this));

@@ -29,9 +29,11 @@ class RegisterOutfitSlots extends ScriptableTweak {
             r"base\\characters\\entities\\player\\player_ma_tpp_reflexion.ent"
         ];
 
+        let playerDisplayName = GetLocalizedTextByKey(TweakDBInterface.GetLocKeyDefault(t"Character.Player_Puppet_Base.displayName"));
+
         for record in TweakDBInterface.GetRecords(n"Character_Record") {
             let character = record as Character_Record;
-            if ArrayContains(playerEntityTemplates, character.EntityTemplatePath()) {
+            if ArrayContains(playerEntityTemplates, character.EntityTemplatePath()) || Equals(GetLocalizedTextByKey(character.DisplayName()), playerDisplayName) {
                 let characterSlots = TweakDBInterface.GetForeignKeyArray(character.GetID() + t".attachmentSlots");
 
                 for outfitSlot in outfitSlots {
