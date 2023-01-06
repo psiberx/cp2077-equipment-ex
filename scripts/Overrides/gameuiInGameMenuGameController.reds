@@ -11,6 +11,15 @@ protected cb func OnInitialize() -> Bool {
 }
 
 @wrapMethod(gameuiInGameMenuGameController)
+protected cb func OnPuppetReady(sceneName: CName, puppet: ref<gamePuppet>) -> Bool {
+    wrappedMethod(sceneName, puppet);
+
+    if this.m_outfitSystem.IsActive() && Equals(sceneName, n"inventory") {
+        this.m_outfitSystem.EquipPuppetOutfit(puppet) ;
+    }
+}
+
+@wrapMethod(gameuiInGameMenuGameController)
 protected cb func OnEquipmentChanged(value: Variant) -> Bool {
     if !this.m_outfitSystem.UpdatePuppetFromBlackboard(this.GetPuppet(n"inventory")) {
         wrappedMethod(value);
