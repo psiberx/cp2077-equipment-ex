@@ -270,12 +270,12 @@ class OutfitManagerController extends inkLogicController {
         this.RefreshList(true);
     }
 
-    protected cb func OnScrollChanged(value: Vector2) {
-        this.RefreshList();
+    protected cb func OnOutfitListUpdated(evt: ref<OutfitListUpdated>) {
+        this.PopulateList();
     }
 
-    protected cb func OnOutfitListReload(evt: ref<OutfitListReload>) {
-        this.PopulateList();
+    protected cb func OnScrollChanged(value: Vector2) {
+        this.RefreshList();
     }
 
     protected func AccessOutfitSystem() -> Bool {

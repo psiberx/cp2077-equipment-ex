@@ -334,6 +334,10 @@ public class OutfitSystem extends ScriptableSystem {
         GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(event);       
     }
 
+    private func TriggerOutfitListEvent() {
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new OutfitListUpdated());
+    }
+
     public func IsBlocked() -> Bool {
         if this.m_state.IsDisabled() {
             return true;
@@ -674,7 +678,8 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func DeleteAllOutfits() -> Bool {
-        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new OutfitListReload());
+        this.TriggerOutfitListEvent();
+
         return this.m_state.DeleteAllOutfits();
     }
 
