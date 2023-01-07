@@ -147,8 +147,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func AttachVisualToSlot(itemID: ItemID, slotID: TweakDBID) {
-        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
-        this.m_transactionSystem.GivePreviewItemByItemID(this.m_player, itemID);
+        let randomID = ItemID.FromTDBID(ItemID.GetTDBID(itemID));
+        let previewID = this.m_transactionSystem.CreatePreviewItemID(randomID);
+
+        this.m_transactionSystem.GiveItem(this.m_player, previewID, 1);
         this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
 
         this.TriggerAttachmentEvent(itemID, slotID);
@@ -156,9 +158,13 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func DetachVisualFromSlot(itemID: ItemID, slotID: TweakDBID) {
-        let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
-        this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
-        this.m_transactionSystem.RemoveItem(this.m_player, previewID, 1);
+        let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, slotID);
+        if IsDefined(itemObject) {
+            let previewID = itemObject.GetItemID();
+
+            this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
+            this.m_transactionSystem.RemoveItem(this.m_player, previewID, 1);
+        }
 
         this.TriggerDetachmentEvent(itemID, slotID);
         this.UpdateBlackboard(slotID);
