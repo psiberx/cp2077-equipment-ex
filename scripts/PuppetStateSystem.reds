@@ -3,6 +3,7 @@ module EquipmentEx
 enum LegsState {
     Flat = 0,
     Lifted = 1,
+    HighHeels = 2,
 }
 
 public class PuppetAttachmentChangeRequest extends ScriptableSystemRequest {
@@ -110,7 +111,11 @@ public class PuppetStateSystem extends ScriptableSystem {
                 let itemAppearance = this.m_transactionSystem.GetItemAppearance(puppet, itemObject.GetItemID());
 
                 if NotEquals(itemAppearance, n"") && NotEquals(itemAppearance, n"empty_appearance_default") {
-                    state = LegsState.Lifted;
+                    if this.m_transactionSystem.MatchVisualTagByItemID(itemObject.GetItemID(), puppet, n"HighHeels") {
+                        state = LegsState.HighHeels;
+                    } else {
+                        state = LegsState.Lifted;
+                    }
                     break;
                 }                
             }
