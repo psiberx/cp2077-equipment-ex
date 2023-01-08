@@ -148,12 +148,13 @@ Items.MyTights:
     - !append itemsFactoryAppearanceSuffix.LegsState
 ```
 
-| Character | Footwear   | Suffix    |
-|:----------|:-----------|:----------|
-| Female    | Unequipped | `&Flat`   |
-| Female    | Equipped   | `&Lifted` |
-| Male      | Unequipped | (empty)   |
-| Male      | Equipped   | (empty)   |
+| Character | Footwear                         | Suffix       |
+|:----------|:---------------------------------|:-------------|
+| Female    | Unequipped                       | `&Flat`      |
+| Female    | Equipped without `HighHeels` tag | `&Lifted`    |
+| Female    | Equipped with `HighHeels` tag    | `&HighHeels` |
+| Male      | Unequipped                       | (empty)      |
+| Male      | Equipped                         | (empty)      |
 
 ## Translations
 
