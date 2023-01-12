@@ -150,7 +150,7 @@ public class OutfitSystem extends ScriptableSystem {
         let randomID = ItemID.FromTDBID(ItemID.GetTDBID(itemID));
         let previewID = this.m_transactionSystem.CreatePreviewItemID(randomID);
 
-        this.m_transactionSystem.GiveItem(this.m_player, previewID, 1);
+        this.m_transactionSystem.GivePreviewItemByItemID(this.m_player, randomID);
         this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
 
         this.TriggerAttachmentEvent(itemID, slotID);
@@ -197,11 +197,13 @@ public class OutfitSystem extends ScriptableSystem {
     private func ReattachVisualInSlot(slotID: TweakDBID) {
         let part = this.m_state.GetPart(slotID);
         if IsDefined(part) {
-            let itemID = part.GetItemID();
-            let previewID = this.m_transactionSystem.CreatePreviewItemID(itemID);
+            let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, slotID);
+            if IsDefined(itemObject) {
+                let previewID = itemObject.GetItemID();
 
-            this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
-            this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, slotID, previewID), 1.0 / 30.0, false);
+                this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
+                this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, slotID, previewID), 1.0 / 30.0, false);
+            }
         }
     }
 
