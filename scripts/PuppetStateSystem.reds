@@ -4,6 +4,7 @@ enum LegsState {
     Flat = 0,
     Lifted = 1,
     HighHeels = 2,
+    FlatShoes = 3,
 }
 
 public class PuppetAttachmentChangeRequest extends ScriptableSystemRequest {
@@ -113,9 +114,15 @@ public class PuppetStateSystem extends ScriptableSystem {
                 if NotEquals(itemAppearance, n"") && NotEquals(itemAppearance, n"empty_appearance_default") {
                     if this.m_transactionSystem.MatchVisualTagByItemID(itemObject.GetItemID(), puppet, n"HighHeels") {
                         state = LegsState.HighHeels;
-                    } else {
-                        state = LegsState.Lifted;
+                        break;
                     }
+                    
+                    if this.m_transactionSystem.MatchVisualTagByItemID(itemObject.GetItemID(), puppet, n"FlatShoes") {
+                        state = LegsState.FlatShoes;
+                        break;
+                    }
+
+                    state = LegsState.Lifted;
                     break;
                 }                
             }
