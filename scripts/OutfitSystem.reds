@@ -8,6 +8,7 @@ public class OutfitSystem extends ScriptableSystem {
     private let m_outfitSlots: array<TweakDBID>;
     private let m_managedSlots: array<TweakDBID>;
     private let m_managedAreas: array<gamedataEquipmentArea>;
+    private let m_cameraDependentSlots: array<TweakDBID>;
 
     private let m_player: wref<GameObject>;
     private let m_equipmentData: wref<EquipmentSystemPlayerData>;
@@ -60,9 +61,14 @@ public class OutfitSystem extends ScriptableSystem {
             ArrayPush(this.m_managedSlots, baseSlot.slotID);
             ArrayPush(this.m_managedAreas, baseSlot.equipmentArea);
         }
+
         for outfitSlot in OutfitConfig.OutfitSlots() {
             ArrayPush(this.m_outfitSlots, outfitSlot.slotID);
             ArrayPush(this.m_managedSlots, outfitSlot.slotID);
+
+            if outfitSlot.isCameraDependent {
+                ArrayPush(this.m_cameraDependentSlots, outfitSlot.slotID);
+            }
         }
     }
 
@@ -209,20 +215,20 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    private func ReattachItemInSlot(slotID: TweakDBID) {
-        let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, slotID);
-        if IsDefined(itemObject) {
-            let itemID = itemObject.GetItemID();
-
-            this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
-            this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, itemID);
-        }
-    }
-
     private func RefreshSlotAttachment(slotID: TweakDBID) {
         this.m_transactionSystem.RefreshAttachment(this.m_player, slotID);
     }
 
+    private func UpdateCameraDependentVisuals() {
+        for part in this.m_state.GetParts() {
+            if this.IsCameraDependentSlot(part.GetSlotID()) {
+                let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, part.GetSlotID());
+                if IsDefined(itemObject) {
+                    this.m_transactionSystem.ResetItemAppearance(this.m_player, itemObject.GetItemID());
+                }
+            }
+        }
+    }
     private func HideEquipment() {
         this.m_equipmentData.UnlockVisualChanges();
         this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit));
@@ -852,6 +858,10 @@ public class OutfitSystem extends ScriptableSystem {
         return ArrayContains(this.m_managedAreas, area);
     }
 
+    public func IsCameraDependentSlot(slotID: TweakDBID) -> Bool {
+        return ArrayContains(this.m_cameraDependentSlots, slotID);
+    }
+
     public func GetOutfitSlots() -> array<TweakDBID> {
         return this.m_outfitSlots;
     }
@@ -883,20 +893,30 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     private let m_system: wref<OutfitSystem>;
 
     public func OnItemEquipped(slotID: TweakDBID, itemID: ItemID) -> Void {
-        if ItemID.IsValid(itemID) && Equals(slotID, t"AttachmentSlots.Outfit") {
-            this.m_system.Deactivate();
+        if this.m_system.IsActive() {
+            if Equals(slotID, t"AttachmentSlots.Outfit") {
+                this.m_system.Deactivate();
+            } else {
+                if Equals(slotID, t"AttachmentSlots.TppHead") {
+                    this.m_system.UpdateCameraDependentVisuals();
+                }
+            }
         }
     }
 
     public func OnItemEquippedVisual(slotID: TweakDBID, itemID: ItemID) -> Void {
-        if this.m_system.IsActive() && this.m_system.IsBaseSlot(slotID) {
-            this.m_system.ReattachVisualInSlot(this.m_system.GetItemSlot(itemID));
+        if this.m_system.IsActive() {
+            if this.m_system.IsBaseSlot(slotID) {
+                this.m_system.ReattachVisualInSlot(this.m_system.GetItemSlot(itemID));
+            }
         }
     }
 
     public func OnItemUnequippedComplete(slotID: TweakDBID, itemID: ItemID) -> Void {
-        if this.m_system.IsActive() && this.m_system.IsBaseSlot(slotID) {
-            this.m_system.ReattachVisualInSlot(this.m_system.GetItemSlot(itemID));
+        if this.m_system.IsActive() {
+            if this.m_system.IsBaseSlot(slotID) {
+                this.m_system.ReattachVisualInSlot(this.m_system.GetItemSlot(itemID));
+            }
         }
     }
 
