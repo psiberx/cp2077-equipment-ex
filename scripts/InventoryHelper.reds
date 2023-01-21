@@ -12,6 +12,13 @@ public class InventoryHelper extends ScriptableSystem {
         this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.GetGameInstance());
     }
 
+    private func IsItemValid(itemData: wref<gameItemData>) -> Bool {
+        let itemRecordId = ItemID.GetTDBID(itemData.GetID());
+        let itemRecord = TweakDBInterface.GetClothingRecord(itemRecordId);
+
+        return IsDefined(itemRecord) && !InventoryDataManagerV2.IsItemBlacklisted(itemData);
+    }
+
     public func GetStash() -> wref<Stash> {
         return this.m_stash;
     }
@@ -31,7 +38,7 @@ public class InventoryHelper extends ScriptableSystem {
         this.m_transactionSystem.GetItemList(this.m_stash, stashItems);
 
         for itemData in stashItems {
-            if !InventoryDataManagerV2.IsItemBlacklisted(itemData) {
+            if this.IsItemValid(itemData) {
                 ArrayPush(items, itemData);
             }
         }
@@ -42,7 +49,7 @@ public class InventoryHelper extends ScriptableSystem {
         this.m_transactionSystem.GetItemList(this.m_player, playerItems);
 
         for itemData in playerItems {
-            if !InventoryDataManagerV2.IsItemBlacklisted(itemData) {
+            if this.IsItemValid(itemData) {
                 let itemID = itemData.GetID();
                 let diff = 0;
 
