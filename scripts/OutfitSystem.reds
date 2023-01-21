@@ -66,7 +66,7 @@ public class OutfitSystem extends ScriptableSystem {
             ArrayPush(this.m_outfitSlots, outfitSlot.slotID);
             ArrayPush(this.m_managedSlots, outfitSlot.slotID);
 
-            if outfitSlot.isCameraDependent {
+            if outfitSlot.dependsOnCamera {
                 ArrayPush(this.m_cameraDependentSlots, outfitSlot.slotID);
             }
         }

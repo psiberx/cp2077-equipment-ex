@@ -46,10 +46,10 @@ public class PuppetStateSystem extends ScriptableSystem {
         ArrayPush(this.m_feetSlots, t"AttachmentSlots.Feet");
 
         for outfitSlot in OutfitConfig.OutfitSlots() {
-            if Equals(outfitSlot.parentID, t"AttachmentSlots.Legs") {
+            if outfitSlot.coversLegs {
                 ArrayPush(this.m_legsSlots, outfitSlot.slotID);
             }
-            if Equals(outfitSlot.parentID, t"AttachmentSlots.Feet") {
+            if outfitSlot.switchesLegs {
                 ArrayPush(this.m_feetSlots, outfitSlot.slotID);
             }
         }
