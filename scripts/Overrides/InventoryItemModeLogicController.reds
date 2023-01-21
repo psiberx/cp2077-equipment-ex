@@ -15,7 +15,7 @@ private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) 
         wardrobeInfo.BindProperty(n"tintColor", n"MainColors.Red");
         wardrobeInfo.BindProperty(n"fontWeight", n"MainColors.BodyFontWeight");
         wardrobeInfo.BindProperty(n"fontSize", n"MainColors.ReadableXSmall");
-        wardrobeInfo.SetWrapping(true, 660);
+        wardrobeInfo.SetWrapping(true, 660.0);
         wardrobeInfo.Reparent(wardrobeContainer);
 
         // let wardrobeLink = this.SpawnFromLocal(wardrobeContainer, n"HyperlinkButton:EquipmentEx.WardrobeHubLink");

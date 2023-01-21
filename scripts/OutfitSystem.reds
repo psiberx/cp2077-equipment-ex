@@ -893,7 +893,7 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     private let m_system: wref<OutfitSystem>;
 
     public func OnItemEquipped(slotID: TweakDBID, itemID: ItemID) -> Void {
-        if this.m_system.IsActive() {
+        if this.m_system.IsActive() && ItemID.IsValid(itemID) {
             if Equals(slotID, t"AttachmentSlots.Outfit") {
                 this.m_system.Deactivate();
             } else {
@@ -905,7 +905,7 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     }
 
     public func OnItemEquippedVisual(slotID: TweakDBID, itemID: ItemID) -> Void {
-        if this.m_system.IsActive() {
+        if this.m_system.IsActive() && ItemID.IsValid(itemID) {
             if this.m_system.IsBaseSlot(slotID) {
                 this.m_system.ReattachVisualInSlot(this.m_system.GetItemSlot(itemID));
             }
@@ -913,7 +913,7 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     }
 
     public func OnItemUnequippedComplete(slotID: TweakDBID, itemID: ItemID) -> Void {
-        if this.m_system.IsActive() {
+        if this.m_system.IsActive() && ItemID.IsValid(itemID) {
             if this.m_system.IsBaseSlot(slotID) {
                 this.m_system.ReattachVisualInSlot(this.m_system.GetItemSlot(itemID));
             }
