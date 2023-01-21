@@ -1,4 +1,4 @@
-import EquipmentEx.{EquipmentEx, OutfitSystem, RequirementsPopup}
+import EquipmentEx.{EquipmentEx, OutfitSystem, ArchivePopup, RequirementsPopup}
 
 @addField(gameuiInventoryGameController)
 private let m_outfitSystem: wref<OutfitSystem>;
@@ -81,8 +81,15 @@ protected func ShowWardrobeScreen() -> Bool {
         return false;
     }
 
-    let outfitManager = this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController") as inkCompoundWidget;
-    outfitManager.SetName(n"wardrobe");
+    let wardrobe = this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController") as inkCompoundWidget;
+    
+    if !IsDefined(wardrobe) {
+        this.m_wardrobePopup = ArchivePopup.Show(this);
+        this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
+        return false;
+    }
+
+    wardrobe.SetName(n"wardrobe");
 
     let alphaAnim = new inkAnimTransparency();
     alphaAnim.SetStartTransparency(0.0);
@@ -94,7 +101,7 @@ protected func ShowWardrobeScreen() -> Bool {
     let animDef = new inkAnimDef();
     animDef.AddInterpolator(alphaAnim);
 
-    outfitManager.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
+    wardrobe.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
     // animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnWardrobeScreenShown");
 
     this.m_wardrobeReady = true;
@@ -112,7 +119,7 @@ protected func ShowWardrobeScreen() -> Bool {
 
     let evt = new DropQueueUpdatedEvent();
     evt.m_dropQueue = this.m_itemModeLogicController.m_itemDropQueue;
-    outfitManager.GetController().QueueEvent(evt);
+    wardrobe.GetController().QueueEvent(evt);
 
     return true;
 }
@@ -129,7 +136,7 @@ protected func HideWardrobeScreen() -> Bool {
         return false;
     }
 
-    let outfitManager = this.GetChildWidgetByPath(n"wardrobe") as inkCompoundWidget;
+    let wardrobe = this.GetChildWidgetByPath(n"wardrobe") as inkCompoundWidget;
 
     this.m_wardrobeReady = false;
     
@@ -143,7 +150,7 @@ protected func HideWardrobeScreen() -> Bool {
     let animDef = new inkAnimDef();
     animDef.AddInterpolator(alphaAnim);
 
-    let animProxy = outfitManager.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
+    let animProxy = wardrobe.GetWidgetByPathName(n"wrapper/wrapper").PlayAnimation(animDef);
     animProxy.RegisterToCallback(inkanimEventType.OnFinish, this, n"OnWardrobeScreenHidden");
 
     if Equals(this.m_mode, InventoryModes.Item) {

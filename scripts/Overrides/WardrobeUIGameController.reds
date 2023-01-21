@@ -1,4 +1,4 @@
-import EquipmentEx.{EquipmentEx, OutfitSystem, RequirementsPopup}
+import EquipmentEx.{EquipmentEx, OutfitSystem, ArchivePopup, RequirementsPopup}
 
 @addField(WardrobeUIGameController)
 private let m_wardrobePopup: ref<inkGameNotificationToken>;
@@ -13,7 +13,12 @@ protected cb func OnInitialize() -> Bool {
         this.m_wardrobePopup = RequirementsPopup.Show(this);
         this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
     } else {
-        this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController");
+        let wardrobe = this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController");
+        if !IsDefined(wardrobe) {
+            this.m_wardrobePopup = ArchivePopup.Show(this);
+            this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
+            return false;
+        }
     }
 
     this.m_introAnimProxy = new inkAnimProxy();
