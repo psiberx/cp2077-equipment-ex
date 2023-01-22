@@ -207,6 +207,13 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Back",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Back"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Left Shoulder",
               "maleVariant": "",
               "primaryKey": 0,
