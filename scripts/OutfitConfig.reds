@@ -12,7 +12,7 @@ struct BaseSlotConfig {
 enum ExtraSlotFlag {
     CameraDependent = 1,
     SwitchesLegs = 2,
-    CoversLegs = 2
+    CoversLegs = 3
 }
 
 struct ExtraSlotConfig {
