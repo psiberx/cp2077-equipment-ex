@@ -36,7 +36,7 @@ class OutfitSlotMatcher {
     private let m_appearanceMappings: array<AppearanceNameSlotMapping>;
     private let m_equipmentMappings: array<EquipmentAreaSlotMapping>;
     private let m_priceMappings: array<PriceModifierSlotMapping>;
-    private let m_entityBans: array<CName>;
+    private let m_ignoredEntities: array<CName>;
 
     public func MapRecords(mappings: array<RecordSlotMapping>) {
         this.m_recordMappings = mappings;
@@ -59,22 +59,17 @@ class OutfitSlotMatcher {
     }
 
     public func IgnoreEntities(ignores: array<CName>) {
-        this.m_entityBans = ignores;
+        this.m_ignoredEntities = ignores;
     }
     
     public func Match(item: ref<Clothing_Record>) -> TweakDBID {
-        let slotID = GetSlotOverride(item);
-        if TDBID.IsValid(slotID) {
-            return slotID;
-        }
-
         if Equals(item.AppearanceName(), n"") {
             return TDBID.None();
         }
 
         let entityName = item.EntityName();
 
-        if ArrayContains(this.m_entityBans, entityName) {
+        if ArrayContains(this.m_ignoredEntities, entityName) {
             return TDBID.None();
         }
 
@@ -145,15 +140,4 @@ class OutfitSlotMatcher {
     public static func Create() -> ref<OutfitSlotMatcher> {
         return new OutfitSlotMatcher();
     }
-}
-
-@if(ModuleExists("EquipmentEx.DevMode"))
-func GetSlotOverride(item: ref<Clothing_Record>) -> TweakDBID {
-    return TDBID.None();
-}
-
-@if(!ModuleExists("EquipmentEx.DevMode"))
-func GetSlotOverride(item: ref<Clothing_Record>) -> TweakDBID {
-    let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
-    return ArraySize(placementSlots) > 1 ? ArrayLast(placementSlots) : TDBID.None();
 }

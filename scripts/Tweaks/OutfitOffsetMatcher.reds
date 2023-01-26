@@ -10,6 +10,12 @@ struct AppearanceNameOffsetMapping {
     public let appearanceTokens: array<String>;
 }
 
+struct AppearanceNameSlotOffsetMapping {
+    public let garmentOffset: Int32;
+    public let outfitSlotID: TweakDBID;
+    public let appearanceTokens: array<String>;
+}
+
 struct OffsetMappingMatch {
     public let garmentOffset: Int32;
     public let score: Int32;
@@ -18,6 +24,7 @@ struct OffsetMappingMatch {
 class OutfitOffsetMatcher {
     private let m_entityMappings: array<EntityNameOffsetMapping>;
     private let m_appearanceMappings: array<AppearanceNameOffsetMapping>;
+    private let m_appearanceSlotMappings: array<AppearanceNameSlotOffsetMapping>;
 
     public func MapEntities(mappings: array<EntityNameOffsetMapping>) {
         this.m_entityMappings = mappings;
@@ -26,12 +33,25 @@ class OutfitOffsetMatcher {
     public func MapAppearances(mappings: array<AppearanceNameOffsetMapping>) {
         this.m_appearanceMappings = mappings;
     }
-    
-    public func Match(item: ref<Clothing_Record>) -> Int32 {
+
+    public func MapAppearances(mappings: array<AppearanceNameSlotOffsetMapping>) {
+        this.m_appearanceSlotMappings = mappings;
+    }
+        
+    public func Match(item: ref<Clothing_Record>, outfitSlotID: TweakDBID) -> Int32 {
         let entityName = item.EntityName();
         let appearanceName = NameToString(item.AppearanceName());
 
         // Appearance exact match
+        for mapping in this.m_appearanceSlotMappings {
+            if Equals(mapping.outfitSlotID, outfitSlotID) {
+                for appearanceToken in mapping.appearanceTokens {
+                    if Equals(appearanceName, appearanceToken) {
+                        return mapping.garmentOffset;
+                    }
+                }
+            }
+        }
         for mapping in this.m_appearanceMappings {
             for appearanceToken in mapping.appearanceTokens {
                 if Equals(appearanceName, appearanceToken) {
@@ -42,13 +62,26 @@ class OutfitOffsetMatcher {
 
         // Appearance partial match
         let match: OffsetMappingMatch;
-        for mapping in this.m_appearanceMappings {
-            for appearanceToken in mapping.appearanceTokens {
-                if StrFindFirst(appearanceName, appearanceToken) >= 0 {
-                    // return mapping.garmentOffset;
-                    if StrLen(appearanceToken) > match.score {
-                        match.score = StrLen(appearanceToken);
-                        match.garmentOffset = mapping.garmentOffset;
+        for mapping in this.m_appearanceSlotMappings {
+            if Equals(mapping.outfitSlotID, outfitSlotID) {
+                for appearanceToken in mapping.appearanceTokens {
+                    if StrFindFirst(appearanceName, appearanceToken) >= 0 {
+                        if StrLen(appearanceToken) > match.score {
+                            match.score = StrLen(appearanceToken);
+                            match.garmentOffset = mapping.garmentOffset;
+                        }
+                    }
+                }
+            }
+        }
+        if match.score == 0 {
+            for mapping in this.m_appearanceMappings {
+                for appearanceToken in mapping.appearanceTokens {
+                    if StrFindFirst(appearanceName, appearanceToken) >= 0 {
+                        if StrLen(appearanceToken) > match.score {
+                            match.score = StrLen(appearanceToken);
+                            match.garmentOffset = mapping.garmentOffset;
+                        }
                     }
                 }
             }

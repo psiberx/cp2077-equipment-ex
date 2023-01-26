@@ -81,34 +81,51 @@ class PatchOriginaltems extends ScriptableTweak {
         offsetMatcher.MapAppearances([
             new AppearanceNameOffsetMapping(0, ["t1_formal_01_"]),
             new AppearanceNameOffsetMapping(5, ["t2_vest_13_"]),
+            new AppearanceNameOffsetMapping(900, ["t2_jacket_11_"]),
             new AppearanceNameOffsetMapping(2000, ["t2_shirt_02_", "t2_vest_19_"]),
-            new AppearanceNameOffsetMapping(4000, ["t2_jacket_11_", "set_01_nomad_01_t2_"]),
+            new AppearanceNameOffsetMapping(4000, ["set_01_nomad_01_t2_"]),
             new AppearanceNameOffsetMapping(-1000, ["t2_", "t1_formal_", "t1_shirt_01_", "t1_shirt_02_", "t1_undershirt_", "set_01_media_01_t1_", "t1_jumpsuit_", "set_01_netrunner_01_t1_"])
+        ]);
+
+        offsetMatcher.MapAppearances([
+            new AppearanceNameSlotOffsetMapping(4000, t"OutfitSlots.TorsoOuter", ["t2_jacket_11_"])
         ]);
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
             let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
             let garmentOffset = item.GarmentOffset();
-            let updated = false;
 
-            let outfitSlotID = slotMatcher.Match(item);
+            let updated = false;
+            let outfitSlotID: TweakDBID;
+            let outfitSlotOffset: Int32;
+
+            if ArraySize(placementSlots) == 1 || DevMode() {
+                outfitSlotID = slotMatcher.Match(item);
+            } else {
+                outfitSlotID = ArrayLast(placementSlots);
+            }
+
             if TDBID.IsValid(outfitSlotID) {
                 for outfitSlot in outfitSlots {
                     if outfitSlot.slotID == outfitSlotID {
                         ArrayRemove(placementSlots, outfitSlot.slotID);
                         ArrayPush(placementSlots, outfitSlot.slotID);
-                        garmentOffset = outfitSlot.garmentOffset;
+                        outfitSlotOffset = outfitSlot.garmentOffset;
                         updated = true;
                         break;
                     }
                 }
             }
 
-            let outfitOffset = offsetMatcher.Match(item);
-            if outfitOffset != 0 && (outfitOffset > 0 || garmentOffset <= 0) {
-                garmentOffset += outfitOffset;
-                updated = true;
+            if garmentOffset == 0 || DevMode() {
+                garmentOffset = outfitSlotOffset;
+
+                let outfitItemOffset = offsetMatcher.Match(item, outfitSlotID);
+                if outfitItemOffset != 0 && (outfitItemOffset > 0 || garmentOffset <= 0) {
+                    garmentOffset += outfitItemOffset;
+                    updated = true;
+                }
             }
 
             if updated {
