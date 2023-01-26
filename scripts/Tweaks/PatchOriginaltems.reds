@@ -79,6 +79,7 @@ class PatchOriginaltems extends ScriptableTweak {
         ]);
 
         offsetMatcher.MapAppearances([
+            new AppearanceNameOffsetMapping(0, ["t1_formal_01_"]),
             new AppearanceNameOffsetMapping(5, ["t2_vest_13_"]),
             new AppearanceNameOffsetMapping(2000, ["t2_shirt_02_", "t2_vest_19_"]),
             new AppearanceNameOffsetMapping(4000, ["t2_jacket_11_", "set_01_nomad_01_t2_"]),
