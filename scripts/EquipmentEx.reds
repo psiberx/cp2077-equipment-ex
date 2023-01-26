@@ -1,7 +1,7 @@
 module EquipmentEx
 
 public abstract class EquipmentEx {
-    public static func Version() -> String = "0.8.6";
+    public static func Version() -> String = "0.8.7";
 
     public static func RequiredArchiveXL() -> String = "1.3.4";
     public static func RequiredTweakXL() -> String = "1.1.0";
@@ -43,3 +43,9 @@ public abstract class EquipmentEx {
         TweakDBManager.SetFlat(t"EquipmentEx.isUserNotified", true);
     }
 }
+
+@if(ModuleExists("EquipmentEx.DevMode"))
+public static func DevMode() -> Bool = true;
+
+@if(!ModuleExists("EquipmentEx.DevMode"))
+public static func DevMode() -> Bool = false;
