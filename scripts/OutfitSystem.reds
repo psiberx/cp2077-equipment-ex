@@ -160,6 +160,7 @@ public class OutfitSystem extends ScriptableSystem {
 
         this.m_transactionSystem.GivePreviewItemByItemID(this.m_player, randomID);
         this.m_transactionSystem.AddItemToSlot(this.m_player, slotID, previewID, true);
+        this.m_equipmentData.SendEquipAudioEvents(previewID);
 
         this.TriggerAttachmentEvent(itemID, slotID);
         this.UpdateBlackboard(itemID, slotID);
@@ -172,6 +173,7 @@ public class OutfitSystem extends ScriptableSystem {
 
             this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
             this.m_transactionSystem.RemoveItem(this.m_player, previewID, 1);
+            this.m_equipmentData.SendUnequipAudioEvents(previewID);
         }
 
         this.TriggerDetachmentEvent(itemID, slotID);
