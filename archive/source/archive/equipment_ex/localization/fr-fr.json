@@ -1,0 +1,354 @@
+{
+  "Header": {
+    "WolvenKitVersion": "8.8.0",
+    "WKitJsonVersion": "0.0.3",
+    "GameVersion": 1610,
+    "DataType": "CR2W"
+  },
+  "Data": {
+    "Version": 195,
+    "BuildVersion": 0,
+    "RootChunk": {
+      "$type": "JsonResource",
+      "cookingPlatform": "PLATFORM_PC",
+      "root": {
+        "HandleId": "0",
+        "Data": {
+          "$type": "localizationPersistenceOnScreenEntries",
+          "entries": [
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Pas de tenue",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-Wardrobe-NoOutfit"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Tenue actuelle",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-Wardrobe-CurrentOutfit"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Saisissez le nom de la tenue :",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-Wardrobe-NotificationSaveSet"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "La tenue portant ce nom existe déjà, voulez-vous la remplacer ?",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-Wardrobe-NotificationReplaceSet"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Rechercher par Nom",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-Wardrobe-SearchByName"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Origine des Objets",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Source préférée des objets pour la gestion des tenues : \u0022Inventaire + Planque\u0022 n'utilisera que les objets actuels présents dans votre inventaire et dans votre planque, \u0022Garde-robe\u0022 utilisera tous les objets que vous avez obtenus dans le jeu (y compris les objets abandonnés et démontés).",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-Description"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Inventaire + Planque",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-InventoryAndStash"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Garde-robe",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-WardrobeStore"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Equipment-EX requiert : \\n- ArchiveXL {archive_xl_req} ou plus récent, \\n- TweakXL {tweak_xl_req} ou plus récent\\n\\nDetected ArchiveXL {archive_xl_ver} et TweakXL {tweak_xl_ver}. \\n\\nVeuillez mettre à jour ces prérequis pour utiliser ce mod.",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-NotificationRequirements"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Equipment-EX a détecté un mod conflictuel (conflit de mods non compatibles). \\n\\nLes mods suivants peuvent causer des problèmes ou bloquer la fonctionnalité de ce mod : \\n{conflits}\\nVeuillez désactiver ou supprimer les mods en conflit si vous souhaitez utiliser ce mod.",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "UI-EquipmentEx-NotificationConflicts"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Tête",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Head"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Cagoule",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Balaclava"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Masque",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Mask"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Lunettes",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Glasses"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Bandeau / Couronne",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Wreath"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Oreille gauche",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-EarLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Oreille droite",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-EarRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Cou / Cravate",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Neckwear"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Collier / Ras-de-cou",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-NecklaceTight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Collier / Court",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-NecklaceShort"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Collier / Long",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-NecklaceLong"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Torse / Dessous",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoUnder"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Torse / Intérieur",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoInner"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Torse / Milieu",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoMiddle"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Torse / Extérieur",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoOuter"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Torse / Aux.",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-TorsoAux"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Dos",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Back"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Épaule gauche",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ShoulderLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Épaule droite",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ShoulderRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Poignet gauche",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-WristLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Poignet droit",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-WristRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Main gauche",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-HandLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Main droite",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-HandRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Taille",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Waist"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Jambes / Intérieur",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-LegsInner"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Jambes / Milieu",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-LegsMiddle"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Jambes / Extérieur",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-LegsOuter"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Cuisse gauche",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ThighLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Cuisse droite",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ThighRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Cheville gauche",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-AnkleLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Cheville droite",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-AnkleRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Pieds",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-Feet"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Corps / Dessous",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-BodyUnder"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Corps / Intérieur",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-BodyInner"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Corps / Milieu",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-BodyMiddle"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Corps / Extérieur",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-BodyOuter"
+            }
+          ]
+        }
+      }
+    },
+    "EmbeddedFiles": []
+  }
+}
