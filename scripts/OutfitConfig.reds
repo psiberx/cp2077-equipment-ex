@@ -73,11 +73,11 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"OutfitSlots.Wreath", 0, t"AttachmentSlots.Eyes"),
 
         // Ears
-        ExtraSlotConfig.Create(n"OutfitSlots.EarLeft", 0),
-        ExtraSlotConfig.Create(n"OutfitSlots.EarRight", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.EarLeft", 0, t"", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"OutfitSlots.EarRight", 0, t"", [ExtraSlotFlag.CameraDependent]),
 
         // Neck
-        ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.Neckwear", 0, t"", [ExtraSlotFlag.CameraDependent]),
         ExtraSlotConfig.Create(n"OutfitSlots.NecklaceTight", 0),
         ExtraSlotConfig.Create(n"OutfitSlots.NecklaceShort", 0),
         ExtraSlotConfig.Create(n"OutfitSlots.NecklaceLong", 0),
