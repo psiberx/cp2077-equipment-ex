@@ -3,5 +3,7 @@ localization:
     en-us: equipment_ex\localization\en-us.json
     cz-cz: equipment_ex\localization\cz-cz.json
     de-de: equipment_ex\localization\de-de.json
+    fr-fr: equipment_ex\localization\fr-fr.json
+    pt-br: equipment_ex\localization\pt-br.json
     ru-ru: equipment_ex\localization\ru-ru.json
     zh-cn: equipment_ex\localization\zh-cn.json
