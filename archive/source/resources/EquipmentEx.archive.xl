@@ -1,6 +1,7 @@
 localization:
   onscreens:
     en-us: equipment_ex\localization\en-us.json
+    es-es: equipment_ex\localization\es-es.json
     cz-cz: equipment_ex\localization\cz-cz.json
     de-de: equipment_ex\localization\de-de.json
     fr-fr: equipment_ex\localization\fr-fr.json

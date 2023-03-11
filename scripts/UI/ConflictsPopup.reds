@@ -4,7 +4,7 @@ public class ConflictsPopup {
     public static func Show(controller: ref<inkGameController>) -> ref<inkGameNotificationToken> {
         let game = controller.GetPlayerControlledObject().GetGame();
         let conflicts: array<String>;
-        EquipmentEx.CheckConflicts(game, conflicts);
+        CompatibilityManager.CheckConflicts(game, conflicts);
 
         let conflictStr: String;
         for conflict in conflicts {

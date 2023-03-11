@@ -1,4 +1,4 @@
-import EquipmentEx.{EquipmentEx, ConflictsPopup}
+import EquipmentEx.{CompatibilityManager, ConflictsPopup}
 
 @addField(QuestTrackerGameController)
 private let m_wardrobePopup: ref<inkGameNotificationToken>;
@@ -7,12 +7,12 @@ private let m_wardrobePopup: ref<inkGameNotificationToken>;
 protected cb func OnInitialize() -> Bool {
     wrappedMethod();
 
-    if !EquipmentEx.IsUserNotified() {
-        if !EquipmentEx.CheckConflicts(this.m_player.GetGame()) {
+    if !CompatibilityManager.IsUserNotified() {
+        if !CompatibilityManager.CheckConflicts(this.m_player.GetGame()) {
             this.m_wardrobePopup = ConflictsPopup.Show(this);
             this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
         }
-        EquipmentEx.MarkAsNotified();
+        CompatibilityManager.MarkAsNotified();
     }
 }
 

@@ -1,4 +1,4 @@
-import EquipmentEx.{EquipmentEx, OutfitSystem, ArchivePopup, RequirementsPopup}
+import EquipmentEx.{CompatibilityManager, OutfitSystem, ArchivePopup, RequirementsPopup}
 
 @addField(WardrobeUIGameController)
 private let m_wardrobePopup: ref<inkGameNotificationToken>;
@@ -9,7 +9,7 @@ protected cb func OnInitialize() -> Bool {
     this.GetChildWidgetByPath(n"setEditorScreenContainer").SetVisible(false);
     this.GetChildWidgetByPath(n"constantContainer/paperDoll").SetVisible(false);
 
-    if !EquipmentEx.CheckRequirements() {
+    if !CompatibilityManager.CheckRequirements() {
         this.m_wardrobePopup = RequirementsPopup.Show(this);
         this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
     } else {

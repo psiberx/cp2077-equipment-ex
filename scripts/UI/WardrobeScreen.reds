@@ -1,5 +1,5 @@
 module EquipmentEx
-import EquipmentEx.Codeware.UI.*
+import Codeware.UI.*
 
 public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_player: wref<PlayerPuppet>;

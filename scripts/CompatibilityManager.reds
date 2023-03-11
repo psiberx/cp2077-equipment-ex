@@ -1,13 +1,14 @@
 module EquipmentEx
 
-public abstract class EquipmentEx {
-    public static func Version() -> String = "0.8.7";
-
+public abstract class CompatibilityManager {
+    public static func RequiredCodeware() -> String = "1.0.0";
     public static func RequiredArchiveXL() -> String = "1.3.4";
     public static func RequiredTweakXL() -> String = "1.1.0";
 
     public static func CheckRequirements() -> Bool {
-        return ArchiveXL.Require(EquipmentEx.RequiredArchiveXL()) && TweakXL.Require(EquipmentEx.RequiredTweakXL());
+        return Codeware.Require(CompatibilityManager.RequiredCodeware())
+            && ArchiveXL.Require(CompatibilityManager.RequiredArchiveXL())
+            && TweakXL.Require(CompatibilityManager.RequiredTweakXL());
     }
 
     public static func CheckConflicts(game: GameInstance, opt conflicts: script_ref<array<String>>) -> Bool {
@@ -43,9 +44,3 @@ public abstract class EquipmentEx {
         TweakDBManager.SetFlat(t"EquipmentEx.isUserNotified", true);
     }
 }
-
-@if(ModuleExists("EquipmentEx.DevMode"))
-public static func DevMode() -> Bool = true;
-
-@if(!ModuleExists("EquipmentEx.DevMode"))
-public static func DevMode() -> Bool = false;

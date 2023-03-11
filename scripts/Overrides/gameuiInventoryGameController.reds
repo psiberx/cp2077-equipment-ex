@@ -1,4 +1,4 @@
-import EquipmentEx.{EquipmentEx, OutfitSystem, ArchivePopup, RequirementsPopup}
+import EquipmentEx.{CompatibilityManager, OutfitSystem, ArchivePopup, RequirementsPopup}
 
 @addField(gameuiInventoryGameController)
 private let m_outfitSystem: wref<OutfitSystem>;
@@ -71,7 +71,7 @@ protected cb func OnBack(userData: ref<IScriptable>) -> Bool {
 
 @addMethod(gameuiInventoryGameController)
 protected func ShowWardrobeScreen() -> Bool {
-    if !EquipmentEx.CheckRequirements() {
+    if !CompatibilityManager.CheckRequirements() {
         this.m_wardrobePopup = RequirementsPopup.Show(this);
         this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
         return false;
