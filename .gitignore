@@ -4,6 +4,7 @@
 /archive/packed
 /archive/source/raw/**/*.json
 /archive/install_log.xml
+/archive/layout.xml
 /build
 /*.log
 ~$*
