@@ -101,6 +101,14 @@ public abstract class OutfitConfig {
         // Hands
         ExtraSlotConfig.Create(n"OutfitSlots.HandLeft", -1),
         ExtraSlotConfig.Create(n"OutfitSlots.HandRight", -1),
+        ExtraSlotConfig.Create(n"OutfitSlots.HandPropLeft", 0),
+        ExtraSlotConfig.Create(n"OutfitSlots.HandPropRight", 0),
+
+        // Fingers
+        ExtraSlotConfig.Create(n"OutfitSlots.FingersLeft", -2),
+        ExtraSlotConfig.Create(n"OutfitSlots.FingersRight", -2),
+        ExtraSlotConfig.Create(n"OutfitSlots.FingernailsLeft", -3),
+        ExtraSlotConfig.Create(n"OutfitSlots.FingernailsRight", -3),
 
         // Waist
         ExtraSlotConfig.Create(n"OutfitSlots.Waist", 1),
@@ -120,6 +128,12 @@ public abstract class OutfitConfig {
 
         // Feet
         ExtraSlotConfig.Create(n"OutfitSlots.Feet", 0, t"AttachmentSlots.Feet", [ExtraSlotFlag.SwitchesLegs]),
+
+        // Toes
+        ExtraSlotConfig.Create(n"OutfitSlots.ToesLeft", -2),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToesRight", -2),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToenailsLeft", -3),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToenailsRight", -3),
 
         // Body
         ExtraSlotConfig.Create(n"OutfitSlots.BodyUnder", -10, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),

@@ -71,44 +71,54 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 
 ### Outfit slots
 
-| Slot name                   | Purpose                                          |
-|:----------------------------|:-------------------------------------------------|
-| `OutfitSlots.Head`          | Hats, Hijabs, Helmets                            |
-| `OutfitSlots.Balaclava`     | Balaclavas                                       |
-| `OutfitSlots.Mask`          | Face Masks                                       |
-| `OutfitSlots.Glasses`       | Glasses, Visors                                  |
-| `OutfitSlots.Wreath`        | Wreaths                                          |
-| `OutfitSlots.EarLeft`       | Earrings                                         |
-| `OutfitSlots.EarRight`      | Earrings                                         |
-| `OutfitSlots.Neckwear`      | Scarves, Collars                                 |
-| `OutfitSlots.NecklaceTight` | Chokers                                          |
-| `OutfitSlots.NecklaceShort` | Short Necklaces                                  |
-| `OutfitSlots.NecklaceLong`  | Long Necklaces                                   |
-| `OutfitSlots.TorsoUnder`    | Bras, Tight Long-sleeves                         |
-| `OutfitSlots.TorsoInner`    | Tops, T-Shirts, Tight Shirts, Tight Dresses      |
-| `OutfitSlots.TorsoMiddle`   | Waistcoats, Blazers, Loose Shirts, Loose Dresses |
-| `OutfitSlots.TorsoOuter`    | Jackets, Coats                                   |
-| `OutfitSlots.TorsoAux`      | Vests, Harnesses, Puffers                        |
-| `OutfitSlots.Back`          | Backpacks, Swords                                |
-| `OutfitSlots.ShoulderLeft`  |                                                  |
-| `OutfitSlots.ShoulderRight` |                                                  |
-| `OutfitSlots.WristLeft`     | Watches, Bands                                   |
-| `OutfitSlots.WristRight`    | Watches, Bands                                   |
-| `OutfitSlots.HandLeft`      | Gloves, Rings                                    |
-| `OutfitSlots.HandRight`     | Gloves, Rings                                    |
-| `OutfitSlots.Waist`         | Belts                                            |
-| `OutfitSlots.LegsInner`     | Tights, Leggings                                 |
-| `OutfitSlots.LegsMiddle`    | Tight Pants, Tight Shorts                        |
-| `OutfitSlots.LegsOuter`     | Loose Pants, Loose Shorts, Skirts                |
-| `OutfitSlots.ThighLeft`     |                                                  |
-| `OutfitSlots.ThighRight`    |                                                  |
-| `OutfitSlots.AnkleLeft`     |                                                  |
-| `OutfitSlots.AnkleRight`    |                                                  |
-| `OutfitSlots.Feet`          | Footwear                                         |
-| `OutfitSlots.BodyUnder`     | Netrunning Suits                                 |
-| `OutfitSlots.BodyInner`     |                                                  |
-| `OutfitSlots.BodyMiddle`    | Jumpsuits, Tracksuits                            |
-| `OutfitSlots.BodyOuter`     |                                                  |
+| Slot name                      | Purpose                                          |
+|:-------------------------------|:-------------------------------------------------|
+| `OutfitSlots.Head`             | Hats, Hijabs, Helmets                            |
+| `OutfitSlots.Balaclava`        | Balaclavas                                       |
+| `OutfitSlots.Mask`             | Face Masks                                       |
+| `OutfitSlots.Glasses`          | Glasses, Visors                                  |
+| `OutfitSlots.Wreath`           | Wreaths                                          |
+| `OutfitSlots.EarLeft`          | Earrings                                         |
+| `OutfitSlots.EarRight`         | Earrings                                         |
+| `OutfitSlots.Neckwear`         | Scarves, Collars                                 |
+| `OutfitSlots.NecklaceTight`    | Chokers                                          |
+| `OutfitSlots.NecklaceShort`    | Short Necklaces                                  |
+| `OutfitSlots.NecklaceLong`     | Long Necklaces                                   |
+| `OutfitSlots.TorsoUnder`       | Bras, Tight Long-sleeves                         |
+| `OutfitSlots.TorsoInner`       | Tops, T-Shirts, Tight Shirts, Tight Dresses      |
+| `OutfitSlots.TorsoMiddle`      | Waistcoats, Blazers, Loose Shirts, Loose Dresses |
+| `OutfitSlots.TorsoOuter`       | Jackets, Coats                                   |
+| `OutfitSlots.TorsoAux`         | Vests, Harnesses, Puffers                        |
+| `OutfitSlots.Back`             | Backpacks, Swords                                |
+| `OutfitSlots.ShoulderLeft`     |                                                  |
+| `OutfitSlots.ShoulderRight`    |                                                  |
+| `OutfitSlots.WristLeft`        | Watches, Bands                                   |
+| `OutfitSlots.WristRight`       | Watches, Bands                                   |
+| `OutfitSlots.HandLeft`         | Gloves                                           |
+| `OutfitSlots.HandRight`        | Gloves                                           |
+| `OutfitSlots.FingersLeft`      | Rings                                            |
+| `OutfitSlots.FingersRight`     | Rings                                            |
+| `OutfitSlots.FingernailsLeft`  | Nails                                            |
+| `OutfitSlots.FingernailsRight` | Nails                                            |
+| `OutfitSlots.Waist`            | Belts                                            |
+| `OutfitSlots.LegsInner`        | Tights, Leggings                                 |
+| `OutfitSlots.LegsMiddle`       | Tight Pants, Tight Shorts                        |
+| `OutfitSlots.LegsOuter`        | Loose Pants, Loose Shorts, Skirts                |
+| `OutfitSlots.ThighLeft`        |                                                  |
+| `OutfitSlots.ThighRight`       |                                                  |
+| `OutfitSlots.AnkleLeft`        |                                                  |
+| `OutfitSlots.AnkleRight`       |                                                  |
+| `OutfitSlots.Feet`             | Footwear                                         |
+| `OutfitSlots.ToesLeft`         | Accessories                                      |
+| `OutfitSlots.ToesRight`        | Accessories                                      |
+| `OutfitSlots.ToenailsLeft`     | Nails                                            |
+| `OutfitSlots.ToenailsRight`    | Nails                                            |
+| `OutfitSlots.BodyUnder`        | Netrunning Suits                                 |
+| `OutfitSlots.BodyInner`        |                                                  |
+| `OutfitSlots.BodyMiddle`       | Jumpsuits, Tracksuits                            |
+| `OutfitSlots.BodyOuter`        |                                                  |
+| `OutfitSlots.HandPropLeft`     | Props for photo mode                             |
+| `OutfitSlots.HandPropRight`    | Props for photo mode                             |
 
 When proposing a new slot, please follow these recommendations:
 
