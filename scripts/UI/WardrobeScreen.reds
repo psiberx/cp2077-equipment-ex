@@ -43,6 +43,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_isCursorOverManager: Bool;
     protected let m_isCursorOverPreview: Bool;
 
+    protected let m_cursorScreenPosition: Vector2;
+
     protected let m_itemDisplayContext: ref<ItemDisplayContextData>;
 
     protected cb func OnInitialize() -> Bool {
@@ -369,6 +371,13 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnPreviewPress(evt: ref<inkPointerEvent>) -> Bool {
+        if evt.IsAction(n"click") {
+            let cursorPos = evt.GetScreenSpacePosition();
+            let screenSize = ScreenHelper.GetScreenSize(this.m_player.GetGame());
+
+            this.m_cursorScreenPosition = new Vector2(cursorPos.X / screenSize.X, cursorPos.Y / screenSize.Y);
+        }
+
         if evt.IsAction(n"mouse_left") {
             this.m_isPreviewMouseHold = true;
 
@@ -407,7 +416,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             this.m_isPreviewMouseHold = false;
 
             let cursorEvent = new inkMenuLayer_SetCursorVisibility();
-            cursorEvent.Init(true, new Vector2(0.50, 0.50));
+            cursorEvent.Init(true, this.m_cursorScreenPosition);
             this.QueueEvent(cursorEvent);
 
             evt.Consume();
