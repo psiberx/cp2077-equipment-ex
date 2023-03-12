@@ -182,7 +182,7 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func AttachAllVisualsToSlots(opt refresh: Bool) {
         for part in this.m_state.GetParts() {
-            if this.IsOutfitSlot(part.GetSlotID()) {
+            if this.IsOutfitSlot(part.GetSlotID()) && this.IsEquippable(part.GetItemID()) {
                 this.AttachVisualToSlot(part.GetItemID(), part.GetSlotID());
 
                 if refresh {
