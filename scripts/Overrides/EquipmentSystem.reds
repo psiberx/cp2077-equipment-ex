@@ -34,6 +34,16 @@ public final const func IsSlotOverriden(area: gamedataEquipmentArea) -> Bool {
 }
 
 @wrapMethod(EquipmentSystemPlayerData)
+private final const func ShouldUnderwearBeVisibleInSet() -> Bool {
+    return !this.m_outfitSystem.IsActive() && !this.m_visualChangesAllowed && wrappedMethod();
+}
+
+@wrapMethod(EquipmentSystemPlayerData)
+private final const func ShouldUnderwearTopBeVisibleInSet() -> Bool {
+    return !this.m_outfitSystem.IsActive() && !this.m_visualChangesAllowed && wrappedMethod();
+}
+
+@wrapMethod(EquipmentSystemPlayerData)
 public final func OnRestored() {
     this.m_outfitSystem = OutfitSystem.GetInstance(this.m_owner.GetGame());
     this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.m_owner.GetGame());

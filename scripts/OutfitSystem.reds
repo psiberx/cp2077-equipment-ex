@@ -231,6 +231,7 @@ public class OutfitSystem extends ScriptableSystem {
             }
         }
     }
+
     private func HideEquipment() {
         this.m_equipmentData.UnlockVisualChanges();
         this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit));
