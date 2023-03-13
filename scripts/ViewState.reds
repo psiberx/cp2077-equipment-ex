@@ -3,6 +3,10 @@ module EquipmentEx
 class ViewState {
     private persistent let m_collapsedSlots: array<TweakDBID>;
 
+    public func GetCollapsed() -> array<TweakDBID> {
+        return this.m_collapsedSlots;
+    }
+
     public func IsCollapsed(slotID: TweakDBID) -> Bool {
         return ArrayContains(this.m_collapsedSlots, slotID);
     }

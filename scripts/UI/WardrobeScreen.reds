@@ -408,6 +408,14 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
+    protected final func ShowGridButtonHints() {
+        if this.m_player.PlayerLastUsedPad() && !this.m_isCursorOverManager && !this.m_isCursorOverPreview {
+            this.m_buttonHints.AddButtonHint(n"world_map_menu_zoom_to_mappin", GetLocalizedText("LocKey#17809"));
+        } else {
+            this.m_buttonHints.RemoveButtonHint(n"world_map_menu_zoom_to_mappin");
+        }
+    }
+
     protected cb func OnInventoryGridSlotClick(evt: ref<InventoryGridSlotClick>) {
         if evt.action.IsAction(n"click") {
             this.PlaySound(n"Button", n"OnPress");
@@ -516,6 +524,13 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
             evt.Consume();
         }
+
+        if !this.m_isCursorOverManager && !this.m_isCursorOverPreview 
+            && this.m_player.PlayerLastUsedPad() && evt.IsAction(n"world_map_menu_zoom_to_mappin") {
+            this.m_inventoryGridDataView.ToggleCollapsed();
+            this.m_inventoryGridDataView.UpdateView();
+            this.QueueScrollPositionRestore();
+        }
     }
 
     protected cb func OnGlobalHold(evt: ref<inkPointerEvent>) -> Bool {
@@ -528,6 +543,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         if evt.IsAction(n"right_stick_x") || evt.IsAction(n"right_stick_y") {
             this.m_inventoryScrollController.SetEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
         }
+
+        this.ShowGridButtonHints();
     }
 
     protected cb func OnGlobalRelative(evt: ref<inkPointerEvent>) -> Bool {
@@ -537,6 +554,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         if this.m_isPreviewMouseHold && evt.IsAction(n"mouse_x") {
             this.RotatePreview(evt.GetAxisData(), 1.0, true);
+        }
+
+        if evt.IsAction(n"mouse_x") || evt.IsAction(n"mouse_y") {
+            this.ShowGridButtonHints();
         }
     }
 

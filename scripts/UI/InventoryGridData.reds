@@ -41,6 +41,10 @@ class InventoryGridDataView extends BackpackDataView {
         this.m_viewManager.SetCollapsed(state);
     }
 
+    public func ToggleCollapsed() {
+        this.m_viewManager.ToggleCollapsed();
+    }
+
     public func ToggleCollapsed(slotID: TweakDBID) {
         this.m_viewManager.ToggleCollapsed(slotID);
     }

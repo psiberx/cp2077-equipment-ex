@@ -17,10 +17,6 @@ public class ViewManager extends ScriptableSystem {
         this.m_state.SetCollapsed(slotID, state);
     }
 
-    public func ToggleCollapsed(slotID: TweakDBID) {
-        this.m_state.ToggleCollapsed(slotID);
-    }
-
     public func SetCollapsed(state: Bool) {
         if state {
             let outfitSystem = OutfitSystem.GetInstance(this.GetGameInstance());
@@ -28,6 +24,18 @@ public class ViewManager extends ScriptableSystem {
         } else {
             this.m_state.SetCollapsed([]);
         }        
+    }
+
+    public func ToggleCollapsed(slotID: TweakDBID) {
+        this.m_state.ToggleCollapsed(slotID);
+    }
+
+    public func ToggleCollapsed() {
+        let outfitSystem = OutfitSystem.GetInstance(this.GetGameInstance());
+        let outfitSlots = outfitSystem.GetOutfitSlots();
+        let collapsedSlots = this.m_state.GetCollapsed();
+
+        this.SetCollapsed(ArraySize(outfitSlots) != ArraySize(collapsedSlots));
     }
 
     public static func GetInstance(game: GameInstance) -> ref<ViewManager> {
