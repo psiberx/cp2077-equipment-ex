@@ -7,7 +7,7 @@ class ViewState {
         return ArrayContains(this.m_collapsedSlots, slotID);
     }
     
-    public func SetCollapsedState(slotID: TweakDBID, state: Bool) {
+    public func SetCollapsed(slotID: TweakDBID, state: Bool) {
         if (state) {
             if !ArrayContains(this.m_collapsedSlots, slotID) {
                 ArrayPush(this.m_collapsedSlots, slotID);
@@ -17,7 +17,11 @@ class ViewState {
         }
     }
 
-    public func ToggleCollapsedState(slotID: TweakDBID) {
-        this.SetCollapsedState(slotID, !ArrayContains(this.m_collapsedSlots, slotID));
+    public func ToggleCollapsed(slotID: TweakDBID) {
+        this.SetCollapsed(slotID, !ArrayContains(this.m_collapsedSlots, slotID));
+    }
+    
+    public func SetCollapsed(slots: array<TweakDBID>) {
+        this.m_collapsedSlots = slots;
     }
 }

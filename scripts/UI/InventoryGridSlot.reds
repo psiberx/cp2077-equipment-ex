@@ -125,7 +125,7 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         this.m_arrow.BindProperty(n"opacity", n"ItemDisplay.borderOpacity");
         this.m_arrow.Reparent(panel);
 
-        this.RegisterToCallback(n"OnRelease", this, n"OnRelease");
+        this.RegisterToCallback(n"OnClick", this, n"OnClick");
         this.RegisterToCallback(n"OnEnter", this, n"OnHoverOver");
         this.RegisterToCallback(n"OnLeave", this, n"OnHoverOut");
     }
@@ -148,7 +148,7 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         }
     }
 
-    protected cb func OnRelease(evt: ref<inkPointerEvent>) {
+    protected cb func OnClick(evt: ref<inkPointerEvent>) {
         this.TriggerClickEvent(evt.GetActionName());
     }
 

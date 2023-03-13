@@ -128,6 +128,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.InitializeInventoryGrid();
         this.InitializeSearchField();
+        this.InitializeGridButtons();
     }
 
     protected cb func OnUninitialize() -> Bool {
@@ -157,7 +158,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected func InitializeSearchField() {
-        let filterWrapper = this.GetRootCompoundWidget().GetWidget(n"wrapper/wrapper/vendorPanel/vendorHeader/inkHorizontalPanelWidget2") as inkCompoundWidget;
+        let filterWrapper = this.GetChildWidgetByPath(n"wrapper/wrapper/vendorPanel/vendorHeader/inkHorizontalPanelWidget2") as inkCompoundWidget;
         let filterSpacing = this.m_filtersContainer.GetChildMargin();
 
         let searchWrapper = new inkCanvas();
@@ -171,6 +172,25 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_searchInput.SetMaxLength(24);
         this.m_searchInput.RegisterToCallback(n"OnInput", this, n"OnSearchFieldInput");
         this.m_searchInput.Reparent(searchWrapper);
+    }
+
+    protected func InitializeGridButtons() {
+        let headerWrapper = this.GetChildWidgetByPath(n"wrapper/wrapper/vendorPanel/vendorHeader/vendoHeaderWrapper") as inkCompoundWidget;
+
+        let buttonPanel = new inkHorizontalPanel();
+        buttonPanel.SetAnchor(inkEAnchor.TopRight);
+        buttonPanel.SetAnchorPoint(new Vector2(1.0, 0.0));
+        buttonPanel.SetMargin(new inkMargin(0.0, 186.0, 0.0, 0.0));
+        buttonPanel.SetChildMargin(new inkMargin(8.0, 0.0, 0.0, 0.0));
+        buttonPanel.Reparent(headerWrapper);
+
+        let expandBtn = InventoryGridButton.Create();
+        expandBtn.SetFlipped(true);
+        expandBtn.Reparent(buttonPanel, this);
+
+        let collapseBtn = InventoryGridButton.Create();
+        collapseBtn.SetCollapse(true);
+        collapseBtn.Reparent(buttonPanel, this);
     }
 
     protected func InitializeInventoryGrid() {
@@ -189,21 +209,6 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_inventoryGridController.SetSource(this.m_inventoryGridDataView);
 
         this.PopulateInventoryGrid();
-    }
-
-    protected func CompareItem(leftItemID: ItemID, rightItemID: ItemID) -> Bool {
-        let leftName = this.m_outfitSystem.GetItemName(leftItemID);
-        let rightName = this.m_outfitSystem.GetItemName(rightItemID);
-
-        if StrLen(leftName) == 0 {
-            return false;
-        }
-
-        if StrLen(rightName) == 0 {
-            return true;
-        }
-
-        return StrCmp(leftName, rightName) < 0;
     }
 
     protected func PopulateInventoryGrid() {
@@ -261,6 +266,21 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.m_inventoryGridDataSource.Reset(finalItems);
         this.m_inventoryGridDataView.UpdateView();
+    }
+
+    protected func CompareItem(leftItemID: ItemID, rightItemID: ItemID) -> Bool {
+        let leftName = this.m_outfitSystem.GetItemName(leftItemID);
+        let rightName = this.m_outfitSystem.GetItemName(rightItemID);
+
+        if StrLen(leftName) == 0 {
+            return false;
+        }
+
+        if StrLen(rightName) == 0 {
+            return true;
+        }
+
+        return StrCmp(leftName, rightName) < 0;
     }
 
     protected func RefreshInventoryGrid() {
@@ -397,6 +417,14 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             this.QueueScrollPositionRestore();
 
             this.ShowSlotButtonHints(evt.slot);
+        }
+    }
+
+    protected cb func OnInventoryGridButtonClick(evt: ref<InventoryGridButtonClick>) {
+        if evt.action.IsAction(n"click") {
+            this.m_inventoryGridDataView.SetCollapsed(evt.collapse);
+            this.m_inventoryGridDataView.UpdateView();
+            this.QueueScrollPositionRestore();
         }
     }
 
