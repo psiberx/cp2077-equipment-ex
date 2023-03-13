@@ -98,15 +98,6 @@ class InventoryGridDataView extends BackpackDataView {
 
         return false;
     }
-
-    public func SortItem(left: ref<IScriptable>, right: ref<IScriptable>) -> Bool {
-        let uiItemLeft = left as InventoryGridItemData;
-        let uiItemRight = right as InventoryGridItemData;
-
-        return this.m_reverse
-            ? uiItemLeft.ItemIndex > uiItemRight.ItemIndex
-            : uiItemLeft.ItemIndex < uiItemRight.ItemIndex;
-    }
 }
 
 class InventoryGridTemplateClassifier extends inkVirtualItemTemplateClassifier {

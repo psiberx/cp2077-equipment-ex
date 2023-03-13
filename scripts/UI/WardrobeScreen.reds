@@ -191,6 +191,21 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.PopulateInventoryGrid();
     }
 
+    protected func CompareItem(leftItemID: ItemID, rightItemID: ItemID) -> Bool {
+        let leftName = this.m_outfitSystem.GetItemName(leftItemID);
+        let rightName = this.m_outfitSystem.GetItemName(rightItemID);
+
+        if StrLen(leftName) == 0 {
+            return false;
+        }
+
+        if StrLen(rightName) == 0 {
+            return true;
+        }
+
+        return StrCmp(leftName, rightName) < 0;
+    }
+
     protected func PopulateInventoryGrid() {
         let allItems = this.m_inventoryHelper.GetAvailableItems(this.m_itemDropQueue);
         let finalItems: array<ref<IScriptable>>;
@@ -204,7 +219,11 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
             for itemData in allItems {
                 if this.m_outfitSystem.IsEquippable(itemData.GetID(), slotID) {
-                    ArrayPush(slotItems, itemData);
+                    let index = 0;
+                    while index < ArraySize(slotItems) && !this.CompareItem(itemData.GetID(), slotItems[index].GetID()) {
+                        index += 1;
+                    }
+                    ArrayInsert(slotItems, index, itemData);
                 }
             }
 
