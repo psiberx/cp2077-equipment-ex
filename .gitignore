@@ -6,5 +6,6 @@
 /archive/install_log.xml
 /archive/layout.xml
 /build
+/dev
 /*.log
 ~$*

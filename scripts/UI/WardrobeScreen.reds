@@ -4,6 +4,7 @@ import Codeware.UI.*
 public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_player: wref<PlayerPuppet>;
     protected let m_outfitSystem: wref<OutfitSystem>;
+    protected let m_viewManager: wref<ViewManager>;
     protected let m_inventoryHelper: wref<InventoryHelper>;
     protected let m_paperdollHelper: wref<PaperdollHelper>;
     protected let m_delaySystem: wref<DelaySystem>;
@@ -22,6 +23,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_inventoryScrollArea: wref<inkCompoundWidget>;
     protected let m_inventoryScrollController: wref<inkScrollController>;
     protected let m_scrollResetPending: Bool;
+    protected let m_scrollLastPosition: Float;
+    protected let m_scrollLastDelta: Float;
 
     protected let m_inventoryGridArea: wref<inkWidget>;
     protected let m_inventoryGridController: wref<inkVirtualGridController>;
@@ -52,6 +55,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.m_player = this.GetPlayerControlledObject() as PlayerPuppet;
         this.m_outfitSystem = OutfitSystem.GetInstance(this.m_player.GetGame());
+        this.m_viewManager = ViewManager.GetInstance(this.m_player.GetGame());
         this.m_inventoryHelper = InventoryHelper.GetInstance(this.m_player.GetGame());
         this.m_paperdollHelper = PaperdollHelper.GetInstance(this.m_player.GetGame());
         this.m_delaySystem = GameInstance.GetDelaySystem(this.m_player.GetGame());
@@ -173,6 +177,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_inventoryGridDataSource = new ScriptableDataSource();
         
         this.m_inventoryGridDataView = new InventoryGridDataView();
+        this.m_inventoryGridDataView.SetViewManager(this.m_viewManager);
         this.m_inventoryGridDataView.BindUIScriptableSystem(this.m_uiScriptableSystem);
         this.m_inventoryGridDataView.SetFilterType(ItemFilterCategory.AllItems);
         this.m_inventoryGridDataView.SetSortMode(ItemSortMode.Default);
@@ -209,7 +214,6 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
                 uiSlotData.ItemData.CategoryName = this.m_outfitSystem.GetSlotName(slotID);
                 uiSlotData.SlotIndex = groupIndex;
                 uiSlotData.ItemIndex = itemIndex;
-                uiSlotData.IsVisible = true;
                 groupIndex += 1;
                 itemIndex += 1;
                 
@@ -219,9 +223,9 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
                     let uiItemData = new InventoryGridItemData();
                     uiItemData.Item = UIInventoryItem.Make(this.m_player, slotID, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
                     uiItemData.DisplayContextData = this.m_itemDisplayContext;
+                    uiItemData.Parent = uiSlotData;
                     uiItemData.SlotIndex = groupIndex;
                     uiItemData.ItemIndex = itemIndex;
-                    uiItemData.IsVisible = true;
                     itemIndex += 1;
 
                     ArrayPush(finalItems, uiItemData);
@@ -237,11 +241,25 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
 
         this.m_inventoryGridDataSource.Reset(finalItems);
+        this.m_inventoryGridDataView.UpdateView();
     }
 
     protected func RefreshInventoryGrid() {
         this.m_inventoryGridDataView.UpdateView();
         this.m_inventoryScrollController.UpdateScrollPositionFromScrollArea();
+    }
+
+    protected func RestoreScrollPosition() {
+        this.m_inventoryScrollController.SetScrollPosition(
+            this.m_scrollLastPosition * this.m_scrollLastDelta / this.m_inventoryScrollController.scrollDelta
+        );
+    }
+
+    protected cb func QueueScrollPositionRestore() {
+        this.m_scrollLastPosition = this.m_inventoryScrollController.position;
+        this.m_scrollLastDelta = this.m_inventoryScrollController.scrollDelta;
+
+        this.m_delaySystem.DelayCallbackNextFrame(RestoreInventoryScrollCallback.Create(this));
     }
 
     protected func UpdateScrollPosition(opt forceReset: Bool) {
@@ -339,6 +357,36 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected cb func OnInventoryItemHoverOut(evt: ref<ItemDisplayHoverOutEvent>) {
         this.ShowItemButtonHints(null);
         this.m_tooltipManager.HideTooltips();
+    }
+
+    protected final func ShowSlotButtonHints(slot: wref<InventoryGridSlotData>) {
+        this.m_buttonHints.RemoveButtonHint(n"click");
+        
+        if IsDefined(slot) {
+            this.m_buttonHints.AddButtonHint(n"click", slot.IsCollapsed
+                ? GetLocalizedTextByKey(n"Common-Access-Open")
+                : GetLocalizedTextByKey(n"Common-Access-Close"));
+        }
+    }
+
+    protected cb func OnInventoryGridSlotClick(evt: ref<InventoryGridSlotClick>) {
+        if evt.action.IsAction(n"click") {
+            this.PlaySound(n"Button", n"OnPress");
+
+            this.m_inventoryGridDataView.ToggleCollapsed(evt.slot.ItemData.SlotID);
+            this.m_inventoryGridDataView.UpdateView();
+            this.QueueScrollPositionRestore();
+
+            this.ShowSlotButtonHints(evt.slot);
+        }
+    }
+
+    protected cb func OnInventoryGridSlotItemHoverOver(evt: ref<InventoryGridSlotHoverOver>) {
+        this.ShowSlotButtonHints(evt.slot);
+    }
+
+    protected cb func OnInventoryGridSlotItemHoverOut(evt: ref<InventoryGridSlotHoverOut>) {
+        this.ShowSlotButtonHints(null);
     }
 
     protected cb func OnManagerHoverOver(evt: ref<inkPointerEvent>) -> Bool {
@@ -494,6 +542,22 @@ class UpdateInventoryGridCallback extends DelayCallback {
 
     public static func Create(controller: ref<WardrobeScreenController>) -> ref<UpdateInventoryGridCallback> {
         let self = new UpdateInventoryGridCallback();
+        self.m_controller = controller;
+        return self;
+    }
+}
+
+class RestoreInventoryScrollCallback extends DelayCallback {
+    protected let m_controller: wref<WardrobeScreenController>;
+
+    public func Call() {
+        if IsDefined(this.m_controller) {
+            this.m_controller.RestoreScrollPosition();
+        }
+    }
+
+    public static func Create(controller: ref<WardrobeScreenController>) -> ref<RestoreInventoryScrollCallback> {
+        let self = new RestoreInventoryScrollCallback();
         self.m_controller = controller;
         return self;
     }

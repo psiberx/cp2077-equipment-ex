@@ -3,13 +3,17 @@ module EquipmentEx
 class InventoryGridItemData extends VendorUIInventoryItemData {
     public let SlotIndex: Int32;
     public let ItemIndex: Int32;
+    public let Parent: wref<InventoryGridSlotData>;
     public let IsVisible: Bool;
 }
 
-class InventoryGridSlotData extends InventoryGridItemData {
-    public let SlotID: TweakDBID;
-    public let SlotName: String;
+class InventoryGridSlotData extends VendorUIInventoryItemData {
+    public let SlotIndex: Int32;
+    public let ItemIndex: Int32;
     public let Children: array<wref<InventoryGridItemData>>;
+    public let TotalItems: Int32;
+    public let VisibleItems: Int32;
+    public let IsCollapsed: Bool;
 
     protected func GetActiveItem() -> wref<InventoryGridItemData> {
         for uiItem in this.Children {
@@ -27,6 +31,15 @@ class InventoryGridDataView extends BackpackDataView {
     private let m_refresh: Bool;
     private let m_reverse: Bool;
     private let m_searchQuery: String;
+    private let m_viewManager: wref<ViewManager>;
+
+    public func SetViewManager(viewManager: wref<ViewManager>) {
+        this.m_viewManager = viewManager;
+    }
+
+    public func ToggleCollapsed(slotID: TweakDBID) {
+        this.m_viewManager.ToggleCollapsedState(slotID);
+    }
 
     public func SetSearchQuery(searchQuery: String) {
         this.m_searchQuery = StrLower(searchQuery);
@@ -42,10 +55,9 @@ class InventoryGridDataView extends BackpackDataView {
 
     public func FilterItem(data: ref<IScriptable>) -> Bool {
         let uiItem = data as InventoryGridItemData;
-        let uiSlot = data as InventoryGridSlotData;
 
-        if this.m_filter {
-            if !IsDefined(uiSlot) {
+        if IsDefined(uiItem) {
+            if this.m_filter {
                 uiItem.IsVisible = true;
 
                 if Equals(this.m_itemFilterType, ItemFilterCategory.Clothes) {
@@ -61,20 +73,30 @@ class InventoryGridDataView extends BackpackDataView {
                     }
                 }
             }
-        } else {
-            if IsDefined(uiSlot) {
-                uiSlot.IsVisible = false;
+
+            return uiItem.IsVisible && !uiItem.Parent.IsCollapsed;
+        }
+
+        let uiSlot = data as InventoryGridSlotData;
+
+        if IsDefined(uiSlot) {
+            if this.m_filter {
+                uiSlot.IsCollapsed = this.m_viewManager.IsCollapsed(uiSlot.ItemData.SlotID);
+            } else {
+                uiSlot.TotalItems = ArraySize(uiSlot.Children);
+                uiSlot.VisibleItems = 0;
 
                 for uiChildData in uiSlot.Children {
                     if uiChildData.IsVisible {
-                        uiSlot.IsVisible = true;
-                        break;
+                        uiSlot.VisibleItems += 1;
                     }
                 }
             }
+
+            return uiSlot.VisibleItems > 0;
         }
 
-        return uiItem.IsVisible;
+        return false;
     }
 
     public func SortItem(left: ref<IScriptable>, right: ref<IScriptable>) -> Bool {
