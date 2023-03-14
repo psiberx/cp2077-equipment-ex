@@ -17,11 +17,11 @@ class OutfitListEntryHoverOut extends Event {
 
 class OutfitListEntryController extends inkVirtualCompoundItemController {
     private let m_data: ref<OutfitListEntryData>;
-    
-    private let m_root: ref<inkCompoundWidget>;
-    private let m_label: ref<inkText>;
-    private let m_checkbox: ref<inkWidget>;
-    private let m_selection: ref<inkWidget>;
+
+    private let m_root: wref<inkCompoundWidget>;
+    private let m_label: wref<inkText>;
+    private let m_checkbox: wref<inkWidget>;
+    private let m_selection: wref<inkWidget>;
 
     private let m_isDisabled: Bool;
     private let m_isHovered: Bool;
