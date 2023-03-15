@@ -130,10 +130,10 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"OutfitSlots.Feet", 0, t"AttachmentSlots.Feet", [ExtraSlotFlag.SwitchesLegs]),
 
         // Toes
-        ExtraSlotConfig.Create(n"OutfitSlots.ToesLeft", -2),
-        ExtraSlotConfig.Create(n"OutfitSlots.ToesRight", -2),
-        ExtraSlotConfig.Create(n"OutfitSlots.ToenailsLeft", -3),
-        ExtraSlotConfig.Create(n"OutfitSlots.ToenailsRight", -3),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToesLeft", -2, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToesRight", -2, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToenailsLeft", -3, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"OutfitSlots.ToenailsRight", -3, t"", [ExtraSlotFlag.CoversLegs]),
 
         // Body
         ExtraSlotConfig.Create(n"OutfitSlots.BodyUnder", -10, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
