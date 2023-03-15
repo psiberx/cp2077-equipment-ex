@@ -1,9 +1,11 @@
 {
   "Header": {
-    "WolvenKitVersion": "8.8.0",
+    "WolvenKitVersion": "8.8.2-nightly.2023-03-09",
     "WKitJsonVersion": "0.0.3",
     "GameVersion": 1610,
-    "DataType": "CR2W"
+    "ExportedDateTime": "2023-03-12T10:24:45.7623587Z",
+    "DataType": "CR2W",
+    "ArchiveFileName": "D:\\Sandbox\\Cyberpunk\\Mods\\EquipmentEx\\Project\\archive\\source\\archive\\equipment_ex\\localization\\en-us.json"
   },
   "Data": {
     "Version": 195,
@@ -60,14 +62,14 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Preferred source of items for outfit manager: \u0022Inventory + Stash\u0022 will only use the current items in your inventory and stashes, \u0022Wardrobe Store\u0022 will use every item you have ever obtained in the game (including dropped and disassembled items).",
+              "femaleVariant": "Preferred source of items for outfit manager: \u0022Inventory \u002B Stash\u0022 will only use the current items in your inventory and stashes, \u0022Wardrobe Store\u0022 will use every item you have ever obtained in the game (including dropped and disassembled items).",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-Description"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Inventory + Stash",
+              "femaleVariant": "Inventory \u002B Stash",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-InventoryAndStash"
@@ -256,6 +258,34 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Fingers",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-FingersLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Fingers",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-FingersRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Fingernails",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-FingernailsLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Fingernails",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-FingernailsRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Waist",
               "maleVariant": "",
               "primaryKey": 0,
@@ -319,6 +349,34 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Toes",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ToesLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Toes",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ToesRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Toenails",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ToenailsLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Toenails",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-ToenailsRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Body / Under",
               "maleVariant": "",
               "primaryKey": 0,
@@ -344,6 +402,20 @@
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "Gameplay-OutfitSlots-BodyOuter"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Hand Prop",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-HandPropLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Hand Prop",
+              "maleVariant": "",
+              "primaryKey": 0,
+              "secondaryKey": "Gameplay-OutfitSlots-HandPropRight"
             }
           ]
         }
