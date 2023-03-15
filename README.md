@@ -13,8 +13,7 @@
 - Cyberpunk 2077 1.61
 - [ArchiveXL](https://github.com/psiberx/cp2077-archive-xl) 1.3.4+
 - [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.1.1+
-- [RED4ext](https://github.com/WopsS/RED4ext) 1.9.0+
-- [redscript](https://github.com/jac3km4/redscript) 0.5.9+
+- [Codeware](https://github.com/psiberx/cp2077-codeware) 1.0.0+
 - (Optional) [Mod Settings](https://github.com/jackhumbert/mod_settings) 0.0.10+
 
 ### Installation
