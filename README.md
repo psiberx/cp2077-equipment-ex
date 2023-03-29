@@ -177,7 +177,8 @@ Your translation will be added to the mod, and you will be credited on the mod p
 Available translations:
 
 - English (`en-us`)
-- Brazilian (`pt-br`) by [@Jaqueta](https://github.com/)
+- Arabic (`ar-ar`) by [@MONSTERaider](https://www.nexusmods.com/users/1630457)
+- Brazilian (`pt-br`) by [@Jaqueta](https://github.com/Jaqueta)
 - Czech (`cz-cz`) by [@starfis](https://www.nexusmods.com/cyberpunk2077/users/933641)
 - French (`fr-fr`) by [@TFE71](https://www.nexusmods.com/users/5620844)
 - German (`de-de`) by [@Vorgash](https://www.nexusmods.com/users/3957237)
