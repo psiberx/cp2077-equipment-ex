@@ -112,7 +112,7 @@ public class OutfitSystem extends ScriptableSystem {
                 }
 
                 if ArraySize(outfitParts) > 0 {
-                    let outfitName = StringToName("Wardrobe Set " + ToString(clothingSet.setID));
+                    let outfitName = StringToName("WARDROBE SET " + ToString(clothingSet.setID));
                     this.m_state.SaveOutfit(outfitName, outfitParts, false, this.GetTimestamp());
                 }
             }
