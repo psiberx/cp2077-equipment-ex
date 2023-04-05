@@ -1,28 +1,25 @@
-import EquipmentEx.{LegsState,PuppetAttachmentChangeRequest,PuppetAppearanceChangeRequest}
-
-@addField(ScriptedPuppet)
-private let m_legsState: LegsState;
+import EquipmentEx.PuppetStateSystem
 
 @addMethod(ScriptedPuppet)
-protected cb func OnPuppetItemAddedToSlot(evt: ref<ItemAddedToSlot>) -> Bool {
-    GameInstance.GetScriptableSystemsContainer(this.GetGame())
-        .QueueRequest(PuppetAttachmentChangeRequest.Create(this, evt.GetSlotID(), evt.GetItemID(), true));
+public func SupportsNewSlots() -> Bool {
+    let characterSlots = TweakDBInterface.GetForeignKeyArray(this.GetRecordID() + t".attachmentSlots");
+    return ArrayContains(characterSlots, t"OutfitSlots.Feet");
 }
 
-@addMethod(ScriptedPuppet)
-protected cb func OnPuppetItemVisualsAddedToSlot(evt: ref<ItemVisualsAddedToSlot>) -> Bool {
-    GameInstance.GetScriptableSystemsContainer(this.GetGame())
-        .QueueRequest(PuppetAttachmentChangeRequest.Create(this, evt.GetSlotID(), evt.GetItemID(), true));
+@wrapMethod(ScriptedPuppet)
+protected cb func OnGameAttached() -> Bool {
+    if this.SupportsNewSlots() {
+        PuppetStateSystem.GetInstance(this.GetGame()).RegisterPuppet(this);
+    }
+
+    wrappedMethod();
 }
 
-@addMethod(ScriptedPuppet)
-protected cb func OnPuppetItemRemovedFromSlot(evt: ref<ItemRemovedFromSlot>) -> Bool {
-    GameInstance.GetScriptableSystemsContainer(this.GetGame())
-        .QueueRequest(PuppetAttachmentChangeRequest.Create(this, evt.GetSlotID(), evt.GetItemID(), false));
-}
+@wrapMethod(ScriptedPuppet)
+protected cb func OnDetach() -> Bool {
+    if this.SupportsNewSlots() {
+        PuppetStateSystem.GetInstance(this.GetGame()).UnregisterPuppet(this);
+    }
 
-@addMethod(ScriptedPuppet)
-protected cb func OnPuppetAppearanceChanged(evt: ref<entAppearanceChangeFinishEvent>) -> Bool {
-    GameInstance.GetScriptableSystemsContainer(this.GetGame())
-        .QueueRequest(PuppetAppearanceChangeRequest.Create(this));
+    wrappedMethod();
 }

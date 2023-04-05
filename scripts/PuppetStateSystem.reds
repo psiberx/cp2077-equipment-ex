@@ -7,39 +7,14 @@ enum LegsState {
     FlatShoes = 3,
 }
 
-public class PuppetAttachmentChangeRequest extends ScriptableSystemRequest {
-    public let puppet: wref<ScriptedPuppet>;
-    public let slotID: TweakDBID;
-    public let itemID: ItemID;
-    public let isEquipped: Bool;
-
-    public static func Create(puppet: wref<ScriptedPuppet>, slotID: TweakDBID, itemID: ItemID, isEquipped: Bool) -> ref<PuppetAttachmentChangeRequest> {
-        let self = new PuppetAttachmentChangeRequest();
-        self.puppet = puppet;
-        self.slotID = slotID;
-        self.itemID = itemID;
-        self.isEquipped = isEquipped;
-
-        return self;
-    }
-}
-
-public class PuppetAppearanceChangeRequest extends ScriptableSystemRequest {
-    public let puppet: wref<ScriptedPuppet>;
-
-    public static func Create(puppet: wref<ScriptedPuppet>) -> ref<PuppetAppearanceChangeRequest> {
-        let self = new PuppetAppearanceChangeRequest();
-        self.puppet = puppet;
-
-        return self;
-    }
-}
-
 public class PuppetStateSystem extends ScriptableSystem {
     private let m_legsSlots: array<TweakDBID>;
     private let m_feetSlots: array<TweakDBID>;
 
     private let m_transactionSystem: wref<TransactionSystem>;
+    private let m_listeners: array<ref<AttachmentSlotsScriptListener>>;
+    private let m_handlers: array<ref<PuppetStateHandler>>;
+    private let m_handlerMap: ref<inkHashMap>;
 
     private func OnAttach() {
         ArrayPush(this.m_legsSlots, t"AttachmentSlots.Legs");
@@ -53,31 +28,58 @@ public class PuppetStateSystem extends ScriptableSystem {
                 ArrayPush(this.m_feetSlots, outfitSlot.slotID);
             }
         }
-    }
 
-    private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
+        this.m_handlerMap = new inkHashMap();
     }
 
-    private func OnAttachmentChange(request: ref<PuppetAttachmentChangeRequest>) {
-        if this.IsFeetSlot(request.slotID) || this.IsFeetCovering(request.puppet, request.itemID) {
-            if this.UpdateLegsState(request.puppet) {
-                this.RefreshItemAppearances(request.puppet);
+    private func OnDetach() {
+        ArrayClear(this.m_handlers);
+        ArrayClear(this.m_listeners);
+
+        this.m_handlerMap.Clear();
+    }
+
+    private func RegisterPuppet(puppet: ref<GameObject>) {
+        let key = Cast<Uint64>(EntityID.GetHash(puppet.GetEntityID()));
+
+        if this.m_handlerMap.KeyExist(key) {
+            return;
+        }
+
+        let handler = PuppetStateHandler.Create(this, puppet);
+        let listener = this.m_transactionSystem.RegisterAttachmentSlotListener(puppet, handler);
+
+        ArrayPush(this.m_handlers, handler);
+        ArrayPush(this.m_listeners, listener);
+
+        this.m_handlerMap.Insert(key, handler);
+    }
+
+    private func UnregisterPuppet(puppet: ref<GameObject>) {
+        let key = Cast<Uint64>(EntityID.GetHash(puppet.GetEntityID()));
+
+        if !this.m_handlerMap.KeyExist(key) {
+            return;
+        }
+
+        let handler = this.m_handlerMap.Get(key) as PuppetStateHandler;
+        let index: Int32; // = ArrayFindFirst(this.m_handlers, handler);
+
+        while index < ArraySize(this.m_handlers) {
+            if Equals(handler, this.m_handlers[index]) {
+                break;
             }
+            index += 1;
         }
 
-        if request.isEquipped && this.IsLegsSlot(request.slotID) {
-            this.RefreshItemAppearance(request.puppet, request.itemID);
-        }
+        ArrayErase(this.m_handlers, index);
+        ArrayErase(this.m_listeners, index);
+
+        this.m_handlerMap.Remove(key);
     }
 
-    private func OnAppearanceChange(request: ref<PuppetAppearanceChangeRequest>) {
-        if this.UpdateLegsState(request.puppet) {
-            this.RefreshItemAppearances(request.puppet);
-        }
-    }
-
-    private func RefreshItemAppearances(puppet: wref<ScriptedPuppet>) {
+    private func RefreshItemAppearances(puppet: wref<GameObject>) {
         for slotID in this.m_legsSlots {
             let itemObject = this.m_transactionSystem.GetItemInSlot(puppet, slotID);
             if IsDefined(itemObject) {
@@ -86,7 +88,7 @@ public class PuppetStateSystem extends ScriptableSystem {
         }
     }
 
-    private func RefreshItemAppearance(puppet: wref<ScriptedPuppet>, itemID: ItemID) {
+    private func RefreshItemAppearance(puppet: wref<GameObject>, itemID: ItemID) {
         let itemAppearance = this.m_transactionSystem.GetItemAppearance(puppet, itemID);
 
         if NotEquals(itemAppearance, n"") && NotEquals(itemAppearance, n"empty_appearance_default") {
@@ -94,16 +96,7 @@ public class PuppetStateSystem extends ScriptableSystem {
         }
     }
 
-    private func UpdateLegsState(puppet: wref<ScriptedPuppet>) -> Bool {
-        let state = this.ResolveLegsState(puppet);
-        let updated = NotEquals(puppet.m_legsState, state);
-
-        puppet.m_legsState = state;
-
-        return updated;
-    }
-
-    private func ResolveLegsState(puppet: wref<ScriptedPuppet>) -> LegsState {
+    private func ResolveLegsState(puppet: wref<GameObject>) -> LegsState {
         let state = LegsState.Flat;
 
         for slotID in this.m_feetSlots {
@@ -139,17 +132,79 @@ public class PuppetStateSystem extends ScriptableSystem {
         return ArrayContains(this.m_feetSlots, slotID);
     }
 
-    private func IsFeetCovering(puppet: wref<ScriptedPuppet>, itemID: ItemID) -> Bool {
+    private func IsFeetCovering(puppet: wref<GameObject>, itemID: ItemID) -> Bool {
         return this.m_transactionSystem.MatchVisualTagByItemID(itemID, puppet, n"hide_S1");
     }
 
-    public func GetLegsStateSuffix(itemD: ItemID, owner: wref<GameObject>, suffixRecord: ref<ItemsFactoryAppearanceSuffixBase_Record>) -> String {
+    public func GetLegsStateSuffix(itemID: ItemID, owner: wref<GameObject>, suffixRecord: ref<ItemsFactoryAppearanceSuffixBase_Record>) -> String {
         let puppet = owner as ScriptedPuppet;
 
         if !IsDefined(puppet) || Equals(puppet.GetResolvedGenderName(), n"Male") {
             return "";
         }
 
-        return ToString(puppet.m_legsState);
+        let key = Cast<Uint64>(EntityID.GetHash(puppet.GetEntityID()));
+        let handler = this.m_handlerMap.Get(key) as PuppetStateHandler;
+
+        if !IsDefined(handler) {
+            return "";
+        }
+
+        return ToString(handler.m_legsState);
+    }
+
+    public static func GetInstance(game: GameInstance) -> ref<PuppetStateSystem> {
+        return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.PuppetStateSystem") as PuppetStateSystem;
+    }
+}
+
+public class PuppetStateHandler extends AttachmentSlotsScriptCallback {
+    private let m_system: wref<PuppetStateSystem>;
+    private let m_puppet: wref<GameObject>;
+    private let m_legsState: LegsState;
+
+    public func OnItemEquipped(slotID: TweakDBID, itemID: ItemID) -> Void {
+        if IsDefined(this.m_puppet) {
+            this.HandleAppearanceChange(slotID, itemID);
+
+            if this.m_system.IsLegsSlot(slotID) {
+                this.m_system.RefreshItemAppearance(this.m_puppet, itemID);
+            }
+        }
+    }
+
+    public func OnItemEquippedVisual(slotID: TweakDBID, itemID: ItemID) -> Void {
+        if IsDefined(this.m_puppet) {
+            this.HandleAppearanceChange(slotID, itemID);
+        }
+    }
+
+    public func OnItemUnequipped(slotID: TweakDBID, itemID: ItemID) -> Void {
+        if IsDefined(this.m_puppet) {
+            this.HandleAppearanceChange(slotID, itemID);
+        }
+    }
+
+    private func HandleAppearanceChange(slotID: TweakDBID, itemID: ItemID) {
+        if this.m_system.IsFeetSlot(slotID) || this.m_system.IsFeetCovering(this.m_puppet, itemID) {
+            if this.UpdateLegsState() {
+                this.m_system.RefreshItemAppearances(this.m_puppet);
+            }
+        }
+    }
+
+    private func UpdateLegsState() -> Bool {
+        let state = this.m_system.ResolveLegsState(this.m_puppet);
+        let updated = NotEquals(this.m_legsState, state);
+        this.m_legsState = state;
+        return updated;
+    }
+
+    public static func Create(system: ref<PuppetStateSystem>, puppet: ref<GameObject>) -> ref<PuppetStateHandler> {
+        let self = new PuppetStateHandler();
+        self.m_system = system;
+        self.m_puppet = puppet;
+
+        return self;
     }
 }
