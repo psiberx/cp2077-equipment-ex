@@ -1,9 +1,10 @@
 localization:
   onscreens:
     en-us: equipment_ex\localization\en-us.json
-    es-es: equipment_ex\localization\es-es.json
+    ar-ar: equipment_ex\localization\ar-ar.json
     cz-cz: equipment_ex\localization\cz-cz.json
     de-de: equipment_ex\localization\de-de.json
+    es-es: equipment_ex\localization\es-es.json
     fr-fr: equipment_ex\localization\fr-fr.json
     pt-br: equipment_ex\localization\pt-br.json
     ru-ru: equipment_ex\localization\ru-ru.json
