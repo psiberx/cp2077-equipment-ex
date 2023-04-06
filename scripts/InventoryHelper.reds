@@ -87,11 +87,17 @@ public class InventoryHelper extends ScriptableSystem {
         let items: array<ref<gameItemData>>;
         let settings = new Settings();
 
-        if Equals(settings.wardrobeItemSource, WardrobeItemSource.WardrobeStore) {
-            this.GetWardrobeItems(items);
-        } else {
-            this.GetPlayerItems(items, excludes);
-            this.GetStashItems(items);
+        switch settings.wardrobeItemSource {
+            case WardrobeItemSource.InventoryOnly:
+                this.GetPlayerItems(items, excludes);
+                break;
+            case WardrobeItemSource.InventoryAndStash:
+                this.GetPlayerItems(items, excludes);
+                this.GetStashItems(items);
+                break;
+            case WardrobeItemSource.WardrobeStore:
+                this.GetWardrobeItems(items);
+                break;
         }
 
         return items;
