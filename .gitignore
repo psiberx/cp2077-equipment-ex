@@ -3,8 +3,8 @@
 /.vscode
 /archive/packed
 /archive/source/raw/**/*.json
-/archive/install_log.xml
-/archive/layout.xml
+/archive/*.xml
+/archive/*.zip
 /build
 /dev
 /*.log
