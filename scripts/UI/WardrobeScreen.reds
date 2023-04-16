@@ -212,54 +212,45 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected func PopulateInventoryGrid() {
-        let allItems = this.m_inventoryHelper.GetAvailableItems(this.m_itemDropQueue);
-        let finalItems: array<ref<IScriptable>>;
-        let slotItems: array<ref<gameItemData>>;
-        let searchQuery = StrLower(this.m_searchInput.GetText());
-        let groupIndex: Int32;
-        let itemIndex: Int32;
-
+        let slotMap = new inkHashMap();
         for slotID in this.m_outfitSystem.GetOutfitSlots() {
-            ArrayClear(slotItems);
+            let uiSlotData = new InventoryGridSlotData();
+            uiSlotData.ItemData.SlotID = slotID;
+            uiSlotData.ItemData.CategoryName = this.m_outfitSystem.GetSlotName(slotID);
 
-            for itemData in allItems {
-                if this.m_outfitSystem.IsEquippable(itemData.GetID(), slotID) {
-                    let index = 0;
-                    while index < ArraySize(slotItems) && !this.CompareItem(itemData.GetID(), slotItems[index].GetID()) {
-                        index += 1;
-                    }
-                    ArrayInsert(slotItems, index, itemData);
+            slotMap.Insert(TDBID.ToNumber(slotID), uiSlotData);
+        }
+
+        for itemData in this.m_inventoryHelper.GetAvailableItems(this.m_itemDropQueue) {
+            let slotIDs = this.m_outfitSystem.GetItemSlots(itemData.GetID());
+            for slotID in slotIDs {
+                let uiSlotData = slotMap.Get(TDBID.ToNumber(slotID)) as InventoryGridSlotData;
+                let uiItemData = new InventoryGridItemData();
+                uiItemData.Item = UIInventoryItem.Make(this.m_player, slotID, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
+                uiItemData.DisplayContextData = this.m_itemDisplayContext;
+                uiItemData.Parent = uiSlotData;
+
+                if uiItemData.Item.IsEquipped() {
+                    uiSlotData.ItemData.ID = uiItemData.Item.GetID();
+                    uiSlotData.ItemData.Name = uiItemData.Item.GetName();
+                    uiSlotData.ItemData.IsEquipped = true;
                 }
+
+                let index = 0;
+                while index < ArraySize(uiSlotData.Children) && !this.CompareItem(itemData.GetID(), uiSlotData.Children[index].Item.GetID()) {
+                    index += 1;
+                }
+                ArrayInsert(uiSlotData.Children, index, uiItemData);
             }
+        }
 
-            if ArraySize(slotItems) > 0 {
-                let uiSlotData = new InventoryGridSlotData();
-                uiSlotData.ItemData.SlotID = slotID;
-                uiSlotData.ItemData.CategoryName = this.m_outfitSystem.GetSlotName(slotID);
-                uiSlotData.SlotIndex = groupIndex;
-                uiSlotData.ItemIndex = itemIndex;
-                groupIndex += 1;
-                itemIndex += 1;
-                
+        let finalItems: array<ref<IScriptable>>;
+        for slotID in this.m_outfitSystem.GetOutfitSlots() {
+            let uiSlotData = slotMap.Get(TDBID.ToNumber(slotID)) as InventoryGridSlotData;
+            if ArraySize(uiSlotData.Children) > 0 {
                 ArrayPush(finalItems, uiSlotData);
-
-                for itemData in slotItems {
-                    let uiItemData = new InventoryGridItemData();
-                    uiItemData.Item = UIInventoryItem.Make(this.m_player, slotID, itemData, this.m_uiInventorySystem.GetInventoryItemsManager());
-                    uiItemData.DisplayContextData = this.m_itemDisplayContext;
-                    uiItemData.Parent = uiSlotData;
-                    uiItemData.SlotIndex = groupIndex;
-                    uiItemData.ItemIndex = itemIndex;
-                    itemIndex += 1;
-
+                for uiItemData in uiSlotData.Children {
                     ArrayPush(finalItems, uiItemData);
-                    ArrayPush(uiSlotData.Children, uiItemData);
-
-                    if uiItemData.Item.IsEquipped() {
-                        uiSlotData.ItemData.ID = uiItemData.Item.GetID();
-                        uiSlotData.ItemData.Name = uiItemData.Item.GetName();
-                        uiSlotData.ItemData.IsEquipped = true;
-                    }
                 }
             }
         }

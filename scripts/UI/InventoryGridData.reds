@@ -1,16 +1,12 @@
 module EquipmentEx
 
 class InventoryGridItemData extends VendorUIInventoryItemData {
-    public let SlotIndex: Int32;
-    public let ItemIndex: Int32;
     public let Parent: wref<InventoryGridSlotData>;
     public let IsVisible: Bool;
 }
 
 class InventoryGridSlotData extends VendorUIInventoryItemData {
-    public let SlotIndex: Int32;
-    public let ItemIndex: Int32;
-    public let Children: array<wref<InventoryGridItemData>>;
+    public let Children: array<ref<InventoryGridItemData>>;
     public let TotalItems: Int32;
     public let VisibleItems: Int32;
     public let IsCollapsed: Bool;

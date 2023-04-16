@@ -488,6 +488,16 @@ public class OutfitSystem extends ScriptableSystem {
         return ItemID.IsValid(itemID) ? this.GetItemSlot(ItemID.GetTDBID(itemID)) : TDBID.None();
     }
 
+    public func GetItemSlots(recordID: TweakDBID) -> array<TweakDBID> {
+        let supportedSlots = TweakDBInterface.GetForeignKeyArray(recordID + t".placementSlots");
+        ArrayErase(supportedSlots, 0);
+        return supportedSlots;
+    }
+
+    public func GetItemSlots(itemID: ItemID) -> array<TweakDBID> {
+        return ItemID.IsValid(itemID) ? this.GetItemSlots(ItemID.GetTDBID(itemID)) : [];
+    }
+
     public func IsOccupied(slotID: TweakDBID) -> Bool {
         return this.m_state.IsActive() && this.m_state.HasPart(slotID);
     }
