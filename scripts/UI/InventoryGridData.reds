@@ -46,7 +46,7 @@ class InventoryGridDataView extends BackpackDataView {
     }
 
     public func SetSearchQuery(searchQuery: String) {
-        this.m_searchQuery = StrLower(searchQuery);
+        this.m_searchQuery = UTF8StrLower(searchQuery);
     }
 
     public func UpdateView() {
@@ -71,7 +71,7 @@ class InventoryGridDataView extends BackpackDataView {
                 }
 
                 if NotEquals(this.m_searchQuery, "") {
-                    let itemName = StrLower(uiItem.Item.GetName());
+                    let itemName = UTF8StrLower(uiItem.Item.GetName());
                     if !StrContains(itemName, this.m_searchQuery) {
                         uiItem.IsVisible = false;
                     }

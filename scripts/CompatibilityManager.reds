@@ -1,9 +1,9 @@
 module EquipmentEx
 
 public abstract class CompatibilityManager {
-    public static func RequiredCodeware() -> String = "1.0.0";
-    public static func RequiredArchiveXL() -> String = "1.3.4";
-    public static func RequiredTweakXL() -> String = "1.1.0";
+    public static func RequiredCodeware() -> String = "1.1.1";
+    public static func RequiredArchiveXL() -> String = "1.4.2";
+    public static func RequiredTweakXL() -> String = "1.1.3";
 
     public static func CheckRequirements() -> Bool {
         return Codeware.Require(CompatibilityManager.RequiredCodeware())
@@ -40,7 +40,7 @@ public abstract class CompatibilityManager {
         return TweakDBInterface.GetBool(t"EquipmentEx.isUserNotified", false);
     }
 
-    public static func MarkAsNotified() -> Bool {
+    public static func MarkAsNotified() {
         TweakDBManager.SetFlat(t"EquipmentEx.isUserNotified", true);
     }
 }
