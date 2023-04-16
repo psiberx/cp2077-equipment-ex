@@ -360,17 +360,23 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected final func ShowItemButtonHints(item: wref<UIInventoryItem>) {
         this.m_buttonHints.RemoveButtonHint(n"equip_item");
         this.m_buttonHints.RemoveButtonHint(n"unequip_item");
-        
-        if IsDefined(item) {
+
+        let cursorContext = n"Default";
+        let cursorData: ref<MenuCursorUserData>;
+
+        if IsDefined(item) && ItemID.IsValid(item.ID) {
+            cursorContext = n"Hover";
             if item.IsEquipped() {
                 this.m_buttonHints.AddButtonHint(n"unequip_item", GetLocalizedTextByKey(n"UI-UserActions-Unequip"));
             } else {
                 this.m_buttonHints.AddButtonHint(n"equip_item", GetLocalizedTextByKey(n"UI-UserActions-Equip"));
             }
         }
+
+        this.SetCursorContext(cursorContext, cursorData);
     }
 
-    protected cb func OnInventoryClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
+    protected cb func OnInventoryItemClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
         if evt.actionName.IsAction(n"equip_item") {
             if !evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
                 if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
