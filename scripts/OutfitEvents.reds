@@ -13,4 +13,6 @@ public class OutfitPartUpdated extends Event {
     public let isEquipped: Bool;
 }
 
+public class OutfitMappingUpdated extends Event {}
+
 public class OutfitListUpdated extends Event {}

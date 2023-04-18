@@ -24,9 +24,11 @@ public class OutfitSystem extends ScriptableSystem {
         this.InitializeState();
         this.InitializeSlotsInfo();
         this.InitializeBlackboards();
+        this.ApplyMappings();
     }
 
     private func OnDetach() {
+        this.ResetMappings();
         this.UninitializeSystems();
     }
 
@@ -210,9 +212,20 @@ public class OutfitSystem extends ScriptableSystem {
             let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, slotID);
             if IsDefined(itemObject) {
                 let previewID = itemObject.GetItemID();
-
                 this.m_transactionSystem.RemoveItemFromSlot(this.m_player, slotID);
                 this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, slotID, previewID), 1.0 / 30.0, false);
+            }
+        }
+    }
+
+    private func ReattachVisualForItem(itemID: ItemID) {
+        let part = this.m_state.GetPart(itemID);
+        if IsDefined(part) {
+            let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, part.GetSlotID());
+            if IsDefined(itemObject) {
+                let previewID = itemObject.GetItemID();
+                this.m_transactionSystem.RemoveItemFromSlot(this.m_player, part.GetSlotID());
+                this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, this.GetItemSlot(itemID), previewID), 1.0 / 30.0, false);
             }
         }
     }
@@ -357,6 +370,10 @@ public class OutfitSystem extends ScriptableSystem {
         GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new OutfitListUpdated());
     }
 
+    private func TriggerMappingEvent() {
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new OutfitMappingUpdated());
+    }
+
     public func IsBlocked() -> Bool {
         if this.m_state.IsDisabled() {
             return true;
@@ -488,15 +505,15 @@ public class OutfitSystem extends ScriptableSystem {
         return ItemID.IsValid(itemID) ? this.GetItemSlot(ItemID.GetTDBID(itemID)) : TDBID.None();
     }
 
-    public func GetItemSlots(recordID: TweakDBID) -> array<TweakDBID> {
-        let supportedSlots = TweakDBInterface.GetForeignKeyArray(recordID + t".placementSlots");
-        ArrayErase(supportedSlots, 0);
-        return supportedSlots;
-    }
+    // public func GetItemSlots(recordID: TweakDBID) -> array<TweakDBID> {
+    //     let supportedSlots = TweakDBInterface.GetForeignKeyArray(recordID + t".placementSlots");
+    //     ArrayErase(supportedSlots, 0);
+    //     return supportedSlots;
+    // }
 
-    public func GetItemSlots(itemID: ItemID) -> array<TweakDBID> {
-        return ItemID.IsValid(itemID) ? this.GetItemSlots(ItemID.GetTDBID(itemID)) : [];
-    }
+    // public func GetItemSlots(itemID: ItemID) -> array<TweakDBID> {
+    //     return ItemID.IsValid(itemID) ? this.GetItemSlots(ItemID.GetTDBID(itemID)) : [];
+    // }
 
     public func IsOccupied(slotID: TweakDBID) -> Bool {
         return this.m_state.IsActive() && this.m_state.HasPart(slotID);
@@ -647,6 +664,84 @@ public class OutfitSystem extends ScriptableSystem {
             }
         } else {
             this.ActivateWithoutClone();
+        }
+    }
+
+    public func AssignItem(itemID: ItemID, slotID: TweakDBID) -> Bool {
+        if !this.IsEquippable(itemID) || !this.IsOutfitSlot(slotID) {
+            return false;
+        }
+
+        let oldSlotID = this.GetItemSlot(itemID);
+
+        if Equals(slotID, oldSlotID) {
+            return false;
+        }
+        
+        this.m_state.UpdateMapping(itemID, slotID);
+
+        this.ApplyMapping(itemID, slotID);
+        this.TriggerMappingEvent();
+
+        if this.IsEquipped(itemID) {
+            this.DetachVisualFromSlot(itemID, oldSlotID);
+            this.m_delaySystem.DelayCallback(DelayedEquipCallback.Create(this, itemID), 1.0 / 30.0, false);
+        }
+
+        return true;
+    }
+
+    private func ApplyMapping(itemID: ItemID, slotID: TweakDBID) {
+        for outfitSlot in OutfitConfig.OutfitSlots() {
+            if Equals(outfitSlot.slotID, slotID) {
+                let record = TweakDBInterface.GetClothingRecord(ItemID.GetTDBID(itemID));
+
+                let placementSlots = TweakDBInterface.GetForeignKeyArray(record.GetID() + t".placementSlots");
+                ArrayResize(placementSlots, 2);
+                if NotEquals(outfitSlot.slotID, ArrayLast(placementSlots)) {
+                    ArrayPush(placementSlots, outfitSlot.slotID);
+                }
+
+                let garmentOffset = OutfitTweakHelper.CalculateFinalOffset(record, 
+                    outfitSlot.slotID, outfitSlot.garmentOffset, OutfitTweakHelper.PrepareOffsetMatcher());
+
+                TweakDBManager.SetFlat(record.GetID() + t".placementSlots", placementSlots);
+                TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", garmentOffset);
+                TweakDBManager.UpdateRecord(record.GetID());
+                break;
+            }
+        }
+    }
+
+    private func ResetMapping(itemID: ItemID) {
+        let record = TweakDBInterface.GetClothingRecord(ItemID.GetTDBID(itemID));
+
+        let placementSlots = TweakDBInterface.GetForeignKeyArray(record.GetID() + t".placementSlots");
+        ArrayResize(placementSlots, 2); //ArrayPop(placementSlots);
+        let previousSlotID = ArrayLast(placementSlots);
+
+        for outfitSlot in OutfitConfig.OutfitSlots() {
+            if Equals(outfitSlot.slotID, previousSlotID) {
+                let garmentOffset = OutfitTweakHelper.CalculateFinalOffset(record, 
+                    outfitSlot.slotID, outfitSlot.garmentOffset, OutfitTweakHelper.PrepareOffsetMatcher());
+
+                TweakDBManager.SetFlat(record.GetID() + t".placementSlots", placementSlots);
+                TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", garmentOffset);
+                TweakDBManager.UpdateRecord(record.GetID());
+                break;
+            }
+        }
+    }
+
+    private func ApplyMappings() {
+        for mapping in this.m_state.GetMappings() {
+            this.ApplyMapping(mapping.GetItemID(), mapping.GetSlotID());
+        }
+    }
+
+    private func ResetMappings() {
+        for mapping in this.m_state.GetMappings() {
+            this.ResetMapping(mapping.GetItemID());
         }
     }
 
@@ -951,6 +1046,23 @@ class DelayedRestoreCallback extends DelayCallback {
     public static func Create(system: ref<OutfitSystem>) -> ref<DelayedRestoreCallback> {
         let self = new DelayedRestoreCallback();
         self.m_system = system;
+
+        return self;
+    }
+}
+
+class DelayedEquipCallback extends DelayCallback {
+    private let m_system: wref<OutfitSystem>;
+    private let m_itemID: ItemID;
+
+    public func Call() {
+        this.m_system.EquipItem(this.m_itemID);
+    }
+
+    public static func Create(system: ref<OutfitSystem>, itemID: ItemID) -> ref<DelayedEquipCallback> {
+        let self = new DelayedEquipCallback();
+        self.m_system = system;
+        self.m_itemID = itemID;
 
         return self;
     }

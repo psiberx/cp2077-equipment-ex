@@ -1,4 +1,9 @@
 [[UNRESOLVED_FN]]
-id = "EQEX_CODEWARE_10101"
+id = "EQEX_CODEWARE_10102"
 line_contains = "UTF8StrLower"
-message = "Install Codeware 1.1.1"
+message = "Install Codeware 1.1.2"
+
+[[UNRESOLVED_TYPE]]
+id = "EQEX_CODEWARE_10102"
+line_contains = "InMenuPopup"
+message = "Install Codeware 1.1.2"

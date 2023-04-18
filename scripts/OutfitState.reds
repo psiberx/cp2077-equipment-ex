@@ -127,6 +127,7 @@ class OutfitState {
     private persistent let m_active: Bool;
     private persistent let m_parts: array<ref<OutfitPart>>;
     private persistent let m_outfits: array<ref<OutfitSet>>;
+    private persistent let m_mappings: array<ref<OutfitPart>>;
     private let m_hash: Uint64;
 
     public func IsDisabled() -> Bool {
@@ -310,6 +311,29 @@ class OutfitState {
 
     public func IsOutfit(hash: Uint64) -> Bool {
         return this.m_hash == hash;
+    }
+
+    public func GetMappings() -> array<ref<OutfitPart>> {
+        return this.m_mappings;
+    }
+
+    public func UpdateMapping(itemID: ItemID, slotID: TweakDBID) {
+        let updated = false;
+
+        for mapping in this.m_mappings {
+            if Equals(mapping.GetItemID(), itemID) {
+                if Equals(mapping.GetSlotID(), slotID) {
+                    return;
+                }
+                mapping.SetSlotID(slotID);
+                updated = true;
+                break;
+            }
+        }
+
+        if !updated {
+            ArrayPush(this.m_mappings, OutfitPart.Create(itemID, slotID));
+        }
     }
 
     public func UpdateHash() {

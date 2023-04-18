@@ -222,7 +222,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
 
         for itemData in this.m_inventoryHelper.GetAvailableItems(this.m_itemDropQueue) {
-            let slotIDs = this.m_outfitSystem.GetItemSlots(itemData.GetID());
+            let slotIDs = [this.m_outfitSystem.GetItemSlot(itemData.GetID())];
             for slotID in slotIDs {
                 let uiSlotData = slotMap.Get(TDBID.ToNumber(slotID)) as InventoryGridSlotData;
                 let uiItemData = new InventoryGridItemData();
@@ -312,6 +312,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.RefreshInventoryGrid();
     }
 
+    protected cb func OnItemListUpdated(evt: ref<OutfitMappingUpdated>) {
+        this.PopulateInventoryGrid();
+    }
+
     protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) {
         this.m_itemDropQueue = evt.m_dropQueue;
 
@@ -351,12 +355,21 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected final func ShowItemButtonHints(item: wref<UIInventoryItem>) {
         this.m_buttonHints.RemoveButtonHint(n"equip_item");
         this.m_buttonHints.RemoveButtonHint(n"unequip_item");
-
+        this.m_buttonHints.RemoveButtonHint(n"upgrade_perk");
+        
         let cursorContext = n"Default";
         let cursorData: ref<MenuCursorUserData>;
 
         if IsDefined(item) && ItemID.IsValid(item.ID) {
-            cursorContext = n"Hover";
+            cursorData = new MenuCursorUserData();
+            cursorData.SetAnimationOverride(n"hoverOnHoldToComplete");
+            cursorData.AddAction(n"upgrade_perk");
+            cursorContext = n"HoldToComplete";
+
+            this.m_buttonHints.AddButtonHint(n"upgrade_perk", 
+                "[" + GetLocalizedText("Gameplay-Devices-Interactions-Helpers-Hold") + "] " 
+                    + GetLocalizedTextByKey(n"UI-UserActions-Equip") + "...");
+
             if item.IsEquipped() {
                 this.m_buttonHints.AddButtonHint(n"unequip_item", GetLocalizedTextByKey(n"UI-UserActions-Unequip"));
             } else {
@@ -382,6 +395,12 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
                     }
                 }
             }
+        }
+    }
+
+    protected cb func OnInventoryItemHold(evt: ref<ItemDisplayHoldEvent>) -> Bool {
+        if evt.actionName.IsAction(n"upgrade_perk") {
+            OutfitMappingPopup.Show(this, evt.uiInventoryItem.ID, this.m_outfitSystem);
         }
     }
 
