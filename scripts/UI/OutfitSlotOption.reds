@@ -60,7 +60,7 @@ class OutfitSlotOptionController extends inkButtonController {
     }
 
     protected func UpdateView() {
-        this.m_root.SetSize(new Vector2(this.m_label.GetDesiredWidth() + 170.0, 80));
+        this.m_root.SetSize(new Vector2(this.m_label.GetDesiredWidth() + 170.0, 80.0));
 
         this.m_label.SetText(GetLocalizedText(this.m_data.displayName));
         this.m_label.BindProperty(n"fontStyle", n"MainColors.BodyFontWeight");
