@@ -80,7 +80,7 @@ public abstract class OutfitConfig {
 
         // Neck
         ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.Neckwear", 0, t"", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceTight", 0),
+        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceTight", 0, t"", [ExtraSlotFlag.CameraDependent]),
         ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceShort", 0),
         ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceLong", 0),
 
