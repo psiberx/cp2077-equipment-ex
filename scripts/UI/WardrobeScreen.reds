@@ -557,7 +557,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
     protected cb func OnGlobalAxis(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"right_stick_x") || evt.IsAction(n"right_stick_y") {
-            this.m_inventoryScrollController.SetEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
+            this.m_inventoryScrollController.SetScrollEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
         }
 
         this.ShowGridButtonHints();
@@ -565,7 +565,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
     protected cb func OnGlobalRelative(evt: ref<inkPointerEvent>) -> Bool {
         if evt.IsAction(n"mouse_wheel") {
-            this.m_inventoryScrollController.SetEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
+            this.m_inventoryScrollController.SetScrollEnabled(!this.m_isCursorOverManager && !this.m_isCursorOverPreview);
         }
 
         if this.m_isPreviewMouseHold && evt.IsAction(n"mouse_x") {
