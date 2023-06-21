@@ -105,12 +105,13 @@ public class PuppetStateSystem extends ScriptableSystem {
                 let itemAppearance = this.m_transactionSystem.GetItemAppearance(puppet, itemObject.GetItemID());
 
                 if NotEquals(itemAppearance, n"") && NotEquals(itemAppearance, n"empty_appearance_default") {
-                    if this.m_transactionSystem.MatchVisualTagByItemID(itemObject.GetItemID(), puppet, n"HighHeels") {
+                    if this.m_transactionSystem.MatchVisualTag(itemObject, n"HighHeels") {
                         state = LegsState.HighHeels;
                         break;
                     }
                     
-                    if this.m_transactionSystem.MatchVisualTagByItemID(itemObject.GetItemID(), puppet, n"FlatShoes") {
+                    if this.m_transactionSystem.MatchVisualTag(itemObject, n"FlatShoes")
+                        || this.m_transactionSystem.MatchVisualTag(itemObject, n"force_FlatFeet") {
                         state = LegsState.FlatShoes;
                         break;
                     }
