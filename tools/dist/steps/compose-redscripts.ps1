@@ -1,6 +1,9 @@
-param ($StageDir, $ProjectName, $Version, $GlobalScope = "${ProjectName}.Global")
+param ($StageDir, $ProjectName, $Version)
 
 $ScriptsDir = "${StageDir}/r6/scripts/${ProjectName}"
+$GlobalScope = "${ProjectName}.Global"
+$SettingsScope = "${ProjectName}.Settings"
+$SettingsFile = "Settings.reds"
 
 $SourceFiles = Get-ChildItem -Path "scripts" -Filter *.reds -Recurse
 $Bundles = @{}
@@ -8,9 +11,17 @@ $Bundles = @{}
 foreach ($ScriptFile in $SourceFiles) {
     $Content = Get-Content $ScriptFile.FullName
     $Module = ($Content | Select-String -Pattern "^module\s+(.+)" -List | %{$_.matches.groups[1].Value})
-    $Imports = ($Content | Select-String -Pattern "^import\s+(.+)" -List | %{$_.matches.groups[1].Value})
-    $Source = ($Content | Select-String -Pattern "^\s*(//|module\s|import\s)" -NotMatch) | Out-String
     $Scope = $Module ?? $GlobalScope
+
+    if ($ScriptFile.Name -eq $SettingsFile) {
+        $Scope = $SettingsScope
+        $Imports = @()
+        $Source = $Content | Out-String
+    }
+    else {
+        $Imports = ($Content | Select-String -Pattern "^import\s+(.+)" -List | %{$_.matches.groups[1].Value})
+        $Source = ($Content | Select-String -Pattern "^\s*(//|module\s|import\s)" -NotMatch) | Out-String
+    }
 
     if ($Bundles[$Scope] -eq $null) {
         $Bundles[$Scope] = @{
@@ -38,7 +49,7 @@ foreach ($Bundle in $Bundles.Values) {
     $BundleFile = "${ScriptsDir}/$($Bundle.Scope).reds"
     Out-File -FilePath ${BundleFile} -Encoding ascii -InputObject "// ${ProjectName} ${Version}"
 
-    if ($Bundle.Module) {
+    if ($Bundle.Module -and ($Bundle.Scope -ne $SettingsScope)) {
         Out-File -FilePath ${BundleFile} -Encoding ascii -InputObject "module $($Bundle.Module)" -Append
     }
 
