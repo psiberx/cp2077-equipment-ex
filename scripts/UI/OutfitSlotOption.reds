@@ -31,7 +31,7 @@ class OutfitSlotOptionController extends inkButtonController {
     }
 
     protected cb func OnRelease(evt: ref<inkPointerEvent>) {
-        if !this.m_disabled && !this.m_selected && evt.IsAction(n"click") {
+        if evt.IsAction(n"click") && !this.m_disabled && !this.m_selected {
             this.TriggerChangeEvent();
         }
     }

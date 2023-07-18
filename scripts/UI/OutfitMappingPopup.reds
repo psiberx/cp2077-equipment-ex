@@ -55,14 +55,12 @@ public class OutfitMappingPopup extends InMenuPopup {
 
         let confirmBtn = PopupButton.Create();
         confirmBtn.SetText(GetLocalizedTextByKey(n"UI-UserActions-Equip")); // GetLocalizedText("LocKey#23123")
-        confirmBtn.SetInputAction(n"system_notification_confirm");
-        //confirmBtn.RegisterToCallback(n"OnBtnClick", this, n"OnConfirm");
+        confirmBtn.SetInputAction(n"one_click_confirm");
         confirmBtn.Reparent(footer);
 
         let cancelBtn = PopupButton.Create();
         cancelBtn.SetText(GetLocalizedText("LocKey#22175"));
-        cancelBtn.SetInputAction(n"back");
-        //cancelBtn.RegisterToCallback(n"OnBtnClick", this, n"OnCancel");
+        cancelBtn.SetInputAction(n"cancel");
         cancelBtn.Reparent(footer);
     }
 
@@ -92,13 +90,7 @@ public class OutfitMappingPopup extends InMenuPopup {
         if !this.m_system.IsEquipped(this.m_itemID) {
             this.m_system.EquipItem(this.m_itemID);
         }
-
-        //this.Close();
     }
-
-    //protected cb func OnCancel(widget: wref<inkWidget>) {
-    //    this.Close();
-    //}
 
     public static func Show(requester: ref<inkGameController>, itemID: ItemID, system: ref<OutfitSystem>) {
         let popup = new OutfitMappingPopup();
