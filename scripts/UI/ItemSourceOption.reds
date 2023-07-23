@@ -1,0 +1,123 @@
+module EquipmentEx
+
+class ItemSourceOptionChange extends Event {
+    public let value: WardrobeItemSource;
+}
+
+class ItemSourceOptionController extends inkButtonController {
+    private let m_value: WardrobeItemSource;
+
+    private let m_root: wref<inkCompoundWidget>;
+    private let m_label: wref<inkText>;
+    private let m_checkbox: wref<inkWidget>;
+    private let m_selection: wref<inkWidget>;
+
+    private let m_disabled: Bool;
+    private let m_hovered: Bool;
+    private let m_selected: Bool;
+
+    protected cb func OnInitialize() {
+        this.m_root = this.GetRootCompoundWidget();
+
+        this.m_label = this.GetChildWidgetByPath(n"titleAndCheckbox/FilterName") as inkText;
+        this.m_label.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
+        
+        this.m_checkbox = this.GetChildWidgetByPath(n"titleAndCheckbox/checkbox");
+        this.m_selection = this.GetChildWidgetByPath(n"titleAndCheckbox/checkbox/checkbox");
+
+        this.RegisterToCallback(n"OnRelease", this, n"OnRelease");
+        this.RegisterToCallback(n"OnEnter", this, n"OnHoverOver");
+        this.RegisterToCallback(n"OnLeave", this, n"OnHoverOut");       
+    }
+
+    protected cb func OnRelease(evt: ref<inkPointerEvent>) {
+        if evt.IsAction(n"click") && !this.m_disabled && !this.m_selected {
+            this.TriggerChangeEvent();
+        }
+    }
+
+    protected cb func OnHoverOver(evt: ref<inkPointerEvent>) {
+        if !this.m_disabled {
+            this.m_hovered = true;
+
+            this.UpdateState();
+            // this.TriggerHoverOverEvent();
+        }
+    }
+
+    protected cb func OnHoverOut(evt: ref<inkPointerEvent>) {
+        if !this.m_disabled {
+            this.m_hovered = false;    
+                   
+            this.UpdateState();
+            // this.TriggerHoverOutEvent();
+        }
+    }
+
+    protected cb func OnOptionChange(evt: ref<ItemSourceOptionChange>) {
+        this.m_selected = Equals(this.m_value, evt.value);
+        this.UpdateState();
+    }
+
+    protected func UpdateView() {
+        this.m_root.SetSize(new Vector2(this.m_label.GetDesiredWidth() + 170.0, 80.0));
+
+        this.m_label.SetText(GetLocalizedText("UI-EquipmentEx-WardrobeItemSource-" + ToString(this.m_value)));
+        this.m_label.BindProperty(n"fontStyle", n"MainColors.BodyFontWeight");
+        this.m_label.BindProperty(n"fontSize", n"MainColors.ReadableSmall");
+
+        this.m_checkbox.SetVisible(true);
+        this.m_label.SetMargin(new inkMargin(20, 0, 0, 0));
+
+        this.GetChildWidgetByPath(n"titleAndCheckbox").SetMargin(new inkMargin(0, 0, 0, 0));
+        this.GetChildWidgetByPath(n"background").SetVisible(false);
+    }
+
+    protected func UpdateState() {
+        this.m_selection.SetVisible(this.m_selected);
+
+        if this.m_disabled {
+            this.m_root.SetState(n"Default");
+            this.m_root.SetOpacity(0.3);
+        } else {
+            this.m_root.SetOpacity(1.0);
+
+            if this.m_hovered {
+                this.m_root.SetState(n"Hover");
+            }
+            else {
+                if this.m_selected {
+                    this.m_root.SetState(n"Selected");
+                }
+                else {
+                    this.m_root.SetState(n"Default");
+                }
+            }
+
+            this.m_label.BindProperty(n"tintColor", this.m_selected ? n"MainColors.Blue" : n"MainColors.Red");
+        }
+    }
+
+    protected func TriggerChangeEvent() {
+        let evt = new ItemSourceOptionChange();
+        evt.value = this.m_value;
+
+        this.QueueEvent(evt);
+    }
+
+    public func SetData(value: WardrobeItemSource, selected: Bool) {
+        this.m_value = value;
+        this.m_selected = selected;
+
+        this.UpdateView();
+        this.UpdateState();
+    }
+
+    public func GetValue() -> WardrobeItemSource {
+        return this.m_value;
+    }
+
+    public func IsSelected() -> Bool {
+        return this.m_selected;
+    }
+}

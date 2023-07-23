@@ -9,6 +9,17 @@ public class ViewManager extends ScriptableSystem {
         }
     }
 
+    public func GetItemSource() -> WardrobeItemSource {
+        return this.m_state.GetItemSource();
+    }
+
+    public func SetItemSource(source: WardrobeItemSource) {
+        if NotEquals(this.m_state.GetItemSource(), source) {
+            this.m_state.SetItemSource(source);
+            this.TriggerItemSourceEvent();
+        }
+    }
+
     public func IsCollapsed(slotID: TweakDBID) -> Bool {
         return this.m_state.IsCollapsed(slotID);
     }
@@ -36,6 +47,10 @@ public class ViewManager extends ScriptableSystem {
         let collapsedSlots = this.m_state.GetCollapsed();
 
         this.SetCollapsed(ArraySize(outfitSlots) != ArraySize(collapsedSlots));
+    }
+
+    private func TriggerItemSourceEvent() {
+        GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new ItemSourceUpdated());
     }
 
     public static func GetInstance(game: GameInstance) -> ref<ViewManager> {

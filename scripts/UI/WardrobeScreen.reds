@@ -184,11 +184,15 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         buttonPanel.SetChildMargin(new inkMargin(8.0, 0.0, 0.0, 0.0));
         buttonPanel.Reparent(headerWrapper);
 
-        let expandBtn = InventoryGridButton.Create();
+        let modeBtn = SettingsButton.Create();
+        modeBtn.Reparent(buttonPanel, this);
+        modeBtn.GetRootWidget().SetMargin(new inkMargin(0, 0, 10, 0));
+
+        let expandBtn = CollapseButton.Create();
         expandBtn.SetFlipped(true);
         expandBtn.Reparent(buttonPanel, this);
 
-        let collapseBtn = InventoryGridButton.Create();
+        let collapseBtn = CollapseButton.Create();
         collapseBtn.SetCollapse(true);
         collapseBtn.Reparent(buttonPanel, this);
     }
@@ -314,6 +318,12 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
     protected cb func OnItemListUpdated(evt: ref<OutfitMappingUpdated>) {
         this.PopulateInventoryGrid();
+        this.QueueScrollPositionRestore();
+    }
+
+    protected cb func OnItemSourceUpdated(evt: ref<ItemSourceUpdated>) {
+        this.PopulateInventoryGrid();
+        this.QueueScrollPositionRestore();
     }
 
     protected cb func OnDropQueueUpdated(evt: ref<DropQueueUpdatedEvent>) {
@@ -444,7 +454,15 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
-    protected cb func OnInventoryGridButtonClick(evt: ref<InventoryGridButtonClick>) {
+    protected cb func OnInventoryGridSlotItemHoverOver(evt: ref<InventoryGridSlotHoverOver>) {
+        this.ShowSlotButtonHints(evt.slot);
+    }
+
+    protected cb func OnInventoryGridSlotItemHoverOut(evt: ref<InventoryGridSlotHoverOut>) {
+        this.ShowSlotButtonHints(null);
+    }
+
+    protected cb func OnInventoryGridCollapseClick(evt: ref<CollapseButtonClick>) {
         if evt.action.IsAction(n"click") {
             this.m_inventoryGridDataView.SetCollapsed(evt.collapse);
             this.m_inventoryGridDataView.UpdateView();
@@ -452,12 +470,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
-    protected cb func OnInventoryGridSlotItemHoverOver(evt: ref<InventoryGridSlotHoverOver>) {
-        this.ShowSlotButtonHints(evt.slot);
-    }
-
-    protected cb func OnInventoryGridSlotItemHoverOut(evt: ref<InventoryGridSlotHoverOut>) {
-        this.ShowSlotButtonHints(null);
+    protected cb func OnInventoryGridSettingsClick(evt: ref<SettingsButtonClick>) {
+        if evt.action.IsAction(n"click") {
+            ViewSettingsPopup.Show(this);
+        }
     }
 
     protected cb func OnManagerHoverOver(evt: ref<inkPointerEvent>) -> Bool {

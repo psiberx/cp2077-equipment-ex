@@ -85,9 +85,8 @@ public class InventoryHelper extends ScriptableSystem {
 
     public func GetAvailableItems(opt excludes: array<ItemModParams>) -> array<ref<gameItemData>> {
         let items: array<ref<gameItemData>>;
-        let settings = new Settings();
 
-        switch settings.wardrobeItemSource {
+        switch ViewManager.GetInstance(this.GetGameInstance()).GetItemSource() {
             case WardrobeItemSource.InventoryOnly:
                 this.GetPlayerItems(items, excludes);
                 break;

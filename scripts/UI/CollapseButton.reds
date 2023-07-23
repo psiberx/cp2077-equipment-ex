@@ -1,12 +1,12 @@
 module EquipmentEx
 import Codeware.UI.*
 
-class InventoryGridButtonClick extends Event {
+class CollapseButtonClick extends Event {
     public let collapse: Bool;
     public let action: ref<inkActionName>;
 }
 
-class InventoryGridButton extends inkCustomController {
+class CollapseButton extends inkCustomController {
     protected let m_isFlipped: Bool;
     protected let m_isCollapse: Bool;
 
@@ -114,7 +114,7 @@ class InventoryGridButton extends inkCustomController {
     }
 
     protected func TriggerClickEvent(action: ref<inkActionName>) {
-        let evt = new InventoryGridButtonClick();
+        let evt = new CollapseButtonClick();
         evt.collapse = this.m_isCollapse;
         evt.action = action;
 
@@ -134,8 +134,8 @@ class InventoryGridButton extends inkCustomController {
         this.ApplyFlippedState();
     }
 
-    public static func Create() -> ref<InventoryGridButton> {
-        let self = new InventoryGridButton();
+    public static func Create() -> ref<CollapseButton> {
+        let self = new CollapseButton();
         self.CreateInstance();
 
         return self;
