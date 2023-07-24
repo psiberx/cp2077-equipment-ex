@@ -64,7 +64,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.m_buttonHints = this.SpawnFromExternal(this.GetChildWidgetByPath(n"button_hints"), r"base\\gameplay\\gui\\common\\buttonhints.inkwidget", n"Root").GetController() as ButtonHints;
         this.m_buttonHints.AddButtonHint(n"back", GetLocalizedTextByKey(n"Common-Access-Close"));
-        this.m_buttonHints.AddButtonHint(n"disassemble_item", "[" + GetLocalizedText("Gameplay-Devices-Interactions-Helpers-Hold") + "] " + GetLocalizedTextByKey(n"UI-UserActions-Unequip") + " " + GetLocalizedTextByKey(n"UI-Filters-AllItems"));
+        // this.m_buttonHints.AddButtonHint(n"disassemble_item", "[" + GetLocalizedText("Gameplay-Devices-Interactions-Helpers-Hold") + "] " + GetLocalizedTextByKey(n"UI-UserActions-Unequip") + " " + GetLocalizedTextByKey(n"UI-Filters-AllItems"));
 
         this.m_outfitManager = this.SpawnFromLocal(this.GetChildWidgetByPath(n"wrapper/wrapper"), n"OutfitManager:EquipmentEx.OutfitManagerController").GetController() as OutfitManagerController;
         this.m_outfitManager.Setup(this.m_outfitSystem, this, this.m_buttonHints);
@@ -485,6 +485,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnPreviewHoverOver(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_buttonHints.AddButtonHint(n"drop_item", GetLocalizedTextByKey(n"UI-UserActions-Unequip") + " " + GetLocalizedTextByKey(n"UI-Filters-AllItems"));
+
         if this.m_player.PlayerLastUsedKBM() {
             this.m_buttonHints.AddButtonHint(n"mouse_wheel", GetLocalizedTextByKey(n"UI-ScriptExports-Zoom0"));
             this.m_buttonHints.AddButtonHint(n"mouse_left", GetLocalizedTextByKey(n"UI-ResourceExports-Rotate"));
@@ -497,6 +499,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnPreviewHoverOut(evt: ref<inkPointerEvent>) -> Bool {
+        this.m_buttonHints.RemoveButtonHint(n"drop_item");
         this.m_buttonHints.RemoveButtonHint(n"mouse_wheel");
         this.m_buttonHints.RemoveButtonHint(n"mouse_left");
         this.m_buttonHints.RemoveButtonHint(n"right_stick_y");
@@ -563,12 +566,16 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             this.m_inventoryGridDataView.UpdateView();
             this.QueueScrollPositionRestore();
         }
+
+        if this.m_isCursorOverPreview && evt.IsAction(n"drop_item") && this.AccessOutfitSystem() {
+            this.m_outfitSystem.UnequipAll();
+        }
     }
 
     protected cb func OnGlobalHold(evt: ref<inkPointerEvent>) -> Bool {
-        if evt.IsAction(n"disassemble_item") && evt.GetHoldProgress() >= 1.0 && this.AccessOutfitSystem() {
-            this.m_outfitSystem.UnequipAll();
-        }
+        // if evt.IsAction(n"disassemble_item") && evt.GetHoldProgress() >= 1.0 && this.AccessOutfitSystem() {
+        //     this.m_outfitSystem.UnequipAll();
+        // }
     }
 
     protected cb func OnGlobalAxis(evt: ref<inkPointerEvent>) -> Bool {
