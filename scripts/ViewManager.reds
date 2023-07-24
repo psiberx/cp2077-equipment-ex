@@ -6,6 +6,7 @@ public class ViewManager extends ScriptableSystem {
     private func OnAttach() {
         if !IsDefined(this.m_state) {
             this.m_state = new ViewState();
+            this.m_state.SetItemSource(WardrobeItemSource.InventoryAndStash);
         }
     }
 
