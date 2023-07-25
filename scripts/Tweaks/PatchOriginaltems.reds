@@ -4,7 +4,6 @@ class PatchOriginaltems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let outfitSlots = OutfitConfig.OutfitSlots();
         let slotMatcher = OutfitTweakHelper.PrepareOriginalSlotMatcher();
-        let offsetMatcher = OutfitTweakHelper.PrepareOffsetMatcher();
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
@@ -13,7 +12,6 @@ class PatchOriginaltems extends ScriptableTweak {
 
             let updated = false;
             let outfitSlotID: TweakDBID;
-            let outfitSlotOffset: Int32;
 
             if ArraySize(placementSlots) == 1 || DevMode() {
                 outfitSlotID = slotMatcher.Match(item);
@@ -26,17 +24,12 @@ class PatchOriginaltems extends ScriptableTweak {
                     if outfitSlot.slotID == outfitSlotID {
                         ArrayRemove(placementSlots, outfitSlot.slotID);
                         ArrayPush(placementSlots, outfitSlot.slotID);
-                        outfitSlotOffset = outfitSlot.garmentOffset;
+                        if garmentOffset == 0 || DevMode() {
+                            garmentOffset = outfitSlot.garmentOffset;
+                        }
                         updated = true;
                         break;
                     }
-                }
-            }
-
-            if garmentOffset == 0 || DevMode() {
-                garmentOffset = OutfitTweakHelper.CalculateFinalOffset(item, outfitSlotID, outfitSlotOffset, offsetMatcher);
-                if garmentOffset != outfitSlotOffset {
-                    updated = true;
                 }
             }
 

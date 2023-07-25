@@ -104,38 +104,4 @@ class OutfitTweakHelper {
 
         return slotMatcher;
     }
-    
-    public static func PrepareOffsetMatcher() -> ref<OutfitOffsetMatcher> {
-        let offsetMatcher = OutfitOffsetMatcher.Create();
-
-        offsetMatcher.MapEntities([
-            new EntityNameOffsetMapping(-1050, n"player_underwear_top_item"),
-            new EntityNameOffsetMapping(-1050, n"player_underwear_bottom_item")
-        ]);
-
-        offsetMatcher.MapAppearances([
-            new AppearanceNameOffsetMapping(0, ["t1_formal_01_"]),
-            new AppearanceNameOffsetMapping(5, ["t2_vest_13_"]),
-            new AppearanceNameOffsetMapping(900, ["t2_jacket_11_"]),
-            new AppearanceNameOffsetMapping(2000, ["t2_shirt_02_", "t2_vest_19_"]),
-            new AppearanceNameOffsetMapping(4000, ["set_01_nomad_01_t2_"]),
-            new AppearanceNameOffsetMapping(-1000, ["t2_", "t1_formal_", "t1_shirt_01_", "t1_shirt_02_", "t1_undershirt_", "set_01_media_01_t1_", "t1_jumpsuit_", "set_01_netrunner_01_t1_"])
-        ]);
-
-        offsetMatcher.MapAppearances([
-            new AppearanceNameSlotOffsetMapping(4000, t"OutfitSlots.TorsoOuter", ["t2_jacket_11_"])
-        ]);
-
-        return offsetMatcher;
-    }
-
-    public static func CalculateFinalOffset(record: ref<Clothing_Record>, outfitSlotID: TweakDBID, defaultOffset: Int32, offsetMatcher: ref<OutfitOffsetMatcher>) -> Int32 {
-        let outfitItemOffset = offsetMatcher.Match(record, outfitSlotID);
-
-        if outfitItemOffset != 0 && (outfitItemOffset > 0 || defaultOffset <= 0) {
-            return defaultOffset + outfitItemOffset;
-        }
-
-        return defaultOffset;
-    }
 }

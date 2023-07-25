@@ -38,6 +38,7 @@ public class OutfitSystem extends ScriptableSystem {
 
         if this.m_state.IsActive() {
             this.HideEquipment();
+            this.EnableGarmentOffsets();
 
             this.m_delaySystem.DelayCallback(DelayedRestoreCallback.Create(this), 1.0 / 30.0, false);
         }
@@ -245,6 +246,14 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
+    private func EnableGarmentOffsets() {
+        ArchiveXL.EnableGarmentOffsets();
+    }
+
+    private func DisableGarmentOffsets() {
+        ArchiveXL.DisableGarmentOffsets();
+    }
+
     private func HideEquipment() {
         this.m_equipmentData.UnlockVisualChanges();
         this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit));
@@ -414,6 +423,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.SetActive(true);
             this.m_state.ClearParts();
 
+            this.EnableGarmentOffsets();
             this.CloneEquipment();
             
             this.TriggerActivationEvent();
@@ -431,6 +441,8 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.SetActive(true);
             this.m_state.ClearParts();
 
+            this.EnableGarmentOffsets();
+
             this.TriggerActivationEvent();
         }
     }
@@ -446,6 +458,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.SetActive(true);
             this.m_state.ClearParts();
 
+            this.EnableGarmentOffsets();
             this.CloneEquipment(ItemID.None(), slotID);
 
             this.TriggerActivationEvent();
@@ -463,6 +476,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.m_state.SetActive(true);
             this.m_state.ClearParts();
 
+            this.EnableGarmentOffsets();
             this.CloneEquipment(itemID, TDBID.None());
 
             this.TriggerActivationEvent();
@@ -479,6 +493,7 @@ public class OutfitSystem extends ScriptableSystem {
 
             this.m_state.SetActive(true);
             
+            this.EnableGarmentOffsets();
             this.AttachAllVisualsToSlots(true);
 
             this.TriggerActivationEvent();
@@ -489,6 +504,7 @@ public class OutfitSystem extends ScriptableSystem {
         if this.m_state.IsActive() {
             this.m_state.SetActive(false);
 
+            this.DisableGarmentOffsets();
             this.ShowEquipment();
             this.DetachAllVisualsFromSlots(false);
 
@@ -702,11 +718,8 @@ public class OutfitSystem extends ScriptableSystem {
                     ArrayPush(placementSlots, outfitSlot.slotID);
                 }
 
-                let garmentOffset = OutfitTweakHelper.CalculateFinalOffset(record, 
-                    outfitSlot.slotID, outfitSlot.garmentOffset, OutfitTweakHelper.PrepareOffsetMatcher());
-
                 TweakDBManager.SetFlat(record.GetID() + t".placementSlots", placementSlots);
-                TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", garmentOffset);
+                TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", outfitSlot.garmentOffset);
                 TweakDBManager.UpdateRecord(record.GetID());
                 break;
             }
@@ -722,11 +735,8 @@ public class OutfitSystem extends ScriptableSystem {
 
         for outfitSlot in OutfitConfig.OutfitSlots() {
             if Equals(outfitSlot.slotID, previousSlotID) {
-                let garmentOffset = OutfitTweakHelper.CalculateFinalOffset(record, 
-                    outfitSlot.slotID, outfitSlot.garmentOffset, OutfitTweakHelper.PrepareOffsetMatcher());
-
                 TweakDBManager.SetFlat(record.GetID() + t".placementSlots", placementSlots);
-                TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", garmentOffset);
+                TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", outfitSlot.garmentOffset);
                 TweakDBManager.UpdateRecord(record.GetID());
                 break;
             }

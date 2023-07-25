@@ -65,86 +65,53 @@ public abstract class OutfitConfig {
     ];
 
     public static func OutfitSlots() -> array<ExtraSlotConfig> = [
-        // Head
-        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Head", 0, t"AttachmentSlots.Head"),
-        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Balaclava", -4, t"AttachmentSlots.Head"),
-
-        // Face
-        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Mask", -1, t"AttachmentSlots.Eyes"),
-        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Glasses", 0, t"AttachmentSlots.Eyes"),
-        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Wreath", 0, t"AttachmentSlots.Eyes"),
-
-        // Ears
-        ExtraSlotConfig.Create(n"Ears", n"OutfitSlots.EarLeft", 0, t"", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Ears", n"OutfitSlots.EarRight", 0, t"", [ExtraSlotFlag.CameraDependent]),
-
-        // Neck
-        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.Neckwear", 0, t"", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceTight", 0, t"", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceShort", 0),
-        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceLong", 0),
-
-        // Torso
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoUnder", -4, t"AttachmentSlots.Chest", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoInner", -3, t"AttachmentSlots.Chest", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoMiddle", -2, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoOuter", 2, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoAux", 4, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent]),
-        
-        // Back
-        ExtraSlotConfig.Create(n"Back", n"OutfitSlots.Back", 3),
-
-        // Waist
-        ExtraSlotConfig.Create(n"Waist", n"OutfitSlots.Waist", 1),
-
-        // Shoulders
-        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.ShoulderLeft", -1),
-        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.ShoulderRight", -1),
-
-        // Wrists
-        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.WristLeft", -1),
-        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.WristRight", -1),
-
-        // Hands
-        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandLeft", -1),
-        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandRight", -1),
-        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandPropLeft", 0),
-        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandPropRight", 0),
-
-        // Fingers
-        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingersLeft", -2),
-        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingersRight", -2),
-        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingernailsLeft", -3),
-        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingernailsRight", -3),
-
-        // Legs
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.LegsInner", -3, t"AttachmentSlots.Legs", [ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.LegsMiddle", -1, t"AttachmentSlots.Legs", [ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.LegsOuter", 0, t"AttachmentSlots.Legs", [ExtraSlotFlag.CoversLegs]),
-
-        // Thighs
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.ThighLeft", -2),
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.ThighRight", -2),
-        
-        // Ankles
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.AnkleLeft", -2),
-        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.AnkleRight", -2),
-
-        // Feet
-        ExtraSlotConfig.Create(n"Feet", n"OutfitSlots.Feet", 0, t"AttachmentSlots.Feet", [ExtraSlotFlag.SwitchesLegs]),
-
-        // Toes
-        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToesLeft", -2, t"", [ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToesRight", -2, t"", [ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsLeft", -3, t"", [ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsRight", -3, t"", [ExtraSlotFlag.CoversLegs]),
-
-        // Body
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyUnder", -10, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyInner", -2, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyMiddle", -1, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyOuter", 10, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs])
-    ];
+        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Head", 310, t"AttachmentSlots.Head"),
+        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Balaclava", 120, t"AttachmentSlots.Head"),
+        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Mask", 130, t"AttachmentSlots.Eyes"),
+        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Glasses", 140, t"AttachmentSlots.Eyes"),
+        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Wreath", 140, t"AttachmentSlots.Eyes"),
+        ExtraSlotConfig.Create(n"Ears", n"OutfitSlots.EarLeft", 140, t"", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Ears", n"OutfitSlots.EarRight", 140, t"", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.Neckwear", 200, t"", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceTight", 190, t"", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceShort", 190),
+        ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceLong", 190),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoUnder", 120, t"AttachmentSlots.Chest", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoInner", 150, t"AttachmentSlots.Chest", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoMiddle", 180, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoOuter", 210, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoAux", 240, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent]),
+        ExtraSlotConfig.Create(n"Back", n"OutfitSlots.Back", 220),
+        ExtraSlotConfig.Create(n"Waist", n"OutfitSlots.Waist", 200),
+        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.ShoulderLeft", 200),
+        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.ShoulderRight", 160),
+        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.WristLeft", 160),
+        ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.WristRight", 160),
+        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandLeft", 160),
+        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandRight", 160),
+        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandPropLeft", 310),
+        ExtraSlotConfig.Create(n"Hands", n"OutfitSlots.HandPropRight", 310),
+        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingersLeft", 170),
+        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingersRight", 170),
+        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingernailsLeft", 100),
+        ExtraSlotConfig.Create(n"Fingers", n"OutfitSlots.FingernailsRight", 100),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.LegsInner", 130, t"AttachmentSlots.Legs", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.LegsMiddle", 160, t"AttachmentSlots.Legs", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.LegsOuter", 190, t"AttachmentSlots.Legs", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.ThighLeft", 140),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.ThighRight", 140),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.AnkleLeft", 140),
+        ExtraSlotConfig.Create(n"Legs", n"OutfitSlots.AnkleRight", 140),
+        ExtraSlotConfig.Create(n"Feet", n"OutfitSlots.Feet", 180, t"AttachmentSlots.Feet", [ExtraSlotFlag.SwitchesLegs]),
+        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToesLeft", 120, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToesRight", 120, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsLeft", 100, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsRight", 100, t"", [ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyUnder", 110, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyInner", 140, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyMiddle", 170, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyOuter", 300, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs])
+   ];
 
     public static func AppearanceSuffixes() -> array<AppearanceSuffixConfig> = [
         AppearanceSuffixConfig.Create(n"itemsFactoryAppearanceSuffix.LegsState", n"EquipmentEx.PuppetStateSystem", n"GetLegsStateSuffix")
