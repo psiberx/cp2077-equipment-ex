@@ -145,6 +145,11 @@ public class PuppetStateSystem extends ScriptableSystem {
         }
 
         let key = Cast<Uint64>(EntityID.GetHash(puppet.GetEntityID()));
+
+        if !this.m_handlerMap.KeyExist(key) {
+            return "";
+        }
+
         let handler = this.m_handlerMap.Get(key) as PuppetStateHandler;
 
         if !IsDefined(handler) {
@@ -168,9 +173,9 @@ public class PuppetStateHandler extends AttachmentSlotsScriptCallback {
         if IsDefined(this.m_puppet) {
             this.HandleAppearanceChange(slotID, itemID);
 
-            if this.m_system.IsLegsSlot(slotID) {
-                this.m_system.RefreshItemAppearance(this.m_puppet, itemID);
-            }
+            // if this.m_system.IsLegsSlot(slotID) {
+            //    this.m_system.RefreshItemAppearance(this.m_puppet, itemID);
+            // }
         }
     }
 
