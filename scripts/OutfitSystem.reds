@@ -219,17 +219,17 @@ public class OutfitSystem extends ScriptableSystem {
         }
     }
 
-    private func ReattachVisualForItem(itemID: ItemID) {
-        let part = this.m_state.GetPart(itemID);
-        if IsDefined(part) {
-            let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, part.GetSlotID());
-            if IsDefined(itemObject) {
-                let previewID = itemObject.GetItemID();
-                this.m_transactionSystem.RemoveItemFromSlot(this.m_player, part.GetSlotID());
-                this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, this.GetItemSlot(itemID), previewID), 1.0 / 30.0, false);
-            }
-        }
-    }
+//    private func ReattachVisualForItem(itemID: ItemID) {
+//        let part = this.m_state.GetPart(itemID);
+//        if IsDefined(part) {
+//            let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, part.GetSlotID());
+//            if IsDefined(itemObject) {
+//                let previewID = itemObject.GetItemID();
+//                this.m_transactionSystem.RemoveItemFromSlot(this.m_player, part.GetSlotID());
+//                this.m_delaySystem.DelayCallback(DelayedAttachCallback.Create(this.m_transactionSystem, this.m_player, this.GetItemSlot(itemID), previewID), 1.0 / 30.0, false);
+//            }
+//        }
+//    }
 
     private func RefreshSlotAttachment(slotID: TweakDBID) {
         this.m_transactionSystem.RefreshAttachment(this.m_player, slotID);

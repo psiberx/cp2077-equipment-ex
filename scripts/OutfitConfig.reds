@@ -107,8 +107,8 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToesRight", 120, t"", [ExtraSlotFlag.CoversLegs]),
         ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsLeft", 100, t"", [ExtraSlotFlag.CoversLegs]),
         ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsRight", 100, t"", [ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyUnder", 110, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyInner", 140, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyUnder", 110, t"AttachmentSlots.Chest", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyInner", 140, t"AttachmentSlots.Chest", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
         ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyMiddle", 170, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs]),
         ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyOuter", 300, t"AttachmentSlots.Torso", [ExtraSlotFlag.CameraDependent, ExtraSlotFlag.CoversLegs])
    ];
