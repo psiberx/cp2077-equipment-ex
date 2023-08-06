@@ -8,6 +8,8 @@ enum LegsState {
 }
 
 public class PuppetStateSystem extends ScriptableSystem {
+    private let m_chestSlots: array<TweakDBID>;
+    private let m_torsoSlots: array<TweakDBID>;
     private let m_legsSlots: array<TweakDBID>;
     private let m_feetSlots: array<TweakDBID>;
 
@@ -21,6 +23,12 @@ public class PuppetStateSystem extends ScriptableSystem {
         ArrayPush(this.m_feetSlots, t"AttachmentSlots.Feet");
 
         for outfitSlot in OutfitConfig.OutfitSlots() {
+            if Equals(outfitSlot.parentID, t"AttachmentSlots.Chest") {
+                ArrayPush(this.m_chestSlots, outfitSlot.slotID);
+            }
+            if Equals(outfitSlot.parentID, t"AttachmentSlots.Torso") {
+                ArrayPush(this.m_torsoSlots, outfitSlot.slotID);
+            }
             if outfitSlot.coversLegs {
                 ArrayPush(this.m_legsSlots, outfitSlot.slotID);
             }
@@ -79,7 +87,21 @@ public class PuppetStateSystem extends ScriptableSystem {
         this.m_handlerMap.Remove(key);
     }
 
-    private func RefreshItemAppearances(puppet: wref<GameObject>) {
+    private func RefreshChestAppearances(puppet: wref<GameObject>) {
+        for slotID in this.m_chestSlots {
+            let itemObject = this.m_transactionSystem.GetItemInSlot(puppet, slotID);
+            if IsDefined(itemObject) {
+                let itemID = itemObject.GetItemID();
+                let recordID = ItemID.GetTDBID(itemID);
+                let appearanceSuffixes = TweakDBInterface.GetForeignKeyArray(recordID + t".appearanceSuffixes");
+                if ArrayContains(appearanceSuffixes, t"itemsFactoryAppearanceSuffix.Partial") {
+                    this.RefreshItemAppearance(puppet, itemID);
+                }
+            }
+        }
+    }
+
+    private func RefreshLegsAppearances(puppet: wref<GameObject>) {
         for slotID in this.m_legsSlots {
             let itemObject = this.m_transactionSystem.GetItemInSlot(puppet, slotID);
             if IsDefined(itemObject) {
@@ -123,6 +145,18 @@ public class PuppetStateSystem extends ScriptableSystem {
         }
 
         return state;
+    }
+
+    private func IsChestSlot(slotID: TweakDBID) -> Bool {
+        return ArrayContains(this.m_chestSlots, slotID);
+    }
+
+    private func IsTorsoSlot(slotID: TweakDBID) -> Bool {
+        return ArrayContains(this.m_torsoSlots, slotID);
+    }
+
+    private func IsSleevesCovering(puppet: wref<GameObject>, itemID: ItemID) -> Bool {
+        return this.m_transactionSystem.MatchVisualTagByItemID(itemID, puppet, n"hide_T1part");
     }
 
     private func IsLegsSlot(slotID: TweakDBID) -> Bool {
@@ -172,10 +206,6 @@ public class PuppetStateHandler extends AttachmentSlotsScriptCallback {
     public func OnItemEquipped(slotID: TweakDBID, itemID: ItemID) -> Void {
         if IsDefined(this.m_puppet) {
             this.HandleAppearanceChange(slotID, itemID);
-
-            // if this.m_system.IsLegsSlot(slotID) {
-            //    this.m_system.RefreshItemAppearance(this.m_puppet, itemID);
-            // }
         }
     }
 
@@ -194,7 +224,11 @@ public class PuppetStateHandler extends AttachmentSlotsScriptCallback {
     private func HandleAppearanceChange(slotID: TweakDBID, itemID: ItemID) {
         if this.m_system.IsFeetSlot(slotID) || this.m_system.IsFeetCovering(this.m_puppet, itemID) {
             if this.UpdateLegsState() {
-                this.m_system.RefreshItemAppearances(this.m_puppet);
+                this.m_system.RefreshLegsAppearances(this.m_puppet);
+            }
+        } else {
+            if this.m_system.IsTorsoSlot(slotID) && this.m_system.IsSleevesCovering(this.m_puppet, itemID) {
+                this.m_system.RefreshChestAppearances(this.m_puppet);
             }
         }
     }

@@ -9,19 +9,19 @@ line_contains = "InMenuPopup"
 message = "Install Codeware 1.1.7 or higher"
 
 [[UNRESOLVED_REF]]
-id = "ARCHIVEXL_10409"
+id = "ARCHIVEXL_10500"
 span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.4.9 or higher"
+message = "Install ArchiveXL 1.5.0 or higher"
 
 [[UNRESOLVED_METHOD]]
-id = "ARCHIVEXL_10409"
+id = "ARCHIVEXL_10500"
 span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.4.9 or higher"
+message = "Install ArchiveXL 1.5.0 or higher"
 
 [[UNRESOLVED_REF]]
-id = "TWEAKXL_10107"
+id = "TWEAKXL_10200"
 span_starts_with = "TweakXL"
-message = "Install TweakXL 1.1.7 or higher"
+message = "Install TweakXL 1.2.0 or higher"
 
 [[UNRESOLVED_METHOD]]
 id = "EQEX_MIX"
