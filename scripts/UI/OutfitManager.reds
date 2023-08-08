@@ -163,7 +163,7 @@ class OutfitManagerController extends inkLogicController {
             return;
         }
 
-        if evt.action.IsAction(n"drop_item") && this.AccessOutfitSystem() {
+        if evt.action.IsAction(n"drop_item") && Equals(evt.entry.Action, OutfitListAction.Equip) && this.AccessOutfitSystem() {
             this.ShowDeleteOutfitPopup(evt.entry.Name);
         }
     }
