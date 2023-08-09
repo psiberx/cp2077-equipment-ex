@@ -8,8 +8,20 @@ class RegisterOutfitSlots extends ScriptableTweak {
             TweakDBManager.CreateRecord(outfitSlot.slotID, n"AttachmentSlot_Record");
             TweakDBManager.SetFlat(outfitSlot.slotID + t".localizedName", outfitSlot.displayName);
 
-            if TDBID.IsValid(outfitSlot.parentID) {
-                TweakDBManager.SetFlat(outfitSlot.slotID + t".parentSlot", outfitSlot.parentID);
+            if ArraySize(outfitSlot.relatedIDs) > 0 {
+                TweakDBManager.SetFlat(outfitSlot.slotID + t".parentSlot", outfitSlot.relatedIDs[0]);
+            }
+
+            if outfitSlot.dependsOnCamera {
+                TweakDBManager.SetFlat(outfitSlot.slotID + t".dependsOnCamera", true);
+            }
+
+            if outfitSlot.dependsOnSleeves {
+                TweakDBManager.SetFlat(outfitSlot.slotID + t".dependsOnSleeves", true);
+            }
+
+            if outfitSlot.dependsOnFeet {
+                TweakDBManager.SetFlat(outfitSlot.slotID + t".dependsOnFeet", true);
             }
 
             TweakDBManager.UpdateRecord(outfitSlot.slotID);
