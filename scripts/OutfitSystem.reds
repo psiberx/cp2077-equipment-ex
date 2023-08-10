@@ -8,7 +8,7 @@ public class OutfitSystem extends ScriptableSystem {
     private let m_outfitSlots: array<TweakDBID>;
     private let m_managedSlots: array<TweakDBID>;
     private let m_managedAreas: array<gamedataEquipmentArea>;
-    private let m_cameraDependentSlots: array<TweakDBID>;
+    // private let m_cameraDependentSlots: array<TweakDBID>;
 
     private let m_player: wref<GameObject>;
     private let m_equipmentData: wref<EquipmentSystemPlayerData>;
@@ -69,9 +69,9 @@ public class OutfitSystem extends ScriptableSystem {
             ArrayPush(this.m_outfitSlots, outfitSlot.slotID);
             ArrayPush(this.m_managedSlots, outfitSlot.slotID);
 
-            if outfitSlot.dependsOnCamera {
-                ArrayPush(this.m_cameraDependentSlots, outfitSlot.slotID);
-            }
+            // if outfitSlot.dependsOnCamera {
+            //     ArrayPush(this.m_cameraDependentSlots, outfitSlot.slotID);
+            // }
         }
     }
 
@@ -235,16 +235,16 @@ public class OutfitSystem extends ScriptableSystem {
         this.m_transactionSystem.RefreshAttachment(this.m_player, slotID);
     }
 
-    private func UpdateCameraDependentVisuals() {
-        for part in this.m_state.GetParts() {
-            if this.IsCameraDependentSlot(part.GetSlotID()) {
-                let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, part.GetSlotID());
-                if IsDefined(itemObject) {
-                    this.m_transactionSystem.ResetItemAppearance(this.m_player, itemObject.GetItemID());
-                }
-            }
-        }
-    }
+    // private func UpdateCameraDependentVisuals() {
+    //     for part in this.m_state.GetParts() {
+    //         if this.IsCameraDependentSlot(part.GetSlotID()) {
+    //             let itemObject = this.m_transactionSystem.GetItemInSlot(this.m_player, part.GetSlotID());
+    //             if IsDefined(itemObject) {
+    //                 this.m_transactionSystem.ResetItemAppearance(this.m_player, itemObject.GetItemID());
+    //             }
+    //         }
+    //     }
+    // }
 
     private func EnableGarmentOffsets() {
         ArchiveXL.EnableGarmentOffsets();
@@ -976,9 +976,9 @@ public class OutfitSystem extends ScriptableSystem {
         return ArrayContains(this.m_managedAreas, area);
     }
 
-    public func IsCameraDependentSlot(slotID: TweakDBID) -> Bool {
-        return ArrayContains(this.m_cameraDependentSlots, slotID);
-    }
+    // public func IsCameraDependentSlot(slotID: TweakDBID) -> Bool {
+    //     return ArrayContains(this.m_cameraDependentSlots, slotID);
+    // }
 
     public func GetOutfitSlots() -> array<TweakDBID> {
         return this.m_outfitSlots;
@@ -1014,11 +1014,12 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
         if this.m_system.IsActive() && ItemID.IsValid(itemID) {
             if Equals(slotID, t"AttachmentSlots.Outfit") {
                 this.m_system.Deactivate();
-            } else {
-                if Equals(slotID, t"AttachmentSlots.TppHead") {
-                    this.m_system.UpdateCameraDependentVisuals();
-                }
             }
+            //else {
+            //    if Equals(slotID, t"AttachmentSlots.TppHead") {
+            //        this.m_system.UpdateCameraDependentVisuals();
+            //    }
+            //}
         }
     }
 
