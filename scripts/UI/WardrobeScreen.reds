@@ -366,6 +366,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_buttonHints.RemoveButtonHint(n"equip_item");
         this.m_buttonHints.RemoveButtonHint(n"unequip_item");
         this.m_buttonHints.RemoveButtonHint(n"upgrade_perk");
+        this.m_buttonHints.RemoveButtonHint(n"drop_item");
         
         let cursorContext = n"Default";
         let cursorData: ref<MenuCursorUserData>;
@@ -375,6 +376,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             cursorData.SetAnimationOverride(n"hoverOnHoldToComplete");
             cursorData.AddAction(n"upgrade_perk");
             cursorContext = n"HoldToComplete";
+
+            if !item.IsEquipped() {
+                this.m_buttonHints.AddButtonHint(n"drop_item", GetLocalizedTextByKey(n"UI-UserActions-Drop"));
+            }
 
             this.m_buttonHints.AddButtonHint(n"upgrade_perk", 
                 "[" + GetLocalizedText("Gameplay-Devices-Interactions-Helpers-Hold") + "] " 
@@ -390,31 +395,42 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.SetCursorContext(cursorContext, cursorData);
     }
 
-    protected cb func OnInventoryItemClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
+    protected cb func OnInventoryItemClick(evt: ref<ItemDisplayClickEvent>) {
         if evt.actionName.IsAction(n"equip_item") {
             if !evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
                 if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
                     this.ShowItemButtonHints(evt.uiInventoryItem);
                 }
             }
-        } else {
-            if evt.actionName.IsAction(n"unequip_item") {
-                if evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
-                    if this.m_outfitSystem.UnequipItem(evt.uiInventoryItem.ID) {
-                        this.ShowItemButtonHints(evt.uiInventoryItem);
-                    }
+            return;
+        }
+        
+        if evt.actionName.IsAction(n"unequip_item") {
+            if evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
+                if this.m_outfitSystem.UnequipItem(evt.uiInventoryItem.ID) {
+                    this.ShowItemButtonHints(evt.uiInventoryItem);
                 }
             }
+            return;
+        }
+        
+        if evt.actionName.IsAction(n"drop_item") {
+            if !evt.uiInventoryItem.IsEquipped() {
+                this.m_inventoryHelper.DiscardItem(evt.uiInventoryItem.ID);
+                this.PopulateInventoryGrid();
+                this.QueueScrollPositionRestore();
+            }
+            return;
         }
     }
 
-    protected cb func OnInventoryItemHold(evt: ref<ItemDisplayHoldEvent>) -> Bool {
+    protected cb func OnInventoryItemHold(evt: ref<ItemDisplayHoldEvent>) {
         if evt.actionName.IsAction(n"upgrade_perk") {
             OutfitMappingPopup.Show(this, evt.uiInventoryItem.ID, this.m_outfitSystem);
         }
     }
 
-    protected cb func OnInventoryItemHoverOver(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
+    protected cb func OnInventoryItemHoverOver(evt: ref<ItemDisplayHoverOverEvent>) {
         this.ShowItemButtonHints(evt.uiInventoryItem);
         this.ShowItemTooltip(evt.widget, evt.uiInventoryItem);
     }

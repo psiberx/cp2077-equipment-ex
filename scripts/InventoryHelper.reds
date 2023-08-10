@@ -102,6 +102,21 @@ public class InventoryHelper extends ScriptableSystem {
         return items;
     }
 
+    public func DiscardItem(itemID: ItemID) {
+        switch ViewManager.GetInstance(this.GetGameInstance()).GetItemSource() {
+            case WardrobeItemSource.InventoryOnly:
+                this.m_transactionSystem.RemoveItem(this.m_player, itemID, 1);
+                break;
+            case WardrobeItemSource.InventoryAndStash:
+                this.m_transactionSystem.RemoveItem(this.m_player, itemID, 1);
+                this.m_transactionSystem.RemoveItem(this.m_stash, itemID, 1);
+                break;
+            case WardrobeItemSource.WardrobeStore:
+                this.m_wardrobeSystem.ForgetItemID(itemID);
+                break;
+        }
+    }
+
     public static func GetInstance(game: GameInstance) -> ref<InventoryHelper> {
         return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.InventoryHelper") as InventoryHelper;
     }

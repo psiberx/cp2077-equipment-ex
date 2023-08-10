@@ -1,12 +1,17 @@
 [[UNRESOLVED_FN]]
-id = "CODEWARE_10108"
+id = "CODEWARE_10109"
 line_contains = "UTF8StrLower"
-message = "Install Codeware 1.1.8 or higher"
+message = "Install Codeware 1.1.9 or higher"
+
+[[UNRESOLVED_METHOD]]
+id = "CODEWARE_10109"
+line_contains = "ForgetItemID"
+message = "Install Codeware 1.1.9 or higher"
 
 [[UNRESOLVED_TYPE]]
-id = "CODEWARE_10108"
+id = "CODEWARE_10109"
 line_contains = "InMenuPopup"
-message = "Install Codeware 1.1.8 or higher"
+message = "Install Codeware 1.1.9 or higher"
 
 [[UNRESOLVED_REF]]
 id = "ARCHIVEXL_10502"
