@@ -143,29 +143,6 @@ then the slot will be automatically assigned according to this table:
 | `Items.GenericFootClothing`       | `OutfitSlots.Feet`       |
 | `Items.Outfit`                    | `OutfitSlots.BodyMiddle` |
 
-### Appearance suffixes
-
-The mod adds a new appearance suffix that represents the state of the legs of female characters.
-It can be used to properly render tights depending on whether the character is wearing shoes.
-
-To activate a new suffix, you must add it to `appearanceSuffixes` as usual:
-
-```yaml
-Items.MyTights:
-  $base: Items.GenericLegClothing
-  appearanceSuffixes: 
-    - !append itemsFactoryAppearanceSuffix.LegsState
-```
-
-| Character | Footwear                      | Suffix       |
-|:----------|:------------------------------|:-------------|
-| Female    | Unequipped                    | `&Flat`      |
-| Female    | Equipped without tags         | `&Lifted`    |
-| Female    | Equipped with `HighHeels` tag | `&HighHeels` |
-| Female    | Equipped with `FlatShoes` tag | `&FlatShoes` |
-| Male      | Unequipped                    | (empty)      |
-| Male      | Equipped                      | (empty)      |
-
 ## Translations
 
 If you want to translate this mod into your language, get translation template JSON 
