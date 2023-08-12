@@ -14,14 +14,14 @@ line_contains = "InMenuPopup"
 message = "Install Codeware 1.1.9 or higher"
 
 [[UNRESOLVED_REF]]
-id = "ARCHIVEXL_10502"
+id = "ARCHIVEXL_10505"
 span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.5.2 or higher"
+message = "Install ArchiveXL 1.5.5 or higher"
 
 [[UNRESOLVED_METHOD]]
-id = "ARCHIVEXL_10502"
+id = "ARCHIVEXL_10505"
 span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.5.2 or higher"
+message = "Install ArchiveXL 1.5.5 or higher"
 
 [[UNRESOLVED_REF]]
 id = "TWEAKXL_10201"
