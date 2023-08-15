@@ -112,7 +112,7 @@ public class InventoryHelper extends ScriptableSystem {
                 this.m_transactionSystem.RemoveItem(this.m_stash, itemID, 1);
                 break;
             case WardrobeItemSource.WardrobeStore:
-                this.m_wardrobeSystem.ForgetItemID(itemID);
+                //this.m_wardrobeSystem.ForgetItemID(itemID);
                 break;
         }
     }
