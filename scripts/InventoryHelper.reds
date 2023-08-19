@@ -12,11 +12,15 @@ public class InventoryHelper extends ScriptableSystem {
         this.m_wardrobeSystem = GameInstance.GetWardrobeSystem(this.GetGameInstance());
     }
 
-    private func IsItemValid(itemData: wref<gameItemData>) -> Bool {
-        let itemRecordId = ItemID.GetTDBID(itemData.GetID());
+    private func IsItemValid(itemID: ItemID) -> Bool {
+        let itemRecordId = ItemID.GetTDBID(itemID);
         let itemRecord = TweakDBInterface.GetClothingRecord(itemRecordId);
 
-        return IsDefined(itemRecord) && !InventoryDataManagerV2.IsItemBlacklisted(itemData);
+        return IsDefined(itemRecord);
+    }
+
+    private func IsItemValid(itemData: wref<gameItemData>) -> Bool {
+        return this.IsItemValid(itemData.GetID()) && !InventoryDataManagerV2.IsItemBlacklisted(itemData);
     }
 
     public func GetStash() -> wref<Stash> {
@@ -73,12 +77,14 @@ public class InventoryHelper extends ScriptableSystem {
 
     public func GetWardrobeItems(out items: array<ref<gameItemData>>) {
         for itemID in this.m_wardrobeSystem.GetStoredItemIDs() {
-            let itemData = this.m_transactionSystem.GetItemData(this.m_player, itemID);
+            if this.IsItemValid(itemID) {
+                let itemData = this.m_transactionSystem.GetItemData(this.m_player, itemID);
 
-            if IsDefined(itemData) {
-                ArrayPush(items, itemData);
-            } else {
-                ArrayPush(items, Inventory.CreateItemData(new ItemModParams(itemID, 1), this.m_player));
+                if IsDefined(itemData) {
+                    ArrayPush(items, itemData);
+                } else {
+                    ArrayPush(items, Inventory.CreateItemData(new ItemModParams(itemID, 1), this.m_player));
+                }
             }
         }
     }
@@ -112,7 +118,7 @@ public class InventoryHelper extends ScriptableSystem {
                 this.m_transactionSystem.RemoveItem(this.m_stash, itemID, 1);
                 break;
             case WardrobeItemSource.WardrobeStore:
-                //this.m_wardrobeSystem.ForgetItemID(itemID);
+                this.m_wardrobeSystem.ForgetItemID(itemID);
                 break;
         }
     }
