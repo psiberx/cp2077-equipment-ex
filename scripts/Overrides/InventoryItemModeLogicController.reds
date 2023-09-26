@@ -40,7 +40,7 @@ protected cb func OnWardrobeOutfitSlotHoverOver(e: ref<WardrobeOutfitSlotHoverOv
 }
 
 @wrapMethod(InventoryItemModeLogicController)
-private final func SetInventoryItemButtonHintsHoverOver(displayingData: InventoryItemData, opt display: ref<InventoryItemDisplayController>) {
+private final func SetInventoryItemButtonHintsHoverOver(const displayingData: script_ref<InventoryItemData>, opt display: ref<InventoryItemDisplayController>) {
     if ItemID.IsValid(displayingData.ID) {
         wrappedMethod(displayingData, display);
     }

@@ -256,7 +256,7 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func HideEquipment() {
         this.m_equipmentData.UnlockVisualChanges();
-        this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit));
+        this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit), 0, false);
 
         for baseSlot in OutfitConfig.BaseSlots() {
             this.m_equipmentData.ClearVisuals(baseSlot.equipmentArea);

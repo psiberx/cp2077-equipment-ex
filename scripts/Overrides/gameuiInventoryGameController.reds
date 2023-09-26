@@ -31,6 +31,10 @@ private final func SetupSetButton() -> Void {
     let btnWrapper = this.GetChildWidgetByPath(n"default_wrapper/menuLinks") as inkCompoundWidget;
     let btnList = this.GetChildWidgetByPath(n"default_wrapper/menuLinks/btnsContainer") as inkCompoundWidget;
 
+    //
+    btnList.GetWidgetByIndex(3).SetVisible(false);
+    btnList.GetWidgetByIndex(4).SetVisible(false);
+
     // Spawn new button
     this.m_wardrobeButton = this.SpawnFromLocal(btnList, n"HyperlinkButton:EquipmentEx.WardrobeHubLinkController");
     this.m_wardrobeButton.RegisterToCallback(n"OnClick", this, n"OnWardrobeBtnClick");
@@ -204,6 +208,10 @@ protected cb func OnPaperDollSlideComplete(anim: ref<inkAnimProxy>) {
 
 @wrapMethod(gameuiInventoryGameController)
 protected cb func OnEquipmentClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
+    if IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
+        return false;
+    }
+
     if evt.actionName.IsAction(n"unequip_item") && Equals(evt.display.GetEquipmentArea(), gamedataEquipmentArea.Outfit) && this.m_outfitSystem.IsActive() {
         this.m_outfitSystem.Deactivate();
     } else {

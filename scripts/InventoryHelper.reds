@@ -83,7 +83,7 @@ public class InventoryHelper extends ScriptableSystem {
                 if IsDefined(itemData) {
                     ArrayPush(items, itemData);
                 } else {
-                    ArrayPush(items, Inventory.CreateItemData(new ItemModParams(itemID, 1), this.m_player));
+                    ArrayPush(items, Inventory.CreateItemData(new ItemModParams(itemID, 1, []), this.m_player));
                 }
             }
         }

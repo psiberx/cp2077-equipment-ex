@@ -12,12 +12,12 @@ public func IsForWardrobe() -> Bool {
 }
 
 @wrapMethod(UIInventoryItem)
-public final func IsEquipped() -> Bool {
+public final func IsEquipped(opt force: Bool) -> Bool {
     if this.IsForWardrobe() && IsDefined(this.m_manager) {
         return this.m_manager.IsItemEquippedInSlot(this.ID, this.m_slotID);
     }
 
-    return wrappedMethod();
+    return wrappedMethod(force);
 }
 
 @wrapMethod(UIInventoryItem)
