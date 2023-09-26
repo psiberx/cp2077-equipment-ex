@@ -19,7 +19,7 @@ span_starts_with = "ArchiveXL"
 message = "Install ArchiveXL 1.6.0 or higher"
 
 [[UNRESOLVED_METHOD]]
-id = "ARCHIVEXL_10610"
+id = "ARCHIVEXL_10600"
 span_starts_with = "ArchiveXL"
 message = "Install ArchiveXL 1.6.0 or higher"
 
