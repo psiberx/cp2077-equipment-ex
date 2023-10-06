@@ -1,3 +1,6 @@
+@addField(InventoryItemModeLogicController)
+public let m_isWardrobeScreen: Bool;
+
 @replaceMethod(InventoryItemModeLogicController)
 private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) {
     inkWidgetRef.SetVisible(this.m_wardrobeSlotsContainer, active);
@@ -40,8 +43,8 @@ protected cb func OnWardrobeOutfitSlotHoverOver(e: ref<WardrobeOutfitSlotHoverOv
 }
 
 @wrapMethod(InventoryItemModeLogicController)
-private final func SetInventoryItemButtonHintsHoverOver(const displayingData: script_ref<InventoryItemData>, opt display: ref<InventoryItemDisplayController>) {
-    if ItemID.IsValid(displayingData.ID) {
-        wrappedMethod(displayingData, display);
+protected cb func OnItemDisplayHoverOver(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
+    if !this.m_isWardrobeScreen {
+        wrappedMethod(evt);
     }
 }

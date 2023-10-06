@@ -125,6 +125,8 @@ protected func ShowWardrobeScreen() -> Bool {
     evt.m_dropQueue = this.m_itemModeLogicController.m_itemDropQueue;
     wardrobe.GetController().QueueEvent(evt);
 
+    this.m_itemModeLogicController.m_isWardrobeScreen = true;
+
     return true;
 }
 
@@ -171,6 +173,8 @@ protected func HideWardrobeScreen() -> Bool {
     this.ZoomCamera(EnumInt(InventoryPaperdollZoomArea.Default));
 
     this.m_buttonHintsController.Show();
+
+    this.m_itemModeLogicController.m_isWardrobeScreen = false;
 
     return true;
 }
