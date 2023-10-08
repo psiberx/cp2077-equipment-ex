@@ -12,7 +12,7 @@
 
 - Cyberpunk 2077 2.01
 - [ArchiveXL](https://github.com/psiberx/cp2077-archive-xl) 1.7.0+
-- [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.4.0+
+- [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.4.1+
 - [Codeware](https://github.com/psiberx/cp2077-codeware) 1.3.0+
 - [redscript](https://github.com/jac3km4/redscript) 0.5.16+
 
