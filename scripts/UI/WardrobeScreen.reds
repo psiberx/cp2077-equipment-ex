@@ -40,6 +40,9 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_itemAddedCallback: ref<CallbackHandle>;
     protected let m_itemRemovedCallback: ref<CallbackHandle>;
 
+    protected let m_equipmentBlackboard: wref<IBlackboard>;
+    protected let m_equipProgressCallback: ref<CallbackHandle>;
+
     protected let m_previewWrapper: wref<inkWidget>;
 
     protected let m_isPreviewMouseHold: Bool;
@@ -49,6 +52,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     protected let m_cursorScreenPosition: Vector2;
 
     protected let m_itemDisplayContext: ref<ItemDisplayContextData>;
+    protected let m_isEquipInProgress: Bool;
 
     protected cb func OnInitialize() -> Bool {
         super.OnInitialize();
@@ -82,9 +86,12 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         this.m_tooltipManager = this.GetRootWidget().GetControllerByType(n"gameuiTooltipsManager") as gameuiTooltipsManager;
         this.m_tooltipManager.Setup(ETooltipsStyle.Menus);
 
-        this.m_inventoryBlackboard = GameInstance.GetBlackboardSystem(this.GetPlayerControlledObject().GetGame()).Get(GetAllBlackboardDefs().UI_Inventory);
+        this.m_inventoryBlackboard = GameInstance.GetBlackboardSystem(this.m_player.GetGame()).Get(GetAllBlackboardDefs().UI_Inventory);
         this.m_itemAddedCallback = this.m_inventoryBlackboard.RegisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemAdded, this, n"OnInventoryItemsChanged");
         this.m_itemRemovedCallback = this.m_inventoryBlackboard.RegisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemRemoved, this, n"OnInventoryItemsChanged");
+
+        this.m_equipmentBlackboard = GameInstance.GetBlackboardSystem(this.m_player.GetGame()).Get(GetAllBlackboardDefs().UI_Equipment);
+        this.m_equipProgressCallback = this.m_equipmentBlackboard.RegisterListenerBool(GetAllBlackboardDefs().UI_Equipment.EquipmentInProgress, this, n"OnEquipmentProgress");
 
         // Filters
 
@@ -155,6 +162,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         this.m_inventoryBlackboard.UnregisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemAdded, this.m_itemAddedCallback);
         this.m_inventoryBlackboard.UnregisterListenerVariant(GetAllBlackboardDefs().UI_Inventory.itemRemoved, this.m_itemRemovedCallback);
+        this.m_equipmentBlackboard.UnregisterListenerBool(GetAllBlackboardDefs().UI_Equipment.EquipmentInProgress, this.m_equipProgressCallback);
     }
 
     protected func InitializeSearchField() {
@@ -341,6 +349,14 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
     }
 
+    protected cb func OnEquipmentProgress(inProgress: Bool) {
+        this.m_isEquipInProgress = inProgress;
+        this.m_outfitManager.SetEnabled(!inProgress);
+
+        //this.m_inventoryGridArea.SetInteractive(!inProgress);
+        //this.m_inventoryGridArea.SetOpacity(!inProgress ? 1.0 : 0.6);
+    }
+
     protected cb func OnFilterChange(controller: wref<inkRadioGroupController>, selectedIndex: Int32) {
         this.UpdateScrollPosition(true);
         this.m_inventoryGridDataView.SetFilterType(this.m_filterManager.GetAt(selectedIndex));
@@ -396,6 +412,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnInventoryItemClick(evt: ref<ItemDisplayClickEvent>) {
+        if this.m_isEquipInProgress {
+            return;
+        }
+
         if evt.actionName.IsAction(n"equip_item") {
             if !evt.uiInventoryItem.IsEquipped() && this.AccessOutfitSystem() {
                 if this.m_outfitSystem.EquipItem(evt.uiInventoryItem.ID) {
@@ -425,6 +445,10 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnInventoryItemHold(evt: ref<ItemDisplayHoldEvent>) {
+        if this.m_isEquipInProgress {
+            return;
+        }
+
         if evt.actionName.IsAction(n"upgrade_perk") {
             OutfitMappingPopup.Show(this, evt.uiInventoryItem.ID, this.m_outfitSystem);
         }

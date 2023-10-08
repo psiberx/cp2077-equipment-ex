@@ -16,6 +16,8 @@ class OutfitManagerController extends inkLogicController {
     protected let m_popupToken: ref<inkGameNotificationToken>;
     protected let m_popupOutfit: CName;
 
+    protected let m_enabled: Bool;
+
     protected cb func OnInitialize() -> Bool {
         this.InitializeLayout();
         this.InitializeList();
@@ -27,6 +29,15 @@ class OutfitManagerController extends inkLogicController {
         this.m_buttonHints = buttonHints;
 
         this.PopulateList();
+        this.SetEnabled(true);
+    }
+
+    public func SetEnabled(enabled: Bool) {
+        this.m_enabled = enabled;
+
+        let widget = this.GetRootWidget();
+        widget.SetInteractive(this.m_enabled);
+        widget.SetOpacity(this.m_enabled ? 1.0 : 0.6);
     }
 
     protected func InitializeLayout() {
@@ -144,6 +155,10 @@ class OutfitManagerController extends inkLogicController {
     }
 
     protected cb func OnOutfitListEntryClick(evt: ref<OutfitListEntryClick>) {
+        if !this.m_enabled {
+            return;
+        }
+
         if evt.action.IsAction(n"click") && this.AccessOutfitSystem() {
             this.PlaySound(n"Button", n"OnPress");
 
