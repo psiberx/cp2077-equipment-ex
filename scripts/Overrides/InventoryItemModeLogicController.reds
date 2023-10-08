@@ -1,5 +1,17 @@
+import EquipmentEx.OutfitSystem
+
+@addField(InventoryItemModeLogicController)
+private let m_outfitSystem: wref<OutfitSystem>;
+
 @addField(InventoryItemModeLogicController)
 public let m_isWardrobeScreen: Bool;
+
+@wrapMethod(InventoryItemModeLogicController)
+public final func SetupData(buttonHints: wref<ButtonHints>, tooltipsManager: wref<gameuiTooltipsManager>, inventoryManager: ref<InventoryDataManagerV2>, player: wref<PlayerPuppet>) {
+     wrappedMethod(buttonHints, tooltipsManager, inventoryManager, player);
+
+     this.m_outfitSystem = OutfitSystem.GetInstance(this.m_player.GetGame());
+}
 
 @replaceMethod(InventoryItemModeLogicController)
 private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) {
@@ -43,8 +55,31 @@ protected cb func OnWardrobeOutfitSlotHoverOver(e: ref<WardrobeOutfitSlotHoverOv
 }
 
 @wrapMethod(InventoryItemModeLogicController)
+protected cb func OnItemDisplayClick(evt: ref<ItemDisplayClickEvent>) -> Bool {
+    if !this.m_isWardrobeScreen {
+        wrappedMethod(evt);
+    }
+}
+
+@wrapMethod(InventoryItemModeLogicController)
 protected cb func OnItemDisplayHoverOver(evt: ref<ItemDisplayHoverOverEvent>) -> Bool {
     if !this.m_isWardrobeScreen {
         wrappedMethod(evt);
+    }
+}
+
+@wrapMethod(InventoryItemModeLogicController)
+private final func SetInventoryItemButtonHintsHoverOver(const displayingData: script_ref<InventoryItemData>, opt display: ref<InventoryItemDisplayController>) {
+    wrappedMethod(displayingData, display);
+
+    if this.m_outfitSystem.IsActive() {
+        this.m_buttonHintsController.RemoveButtonHint(n"preview_item");
+    }
+}
+
+@wrapMethod(InventoryItemModeLogicController)
+private final func HandleItemClick(const itemData: script_ref<InventoryItemData>, actionName: ref<inkActionName>, opt displayContext: ItemDisplayContext) {
+    if !this.m_outfitSystem.IsActive() || !actionName.IsAction(n"preview_item") {
+        wrappedMethod(itemData, actionName, displayContext);
     }
 }
