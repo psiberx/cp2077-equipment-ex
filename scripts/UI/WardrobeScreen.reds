@@ -234,7 +234,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         }
 
         for itemData in this.m_inventoryHelper.GetAvailableItems(this.m_itemDropQueue) {
-            let slotIDs = [this.m_outfitSystem.GetItemSlot(itemData.GetID())];
+            let slotIDs = [this.m_outfitSystem.GetItemSlot(itemData.ID)];
             for slotID in slotIDs {
                 let uiSlotData = slotMap.Get(TDBID.ToNumber(slotID)) as InventoryGridSlotData;
                 let uiItemData = new InventoryGridItemData();
@@ -249,7 +249,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
                 }
 
                 let index = 0;
-                while index < ArraySize(uiSlotData.Children) && !this.CompareItem(itemData.GetID(), uiSlotData.Children[index].Item.GetID()) {
+                while index < ArraySize(uiSlotData.Children) && !this.CompareItem(itemData.ID, uiSlotData.Children[index].Item.GetID()) {
                     index += 1;
                 }
                 ArrayInsert(uiSlotData.Children, index, uiItemData);
@@ -682,6 +682,8 @@ class UpdateInventoryGridCallback extends DelayCallback {
 
     public func Call() {
         if IsDefined(this.m_controller) {
+            EquipmentSystem.GetData(this.m_controller.m_player).GetInventoryManager().MarkToRebuild();
+
             this.m_controller.UpdateScrollPosition();
             this.m_controller.PopulateInventoryGrid();
         }

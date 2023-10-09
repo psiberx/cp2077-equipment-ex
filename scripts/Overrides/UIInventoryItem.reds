@@ -1,6 +1,7 @@
 @addMethod(UIInventoryItem)
-public static func Make(owner: wref<GameObject>, slotID: TweakDBID, itemData: ref<gameItemData>, opt manager: wref<UIInventoryItemsManager>) -> ref<UIInventoryItem> {
-    let self = UIInventoryItem.Make(owner, itemData, manager);
+public static func Make(owner: wref<GameObject>, slotID: TweakDBID, itemData: script_ref<InventoryItemData>, opt manager: wref<UIInventoryItemsManager>) -> ref<UIInventoryItem> {
+    let self = UIInventoryItem.FromInventoryItemData(owner, itemData, manager);
+    self.m_data.IconPath = UIInventoryItemsManager.ResolveItemIconName(self.m_itemTweakID, self.m_itemRecord, self.m_manager);
     self.m_slotID = slotID;
 
     return self;
