@@ -71,7 +71,7 @@ class InventoryGridDataView extends BackpackDataView {
                 }
 
                 if NotEquals(this.m_searchQuery, "") {
-                    let itemName = UTF8StrLower(uiItem.Item.GetName());
+                    let itemName = UTF8StrLower(GetLocalizedText(uiItem.Item.m_data.Name));
                     if !StrContains(itemName, this.m_searchQuery) {
                         uiItem.IsVisible = false;
                     }
