@@ -69,17 +69,29 @@ protected cb func OnItemDisplayHoverOver(evt: ref<ItemDisplayHoverOverEvent>) ->
 }
 
 @wrapMethod(InventoryItemModeLogicController)
-private final func SetInventoryItemButtonHintsHoverOver(const displayingData: script_ref<InventoryItemData>, opt display: ref<InventoryItemDisplayController>) {
+private final func SetInventoryItemButtonHintsHoverOver(const displayingData: script_ref<InventoryItemData>,
+                                                        opt display: ref<InventoryItemDisplayController>) {
     wrappedMethod(displayingData, display);
 
     if this.m_outfitSystem.IsActive() {
-        this.m_buttonHintsController.RemoveButtonHint(n"preview_item");
+        let equipmentArea = InventoryItemData.GetEquipmentArea(displayingData);
+        let isClothing = this.IsEquipmentAreaClothing(equipmentArea) || Equals(equipmentArea, gamedataEquipmentArea.Outfit);
+        if isClothing {
+            this.m_buttonHintsController.RemoveButtonHint(n"preview_item");
+        }
     }
 }
 
 @wrapMethod(InventoryItemModeLogicController)
-private final func HandleItemClick(const itemData: script_ref<InventoryItemData>, actionName: ref<inkActionName>, opt displayContext: ItemDisplayContext) {
-    if !this.m_outfitSystem.IsActive() || !actionName.IsAction(n"preview_item") {
-        wrappedMethod(itemData, actionName, displayContext);
+private final func HandleItemClick(const itemData: script_ref<InventoryItemData>, actionName: ref<inkActionName>,
+                                   opt displayContext: ItemDisplayContext) {
+    if this.m_outfitSystem.IsActive() && actionName.IsAction(n"preview_item") {
+        let equipmentArea = InventoryItemData.GetEquipmentArea(itemData);
+        let isClothing = this.IsEquipmentAreaClothing(equipmentArea) || Equals(equipmentArea, gamedataEquipmentArea.Outfit);
+        if isClothing {
+            return;
+        }
     }
+
+    wrappedMethod(itemData, actionName, displayContext);
 }
