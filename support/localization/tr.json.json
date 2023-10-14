@@ -90,8 +90,7 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Equipment-EX çakışan bir mod tespit etti.\\n\\nAşağıdaki modlar sorunlara neden olabilir veya bu modun işlevselliğini engelleyebilir:\\n{conflicts}\\nBu modu kullanmak istiyorsan lütfen çakışan modları devre dışı bırak veya kaldır.
-",
+              "femaleVariant": "Equipment-EX çakışan bir mod tespit etti.\\n\\nAşağıdaki modlar sorunlara neden olabilir veya bu modun işlevselliğini engelleyebilir:\\n{conflicts}\\nBu modu kullanmak istiyorsan lütfen çakışan modları devre dışı bırak veya kaldır.",
               "maleVariant": "",
               "primaryKey": 0,
               "secondaryKey": "UI-EquipmentEx-NotificationConflicts"
