@@ -6,6 +6,7 @@ localization:
     de-de: equipment_ex\localization\de-de.json
     es-es: equipment_ex\localization\es-es.json
     fr-fr: equipment_ex\localization\fr-fr.json
+    it-it: equipment_ex\localization\it-it.json
     kr-kr: equipment_ex\localization\kr-kr.json
     pt-br: equipment_ex\localization\pt-br.json
     ru-ru: equipment_ex\localization\ru-ru.json
