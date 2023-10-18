@@ -3,9 +3,6 @@ import EquipmentEx.OutfitSystem
 @addField(BackpackMainGameController)
 private let m_outfitSystem: wref<OutfitSystem>;
 
-@addField(BackpackMainGameController)
-private let m_outfitSystem: wref<OutfitSystem>;
-
 @wrapMethod(BackpackMainGameController)
 protected cb func OnInitialize() -> Bool {
     wrappedMethod();
