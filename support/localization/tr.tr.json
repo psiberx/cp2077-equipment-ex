@@ -19,406 +19,406 @@
           "entries": [
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "No outfit",
+              "femaleVariant": "Kıyafet yok",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-Wardrobe-NoOutfit"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Current outfit",
+              "femaleVariant": "Mevcut kıyafet",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-Wardrobe-CurrentOutfit"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Enter outfit name:",
+              "femaleVariant": "Kıyafet ismi gir:",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-Wardrobe-NotificationSaveSet"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Outfit with this name already exists, do you want to overwrite it?",
+              "femaleVariant": "Bu isme sahip kıyafet zaten mevcut, üzerine yazmak istiyor musun?",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-Wardrobe-NotificationReplaceSet"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Search by name",
+              "femaleVariant": "İsme göre ara",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-Wardrobe-SearchByName"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Item Source",
+              "femaleVariant": "Eşya Kaynağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Preferred source of items for outfit manager: \u0022Inventory \u002B Stash\u0022 will only use the current items in your inventory and stashes, \u0022Wardrobe Store\u0022 will use every item you have ever obtained in the game (including dropped and disassembled items).",
+              "femaleVariant": "Kıyafet yöneticisi için tercih edilen öğe kaynağı: \u0022Envanter \u002B Zula\u0022 yalnızca envanterindeki ve zulandaki mevcut öğeleri kullanacak, \u0022Gardırop Mağazası\u0022 Oyunda şimdiye kadar elde ettiğin her eşyayı kullanacak (bırakılan ve sökülen eşyalar dahil).",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-Description"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Inventory",
+              "femaleVariant": "Envanter",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-InventoryOnly"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Inventory \u002B Stash",
+              "femaleVariant": "Envanter \u002B Zula",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-InventoryAndStash"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Wardrobe Store",
+              "femaleVariant": "Gardırop Mağazası",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-WardrobeItemSource-WardrobeStore"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Equipment-EX requires:\\n- ArchiveXL {archive_xl_req} or higher\\n- TweakXL {tweak_xl_req} or higher\\n- Codeware {codeware_req} or higher\\n\\nDetected ArchiveXL {archive_xl_ver}, TweakXL {tweak_xl_ver} and Codeware {codeware_ver}.\\n\\nPlease update the dependencies to use this mod.",
+              "femaleVariant": "Equipment-EX gereksinimleri:\\n- ArchiveXL {archive_xl_req} veya daha üstü\\n- TweakXL {tweak_xl_req} veya daha üstü\\n- Codeware {codeware_req} veya daha üstü\\n\\nAlgılandı ArchiveXL {archive_xl_ver}, TweakXL {tweak_xl_ver} ve Codeware {codeware_ver}.\\n\\nBu modu kullanmak için lütfen gereksinimleri güncelleyin.",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-NotificationRequirements"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Equipment-EX has detected a conflicting mod.\\n\\nThe following mods may cause problems or block the functionality of this mod:\\n{conflicts}\\nPlease disable or remove conflicting mods if you wish to use this mod.",
+              "femaleVariant": "Equipment-EX çakışan bir mod tespit etti.\\n\\nAşağıdaki modlar bu modun işlevselliğini engelleyebilir veya sorunlara yol açabilir:\\n{conflicts}\\nEğer bu modu kullanmak istiyorsanız, lütfen çakışan modları devre dışı bırakın veya silin.",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "UI-EquipmentEx-NotificationConflicts"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Head",
+              "femaleVariant": "Kafa",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Head"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Balaclava",
+              "femaleVariant": "Kar Maskesi",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Balaclava"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Mask",
+              "femaleVariant": "Maske",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Mask"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Glasses",
+              "femaleVariant": "Gözlükler",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Glasses"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Wreath",
+              "femaleVariant": "Çelenk",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Wreath"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Ear",
+              "femaleVariant": "Sol Kulak",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-EarLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Ear",
+              "femaleVariant": "Sağ Kulak",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-EarRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Neckwear",
+              "femaleVariant": "Boyun Bağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Neckwear"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Necklace / Tight",
+              "femaleVariant": "Kolye / Dar",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceTight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Necklace / Short",
+              "femaleVariant": "Kolye / Kısa",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceShort"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Necklace / Long",
+              "femaleVariant": "Kolye / Uzun",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-NecklaceLong"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Torso / Under",
+              "femaleVariant": "Gövde / Alt",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-TorsoUnder"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Torso / Inner",
+              "femaleVariant": "Gövde / İç",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-TorsoInner"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Torso / Middle",
+              "femaleVariant": "Gövde / Orta",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-TorsoMiddle"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Torso / Outer",
+              "femaleVariant": "Gövde / Dış",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-TorsoOuter"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Torso / Aux",
+              "femaleVariant": "Gövde / Aks",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-TorsoAux"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Back",
+              "femaleVariant": "Sırt",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Back"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Shoulder",
+              "femaleVariant": "Sol Omuz",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ShoulderLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Shoulder",
+              "femaleVariant": "Sağ Omuz",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ShoulderRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Wrist",
+              "femaleVariant": "Sol Bilek",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-WristLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Wrist",
+              "femaleVariant": "Sağ Bilek",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-WristRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Hand",
+              "femaleVariant": "Sol El",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-HandLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Hand",
+              "femaleVariant": "Sağ El",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-HandRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Fingers",
+              "femaleVariant": "Sol Parmak",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-FingersLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Fingers",
+              "femaleVariant": "Sağ Parmak",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-FingersRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Fingernails",
+              "femaleVariant": "Sol El Tırnağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-FingernailsLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Fingernails",
+              "femaleVariant": "Sağ El Tırnağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-FingernailsRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Waist",
+              "femaleVariant": "Bel",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Waist"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Legs / Inner",
+              "femaleVariant": "Bacaklar / İç",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-LegsInner"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Legs / Middle",
+              "femaleVariant": "Bacaklar / Orta",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-LegsMiddle"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Legs / Outer",
+              "femaleVariant": "Bacaklar / Dış",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-LegsOuter"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Thigh",
+              "femaleVariant": "Sol Uyluk",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ThighLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Thigh",
+              "femaleVariant": "Sağ Uyluk",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ThighRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Ankle",
+              "femaleVariant": "Sol Ayak Bileği",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-AnkleLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Ankle",
+              "femaleVariant": "Sağ Ayak Bileği",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-AnkleRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Feet",
+              "femaleVariant": "Ayak",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Feet"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Toes",
+              "femaleVariant": "Sol Ayak Parmağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ToesLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Toes",
+              "femaleVariant": "Sağ Ayak Parmağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ToesRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Toenails",
+              "femaleVariant": "Sol Ayak Tırnağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ToenailsLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Toenails",
+              "femaleVariant": "Sağ Ayak Tırnağı",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ToenailsRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Body / Under",
+              "femaleVariant": "Beden / Alt",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-BodyUnder"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Body / Inner",
+              "femaleVariant": "Beden / İç",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-BodyInner"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Body / Middle",
+              "femaleVariant": "Beden / Orta",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-BodyMiddle"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Body / Outer",
+              "femaleVariant": "Beden / Dış",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-BodyOuter"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Left Hand Prop",
+              "femaleVariant": "Sol El Aksesuar",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-HandPropLeft"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
-              "femaleVariant": "Right Hand Prop",
+              "femaleVariant": "Sağ El Aksesuar",
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-HandPropRight"
