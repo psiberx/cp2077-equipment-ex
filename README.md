@@ -164,3 +164,4 @@ Available translations:
 - Russian (`ru-ru`) by [@Locked15](https://github.com/Locked15)
 - Simplified Chinese (`zh-cn`) by [@Zo70](https://www.nexusmods.com/users/158442118)
 - Spanish (`es-es`) by [@Anrui](https://www.nexusmods.com/users/36190195)
+- Turkish (`tr-tr`) by [@paielcitra](https://www.nexusmods.com/users/54660342)
