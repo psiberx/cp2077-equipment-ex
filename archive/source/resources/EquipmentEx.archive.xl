@@ -10,4 +10,5 @@ localization:
     kr-kr: equipment_ex\localization\kr-kr.json
     pt-br: equipment_ex\localization\pt-br.json
     ru-ru: equipment_ex\localization\ru-ru.json
+    tr-tr: equipment_ex\localization\tr-tr.json
     zh-cn: equipment_ex\localization\zh-cn.json
