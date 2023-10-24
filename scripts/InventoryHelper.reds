@@ -66,21 +66,9 @@ public class InventoryHelper extends ScriptableSystem {
     }
 
     public func GetWardrobeItems(out items: array<InventoryItemData>) {
-        let equipmentAreas = [
-            gamedataEquipmentArea.Head,
-            gamedataEquipmentArea.Face,
-            gamedataEquipmentArea.InnerChest,
-            gamedataEquipmentArea.OuterChest,
-            gamedataEquipmentArea.Legs,
-            gamedataEquipmentArea.Feet,
-            gamedataEquipmentArea.Outfit
-        ];
-
-        for equipmentArea in equipmentAreas {
-            for itemData in this.m_wardrobeSystem.GetFilteredInventoryItemsData(equipmentArea, this.m_inventoryManager) {
-                if this.IsValidItem(itemData.ID) {
-                    ArrayPush(items, itemData);
-                }
+        for itemID in this.m_wardrobeSystem.GetStoredItemIDs() {
+            if this.IsValidItem(itemID) {
+                ArrayPush(items, this.m_inventoryManager.GetInventoryItemDataFromItemID(itemID));
             }
         }
     }

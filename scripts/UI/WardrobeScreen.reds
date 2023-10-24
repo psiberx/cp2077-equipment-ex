@@ -393,7 +393,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             cursorData.AddAction(n"upgrade_perk");
             cursorContext = n"HoldToComplete";
 
-            if !item.IsEquipped() && NotEquals(this.m_viewManager.GetItemSource(), WardrobeItemSource.WardrobeStore) {
+            if !item.IsEquipped() {
                 this.m_buttonHints.AddButtonHint(n"drop_item", GetLocalizedTextByKey(n"UI-UserActions-Drop"));
             }
 
