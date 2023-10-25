@@ -36,9 +36,9 @@ class OutfitTweakHelper {
     public static func PrepareOriginalSlotMatcher() -> ref<OutfitSlotMatcher> {
         let slotMatcher = OutfitSlotMatcher.Create();
 
-        slotMatcher.IgnoreEntities([
-            n"player_outfit_item"
-        ]);
+        //slotMatcher.IgnoreEntities([
+        //    n"player_outfit_item"
+        //]);
 
         slotMatcher.MapEntities([
             new EntityNameSlotMapping(t"OutfitSlots.Head", n"player_head_item"),
@@ -46,7 +46,9 @@ class OutfitTweakHelper {
             new EntityNameSlotMapping(t"OutfitSlots.TorsoInner", n"player_inner_torso_item"),
             new EntityNameSlotMapping(t"OutfitSlots.TorsoOuter", n"player_outer_torso_item"),
             new EntityNameSlotMapping(t"OutfitSlots.LegsMiddle", n"player_legs_item"),
-            new EntityNameSlotMapping(t"OutfitSlots.Feet", n"player_feet_item")
+            new EntityNameSlotMapping(t"OutfitSlots.Feet", n"player_feet_item"),
+            new EntityNameSlotMapping(t"OutfitSlots.BodyMiddle", n"player_outfit_item"),
+            new EntityNameSlotMapping(t"OutfitSlots.BodyMiddle", n"player_outfit_item_ep1")
         ]);
 
         slotMatcher.MapAppearances([
