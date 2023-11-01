@@ -1,32 +1,32 @@
-[[UNRESOLVED_FN]]
-id = "CODEWARE_10401"
-line_contains = "UTF8StrLower"
-message = "Install Codeware 1.4.1 or higher"
+[[UNRESOLVED_REF]]
+id = "ARCHIVEXL_10801"
+span_starts_with = "ArchiveXL"
+message = "Install ArchiveXL 1.8.1 or higher"
 
 [[UNRESOLVED_METHOD]]
-id = "CODEWARE_10401"
+id = "ARCHIVEXL_10801"
+span_starts_with = "ArchiveXL"
+message = "Install ArchiveXL 1.8.1 or higher"
+
+[[UNRESOLVED_REF]]
+id = "TWEAKXL_10500"
+span_starts_with = "TweakXL"
+message = "Install TweakXL 1.5.0 or higher"
+
+[[UNRESOLVED_FN]]
+id = "CODEWARE_10500"
+line_contains = "UTF8StrLower"
+message = "Install Codeware 1.5.0 or higher"
+
+[[UNRESOLVED_METHOD]]
+id = "CODEWARE_10500"
 line_contains = "ForgetItemID"
-message = "Install Codeware 1.4.1 or higher"
+message = "Install Codeware 1.5.0 or higher"
 
 [[UNRESOLVED_TYPE]]
-id = "CODEWARE_10401"
+id = "CODEWARE_10500"
 line_contains = "InMenuPopup"
-message = "Install Codeware 1.4.1 or higher"
-
-[[UNRESOLVED_REF]]
-id = "ARCHIVEXL_10700"
-span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.7.0 or higher"
-
-[[UNRESOLVED_METHOD]]
-id = "ARCHIVEXL_10700"
-span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.7.0 or higher"
-
-[[UNRESOLVED_REF]]
-id = "TWEAKXL_10403"
-span_starts_with = "TweakXL"
-message = "Install TweakXL 1.4.3 or higher"
+message = "Install Codeware 1.5.0 or higher"
 
 [[UNRESOLVED_METHOD]]
 id = "EQEX_MIX"
