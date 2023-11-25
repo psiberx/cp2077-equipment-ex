@@ -1,17 +1,17 @@
 [[UNRESOLVED_REF]]
-id = "ARCHIVEXL_10801"
+id = "ARCHIVEXL_10900"
 span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.8.1 or higher"
+message = "Install ArchiveXL 1.9.0 or higher"
 
 [[UNRESOLVED_METHOD]]
-id = "ARCHIVEXL_10801"
+id = "ARCHIVEXL_10900"
 span_starts_with = "ArchiveXL"
-message = "Install ArchiveXL 1.8.1 or higher"
+message = "Install ArchiveXL 1.9.0 or higher"
 
 [[UNRESOLVED_REF]]
-id = "TWEAKXL_10500"
+id = "TWEAKXL_10501"
 span_starts_with = "TweakXL"
-message = "Install TweakXL 1.5.0 or higher"
+message = "Install TweakXL 1.5.1 or higher"
 
 [[UNRESOLVED_FN]]
 id = "CODEWARE_10500"

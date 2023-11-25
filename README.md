@@ -10,7 +10,7 @@
 
 ### Requirements
 
-- Cyberpunk 2077 2.01
+- Cyberpunk 2077 2.02
 - [ArchiveXL](https://github.com/psiberx/cp2077-archive-xl) 1.8.1+
 - [TweakXL](https://github.com/psiberx/cp2077-tweak-xl) 1.5.0+
 - [Codeware](https://github.com/psiberx/cp2077-codeware) 1.5.0+
