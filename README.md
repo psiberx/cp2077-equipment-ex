@@ -158,6 +158,7 @@ Available translations:
 - German (`de-de`) by [@Vorgash](https://www.nexusmods.com/users/3957237)
 - Italian (`it-it`) by [@chipzz97](https://www.nexusmods.com/users/46275402)
 - Korean (`kr-kr`) by [@manikda11](https://www.nexusmods.com/users/47584948)
+- Polish (`pl-pl`) by [@gojowenus](https://www.nexusmods.com/users/5672133)
 - Russian (`ru-ru`) by [@Locked15](https://github.com/Locked15)
 - Simplified Chinese (`zh-cn`) by [@Zo70](https://www.nexusmods.com/users/158442118)
 - Spanish (`es-es`) by [@Anrui](https://www.nexusmods.com/users/36190195)

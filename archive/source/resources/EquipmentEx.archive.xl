@@ -8,6 +8,7 @@ localization:
     fr-fr: equipment_ex\localization\fr-fr.json
     it-it: equipment_ex\localization\it-it.json
     kr-kr: equipment_ex\localization\kr-kr.json
+    pl-pl: equipment_ex\localization\pl-pl.json
     pt-br: equipment_ex\localization\pt-br.json
     ru-ru: equipment_ex\localization\ru-ru.json
     tr-tr: equipment_ex\localization\tr-tr.json
