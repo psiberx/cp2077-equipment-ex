@@ -18,7 +18,7 @@
 
 ### Installation
 
-1. Install all requirements
+1. Install requirements
 2. Download [the latest release](https://github.com/psiberx/cp2077-equipment-ex/releases) archive
 3. Extract the archive into the Cyberpunk 2077 installation directory
 
@@ -33,12 +33,6 @@
 - To delete an outfit, hover over the outfit and press the hotkey from the hint
 - To disable the outfit mode, you can select "No outfit" or unequip the outfit from the Inventory menu
 - In photo mode, you will find the option to change outfits on the fly in the pose section
-
-### Mod settings
-
-| Name             | Description                                                                                                                                                                                                                                                          |
-|:-----------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Item&nbsp;Source | Selects the preferred source of items for outfit manager:<br>"Inventory + Stash" will only use the current items in your inventory and stashes<br>"Wardrobe Store" will use every item you have ever obtained in the game (including dropped and disassembled items) |
 
 ## Documentation
 
@@ -76,6 +70,8 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.Balaclava`        | Balaclavas                                       |
 | `OutfitSlots.Mask`             | Face Masks                                       |
 | `OutfitSlots.Glasses`          | Glasses, Visors                                  |
+| `OutfitSlots.EyeLeft`          | Lenses, Visors                                   |
+| `OutfitSlots.EyeRight`         | Lenses, Visors                                   |
 | `OutfitSlots.Wreath`           | Wreaths                                          |
 | `OutfitSlots.EarLeft`          | Earrings                                         |
 | `OutfitSlots.EarRight`         | Earrings                                         |
@@ -93,6 +89,7 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.ShoulderRight`    |                                                  |
 | `OutfitSlots.WristLeft`        | Watches, Bands                                   |
 | `OutfitSlots.WristRight`       | Watches, Bands                                   |
+| `OutfitSlots.Hands`            | Gloves                                           |
 | `OutfitSlots.HandLeft`         | Gloves                                           |
 | `OutfitSlots.HandRight`        | Gloves                                           |
 | `OutfitSlots.FingersLeft`      | Rings                                            |

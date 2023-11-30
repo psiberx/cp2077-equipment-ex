@@ -124,6 +124,20 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Eye",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-EyeLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Eye",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-EyeRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Glasses",
               "maleVariant": "",
               "primaryKey": "0",
@@ -247,6 +261,13 @@
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-WristRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Hands",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-Hands"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
