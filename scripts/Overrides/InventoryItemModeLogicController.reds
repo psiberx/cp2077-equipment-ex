@@ -83,8 +83,7 @@ private final func SetInventoryItemButtonHintsHoverOver(const displayingData: sc
 }
 
 @wrapMethod(InventoryItemModeLogicController)
-private final func HandleItemClick(const itemData: script_ref<InventoryItemData>, actionName: ref<inkActionName>,
-                                   opt displayContext: ItemDisplayContext) {
+private final func HandleItemClick(const itemData: script_ref<InventoryItemData>, actionName: ref<inkActionName>, opt displayContext: ItemDisplayContext, opt isPlayerLocked: Bool) {
     if this.m_outfitSystem.IsActive() && actionName.IsAction(n"preview_item") {
         let equipmentArea = InventoryItemData.GetEquipmentArea(itemData);
         let isClothing = this.IsEquipmentAreaClothing(equipmentArea) || Equals(equipmentArea, gamedataEquipmentArea.Outfit);
@@ -93,5 +92,5 @@ private final func HandleItemClick(const itemData: script_ref<InventoryItemData>
         }
     }
 
-    wrappedMethod(itemData, actionName, displayContext);
+    wrappedMethod(itemData, actionName, displayContext, isPlayerLocked);
 }
