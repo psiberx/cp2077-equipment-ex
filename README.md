@@ -86,10 +86,10 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.TorsoOuter`       | Jackets, Coats                                   |
 | `OutfitSlots.TorsoAux`         | Vests, Harnesses, Puffers                        |
 | `OutfitSlots.Back`             | Backpacks, Swords                                |
-| `OutfitSlots.ElbowLeft`        |                                                  |
-| `OutfitSlots.ElbowRight`       |                                                  |
 | `OutfitSlots.ShoulderLeft`     |                                                  |
 | `OutfitSlots.ShoulderRight`    |                                                  |
+| `OutfitSlots.ElbowLeft`        |                                                  |
+| `OutfitSlots.ElbowRight`       |                                                  |
 | `OutfitSlots.WristLeft`        | Watches, Bands                                   |
 | `OutfitSlots.WristRight`       | Watches, Bands                                   |
 | `OutfitSlots.Hands`            | Gloves                                           |
