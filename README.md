@@ -103,10 +103,10 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.LegsInner`        | Tights, Leggings                                 |
 | `OutfitSlots.LegsMiddle`       | Tight Pants, Tight Shorts                        |
 | `OutfitSlots.LegsOuter`        | Loose Pants, Loose Shorts, Skirts                |
-| `OutfitSlots.KneeLeft`         |                                                  |
-| `OutfitSlots.KneeRight`        |                                                  |
 | `OutfitSlots.ThighLeft`        |                                                  |
 | `OutfitSlots.ThighRight`       |                                                  |
+| `OutfitSlots.KneeLeft`         |                                                  |
+| `OutfitSlots.KneeRight`        |                                                  |
 | `OutfitSlots.AnkleLeft`        |                                                  |
 | `OutfitSlots.AnkleRight`       |                                                  |
 | `OutfitSlots.Feet`             | Footwear                                         |
