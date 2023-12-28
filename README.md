@@ -1,6 +1,6 @@
 # Equipment-EX
 
-- Adds a new transmog system with 30+ clothing slots
+- Adds a new transmog system with 50+ clothing slots
 - Adds a brand-new UI accessible from Hub menu and V's apartments
 - Allows you to manage an unlimited amount of outfits with your names
 - Converts your existing wardrobe sets to a new system at a first launch
@@ -70,6 +70,7 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.Balaclava`        | Balaclavas                                       |
 | `OutfitSlots.Mask`             | Face Masks                                       |
 | `OutfitSlots.Glasses`          | Glasses, Visors                                  |
+| `OutfitSlots.Eyes`             | Lenses, Visors                                   |
 | `OutfitSlots.EyeLeft`          | Lenses, Visors                                   |
 | `OutfitSlots.EyeRight`         | Lenses, Visors                                   |
 | `OutfitSlots.Wreath`           | Wreaths                                          |
@@ -85,6 +86,8 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.TorsoOuter`       | Jackets, Coats                                   |
 | `OutfitSlots.TorsoAux`         | Vests, Harnesses, Puffers                        |
 | `OutfitSlots.Back`             | Backpacks, Swords                                |
+| `OutfitSlots.ElbowLeft`        |                                                  |
+| `OutfitSlots.ElbowRight`       |                                                  |
 | `OutfitSlots.ShoulderLeft`     |                                                  |
 | `OutfitSlots.ShoulderRight`    |                                                  |
 | `OutfitSlots.WristLeft`        | Watches, Bands                                   |
@@ -100,6 +103,8 @@ If user doesn't have Equipment-EX installed, the item will still work with the b
 | `OutfitSlots.LegsInner`        | Tights, Leggings                                 |
 | `OutfitSlots.LegsMiddle`       | Tight Pants, Tight Shorts                        |
 | `OutfitSlots.LegsOuter`        | Loose Pants, Loose Shorts, Skirts                |
+| `OutfitSlots.KneeLeft`         |                                                  |
+| `OutfitSlots.KneeRight`        |                                                  |
 | `OutfitSlots.ThighLeft`        |                                                  |
 | `OutfitSlots.ThighRight`       |                                                  |
 | `OutfitSlots.AnkleLeft`        |                                                  |
