@@ -50,7 +50,7 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Glasses", 19000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Eyes", 13000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.EyeLeft", 14000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
-        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.EyeRigft", 14000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
+        ExtraSlotConfig.Create(n"Face", n"OutfitSlots.EyeRight", 14000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Wreath", 18000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Ears", n"OutfitSlots.EarLeft", 14000, [], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Ears", n"OutfitSlots.EarRight", 14000, [], [t"AttachmentSlots.Head"]),
