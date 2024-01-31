@@ -44,8 +44,8 @@ public abstract class OutfitConfig {
     ];
 
     public static func OutfitSlots() -> array<ExtraSlotConfig> = [
-        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Head", 310000, [t"AttachmentSlots.Head"], [t"AttachmentSlots.Head"]),
-        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Balaclava", 160000, [t"AttachmentSlots.Head"], [t"AttachmentSlots.Head"]),
+        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Head", 310000, [t"AttachmentSlots.Head"]),
+        ExtraSlotConfig.Create(n"Head", n"OutfitSlots.Balaclava", 160000, [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Mask", 170000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Glasses", 190000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Face", n"OutfitSlots.Eyes", 130000, [t"AttachmentSlots.Eyes"], [t"AttachmentSlots.Head"]),
