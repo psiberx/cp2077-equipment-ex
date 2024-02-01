@@ -272,8 +272,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected func CompareItem(leftItemID: ItemID, rightItemID: ItemID) -> Bool {
-        let leftName = this.m_outfitSystem.GetItemName(leftItemID);
-        let rightName = this.m_outfitSystem.GetItemName(rightItemID);
+        let leftName = NameToString(TweakDBInterface.GetItemRecord(ItemID.GetTDBID(leftItemID)).AppearanceName());
+        let rightName = NameToString(TweakDBInterface.GetItemRecord(ItemID.GetTDBID(rightItemID)).AppearanceName());
 
         if StrLen(leftName) == 0 {
             return false;
