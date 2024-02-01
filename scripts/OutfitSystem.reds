@@ -34,6 +34,7 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func OnRestored(saveVersion: Int32, gameVersion: Int32) {
         this.InitializePlayerAndSystems();
+        this.CleanUpPreviewItems();
         this.MigrateState();
 
         if this.m_state.IsActive() {
@@ -140,6 +141,18 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func RemoveAllItemsFromState() {
         this.m_state.ClearParts();
+    }
+
+    private func CleanUpPreviewItems() {
+        let playerItems: array<wref<gameItemData>>;
+        if this.m_transactionSystem.GetItemList(this.m_player, playerItems) {
+            for itemData in playerItems {
+                let itemID = itemData.GetID();
+                if ItemID.HasFlag(itemID, gameEItemIDFlag.Preview) {
+                    this.m_transactionSystem.RemoveItem(this.m_player, itemID, 1);
+                }
+            }
+        }
     }
 
     private func MigrateState() {
