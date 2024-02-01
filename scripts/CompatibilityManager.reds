@@ -1,7 +1,7 @@
 module EquipmentEx
 
 public abstract class CompatibilityManager {
-    public static func RequiredArchiveXL() -> String = "1.11.1";
+    public static func RequiredArchiveXL() -> String = "1.11.2";
     public static func RequiredTweakXL() -> String = "1.7.0";
     public static func RequiredCodeware() -> String = "1.7.0";
 
