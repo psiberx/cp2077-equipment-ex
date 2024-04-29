@@ -1,9 +1,9 @@
 {
   "Header": {
-    "WolvenKitVersion": "8.11.0",
+    "WolvenKitVersion": "8.13.0-nightly.2024-04-27",
     "WKitJsonVersion": "0.0.8",
-    "GameVersion": 2000,
-    "ExportedDateTime": "2023-10-18T13:11:34.2219582Z",
+    "GameVersion": 2120,
+    "ExportedDateTime": "2024-04-29T09:04:30.6910952Z",
     "DataType": "CR2W"
   },
   "Data": {
@@ -121,6 +121,13 @@
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-Mask"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Eyes",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-Eyes"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
@@ -250,6 +257,20 @@
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Elbow",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-ElbowLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Elbow",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-ElbowRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
               "femaleVariant": "Left Wrist",
               "maleVariant": "",
               "primaryKey": "0",
@@ -352,6 +373,20 @@
               "maleVariant": "",
               "primaryKey": "0",
               "secondaryKey": "Gameplay-OutfitSlots-ThighRight"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Left Knee",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-KneeLeft"
+            },
+            {
+              "$type": "localizationPersistenceOnScreenEntry",
+              "femaleVariant": "Right Knee",
+              "maleVariant": "",
+              "primaryKey": "0",
+              "secondaryKey": "Gameplay-OutfitSlots-KneeRight"
             },
             {
               "$type": "localizationPersistenceOnScreenEntry",
