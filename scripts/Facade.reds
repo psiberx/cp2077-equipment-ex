@@ -1,7 +1,7 @@
 import EquipmentEx.OutfitSystem
 
 public abstract class EquipmentEx {
-    public static func Version() -> String = "1.1.19";
+    public static func Version() -> String = "1.2.0";
 
     public static func Activate(game: GameInstance) {
         OutfitSystem.GetInstance(game).Activate();
@@ -43,16 +43,16 @@ public abstract class EquipmentEx {
             let transactionSystem = GameInstance.GetTransactionSystem(game);
             let player = GetPlayer(game);
 
-            EquipmentEx.Print("=== Equipped Items ===");
+            Print("=== Equipped Items ===");
             
             for slotID in usedSlots {
                 let itemID = transactionSystem.GetItemInSlot(player, slotID).GetItemID();
-                EquipmentEx.Print(s"\(outfitSystem.GetSlotName(slotID)) : \(outfitSystem.GetItemName(itemID))");
+                Print(s"\(outfitSystem.GetSlotName(slotID)) : \(outfitSystem.GetItemName(itemID))");
             }
             
-            EquipmentEx.Print("===");
+            Print("===");
         } else {
-            EquipmentEx.Print("=== No Equipped Items ===");
+            Print("=== No Equipped Items ===");
         }
     }
 
@@ -70,7 +70,7 @@ public abstract class EquipmentEx {
                 command += s"EquipmentEx.EquipItem(\"\(TDBID.ToStringDEBUG(ItemID.GetTDBID(itemID)))\") ";
             }
             
-            EquipmentEx.Print(command);
+            Print(command);
         }
     }
 
@@ -92,7 +92,7 @@ public abstract class EquipmentEx {
 
     public static func DeleteAllOutfits(game: GameInstance) {
         OutfitSystem.GetInstance(game).DeleteAllOutfits();
-        EquipmentEx.Print("All outfits deleted");
+        Print("All outfits deleted");
     }
 
     public static func PrintOutfits(game: GameInstance) {
@@ -100,19 +100,15 @@ public abstract class EquipmentEx {
         let outfitNames = outfitSystem.GetOutfits();
 
         if ArraySize(outfitNames) > 0 {
-            EquipmentEx.Print("=== Saved Outfits ===");
+            Print("=== Saved Outfits ===");
 
             for outfitName in outfitNames {
-                EquipmentEx.Print(NameToString(outfitName));
+                Print(NameToString(outfitName));
             }
 
-            EquipmentEx.Print("===");
+            Print("===");
         } else {
-            EquipmentEx.Print("=== No Saved Outfits ===");
+            Print("=== No Saved Outfits ===");
         }
-    }
-
-    private static func Print(const str: script_ref<String>) {
-        ModLog(n"Equipment-EX", str);
     }
 }
