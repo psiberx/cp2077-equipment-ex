@@ -2,7 +2,9 @@ module EquipmentEx
 
 class PatchCustomItems extends ScriptableTweak {
     protected func OnApply() -> Void {
+        let batch = TweakDBManager.StartBatch();
         let outfitSlots = OutfitConfig.OutfitSlots();
+        let outfitMap = OutfitTweakHelper.BuildOutfitSlotMap(outfitSlots);
         let slotMatcher = OutfitTweakHelper.PrepareCustomSlotMatcher();
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
@@ -12,19 +14,21 @@ class PatchCustomItems extends ScriptableTweak {
             if ArraySize(placementSlots) == 1 {
                 let outfitSlotID = slotMatcher.Match(item);
                 if TDBID.IsValid(outfitSlotID) {
-                    for outfitSlot in outfitSlots {
-                        if outfitSlot.slotID == outfitSlotID {
-                            if !ArrayContains(placementSlots, outfitSlot.slotID) {
-                                ArrayPush(placementSlots, outfitSlot.slotID);
-                                TweakDBManager.SetFlat(item.GetID() + t".placementSlots", placementSlots);
-                                TweakDBManager.UpdateRecord(item.GetID());
-                            }                           
-                            break;
+                    let outfitHash = TDBID.ToNumber(outfitSlotID);
+                    if outfitMap.KeyExist(outfitHash) {
+                        let outfitIndex = outfitMap.Get(outfitHash);
+                        let outfitSlot = outfitSlots[outfitIndex];
+                        if !ArrayContains(placementSlots, outfitSlot.slotID) {
+                            ArrayPush(placementSlots, outfitSlot.slotID);
+                            batch.SetFlat(item.GetID() + t".placementSlots", placementSlots);
+                            batch.UpdateRecord(item.GetID());
                         }
                     }
                 }
             }
         }
+
+        batch.Commit();
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
@@ -34,15 +38,17 @@ class PatchCustomItems extends ScriptableTweak {
             if (garmentOffset == 0 || DevMode()) && ArraySize(placementSlots) > 1 {
                 let outfitSlotID = ArrayLast(placementSlots);
                 if TDBID.IsValid(outfitSlotID) {
-                    for outfitSlot in outfitSlots {
-                        if outfitSlot.slotID == outfitSlotID {
-                            TweakDBManager.SetFlat(item.GetID() + t".garmentOffset", outfitSlot.garmentOffset);
-                            TweakDBManager.UpdateRecord(item.GetID());                       
-                            break;
-                        }
+                    let outfitHash = TDBID.ToNumber(outfitSlotID);
+                    if outfitMap.KeyExist(outfitHash) {
+                        let outfitIndex = outfitMap.Get(outfitHash);
+                        let outfitSlot = outfitSlots[outfitIndex];
+                        batch.SetFlat(item.GetID() + t".garmentOffset", outfitSlot.garmentOffset);
+                        batch.UpdateRecord(item.GetID());
                     }
                 }
             }
         }
+
+        batch.Commit();
     }
 }

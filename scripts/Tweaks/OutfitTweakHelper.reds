@@ -106,4 +106,14 @@ class OutfitTweakHelper {
 
         return slotMatcher;
     }
+
+    public static func BuildOutfitSlotMap(out outfitSlots: array<ExtraSlotConfig>) -> ref<inkIntHashMap> {
+        let outfitMap = new inkIntHashMap();
+        let index = 0;
+        for outfitSlot in outfitSlots {
+            outfitMap.Insert(TDBID.ToNumber(outfitSlot.slotID), index);
+            index = index + 1;
+        }
+        return outfitMap;
+    }
 }

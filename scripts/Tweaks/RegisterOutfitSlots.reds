@@ -2,22 +2,23 @@ module EquipmentEx
 
 class RegisterOutfitSlots extends ScriptableTweak {
     protected func OnApply() -> Void {
+        let batch = TweakDBManager.StartBatch();
         let outfitSlots = OutfitConfig.OutfitSlots();
 
         for outfitSlot in outfitSlots {
-            TweakDBManager.CreateRecord(outfitSlot.slotID, n"AttachmentSlot_Record");
-            TweakDBManager.SetFlat(outfitSlot.slotID + t".localizedName", outfitSlot.displayName);
+            batch.CreateRecord(outfitSlot.slotID, n"AttachmentSlot_Record");
+            batch.SetFlat(outfitSlot.slotID + t".localizedName", outfitSlot.displayName);
 
             if ArraySize(outfitSlot.relatedSlotIDs) > 0 {
-                TweakDBManager.SetFlat(outfitSlot.slotID + t".parentSlot", outfitSlot.relatedSlotIDs[0]);
+                batch.SetFlat(outfitSlot.slotID + t".parentSlot", outfitSlot.relatedSlotIDs[0]);
             }
 
             if ArraySize(outfitSlot.dependencySlotIDs) > 0 {
-                TweakDBManager.SetFlat(outfitSlot.slotID + t".dependencySlots", outfitSlot.dependencySlotIDs);
+                batch.SetFlat(outfitSlot.slotID + t".dependencySlots", outfitSlot.dependencySlotIDs);
             }
 
-            TweakDBManager.UpdateRecord(outfitSlot.slotID);
-            TweakDBManager.RegisterName(outfitSlot.slotName);
+            batch.UpdateRecord(outfitSlot.slotID);
+            batch.RegisterName(outfitSlot.slotName);
         }
 
         let playerEntityTemplates = [
@@ -46,9 +47,11 @@ class RegisterOutfitSlots extends ScriptableTweak {
                     }
                 }
 
-                TweakDBManager.SetFlat(character.GetID() + t".attachmentSlots", characterSlots);
-                TweakDBManager.UpdateRecord(character.GetID());
+                batch.SetFlat(character.GetID() + t".attachmentSlots", characterSlots);
+                batch.UpdateRecord(character.GetID());
             }
         }
+
+        batch.Commit();
     }
 }
