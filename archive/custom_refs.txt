@@ -1,0 +1,14 @@
+equipment_ex\gui\wardrobe.inkwidget
+equipment_ex\localization\ar-ar.json
+equipment_ex\localization\cz-cz.json
+equipment_ex\localization\de-de.json
+equipment_ex\localization\en-us.json
+equipment_ex\localization\es-es.json
+equipment_ex\localization\fr-fr.json
+equipment_ex\localization\it-it.json
+equipment_ex\localization\kr-kr.json
+equipment_ex\localization\pl-pl.json
+equipment_ex\localization\pt-br.json
+equipment_ex\localization\ru-ru.json
+equipment_ex\localization\tr-tr.json
+equipment_ex\localization\zh-cn.json
