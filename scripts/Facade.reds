@@ -1,7 +1,7 @@
 import EquipmentEx.OutfitSystem
 
 public abstract class EquipmentEx {
-    public static func Version() -> String = "1.2.0";
+    public static func Version() -> String = "1.2.1";
 
     public static func Activate(game: GameInstance) {
         OutfitSystem.GetInstance(game).Activate();

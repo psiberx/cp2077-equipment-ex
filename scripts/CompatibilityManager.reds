@@ -1,8 +1,8 @@
 module EquipmentEx
 
 public abstract class CompatibilityManager {
-    public static func RequiredCodeware() -> String = "1.12.0";
-    public static func RequiredArchiveXL() -> String = "1.16.0";
+    public static func RequiredCodeware() -> String = "1.12.1";
+    public static func RequiredArchiveXL() -> String = "1.16.1";
     public static func RequiredTweakXL() -> String = "1.10.3";
 
     public static func CheckRequirements() -> Bool {
@@ -30,6 +30,10 @@ public abstract class CompatibilityManager {
         itemController.SetLocked(true, false);
         if !itemController.m_isLocked {
             ArrayPush(conflicts, "No Special Outfit Lock");
+        }
+
+        if GameFileExists("archive/pc/mod/basegame_underwear_patch.archive") {
+            ArrayPush(conflicts, "Underwear Remover by Sorrow446");
         }
 
         return ArraySize(conflicts) == 0;
