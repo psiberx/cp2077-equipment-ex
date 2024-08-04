@@ -343,8 +343,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnInventoryItemsChanged(value: Variant) {
-        let itemID = FromVariant<ItemID>(value);
-        if ItemID.IsValid(itemID) && this.m_outfitSystem.IsEquippable(itemID) {
+        let data = FromVariant<ItemRemovedData>(value);
+        if ItemID.IsValid(data.itemID) && this.m_outfitSystem.IsEquippable(data.itemID) {
             this.QueueInventoryGridUpdate();
         }
     }
