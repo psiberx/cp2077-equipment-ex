@@ -1,8 +1,8 @@
 module EquipmentEx
 
 public abstract class CompatibilityManager {
-    public static func RequiredCodeware() -> String = "1.12.2";
-    public static func RequiredArchiveXL() -> String = "1.16.2";
+    public static func RequiredCodeware() -> String = "1.12.3";
+    public static func RequiredArchiveXL() -> String = "1.16.4";
     public static func RequiredTweakXL() -> String = "1.10.3";
 
     public static func CheckRequirements() -> Bool {
@@ -27,9 +27,13 @@ public abstract class CompatibilityManager {
         questsSystem.SetFact(n"transmog_enabled", transmogEnabled);
 
         let itemController = new InventoryItemDisplayController();
-        itemController.SetLocked(true, false);
+        itemController.SetLocked(true, true);
         if !itemController.m_isLocked {
-            ArrayPush(conflicts, "No Special Outfit Lock");
+            if itemController.m_visibleWhenLocked {
+                ArrayPush(conflicts, "No Special Outfit Lock");
+            } else {
+                ArrayPush(conflicts, "Never Lock Outfits");
+            }
         }
 
         if GameFileExists("archive/pc/mod/basegame_underwear_patch.archive") {
