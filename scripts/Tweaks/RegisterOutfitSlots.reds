@@ -40,15 +40,16 @@ class RegisterOutfitSlots extends ScriptableTweak {
             let character = record as Character_Record;
             if ArrayContains(playerEntityTemplates, character.EntityTemplatePath()) || Equals(GetLocalizedTextByKey(character.DisplayName()), playerDisplayName) {
                 let characterSlots = TweakDBInterface.GetForeignKeyArray(character.GetID() + t".attachmentSlots");
-
-                for outfitSlot in outfitSlots {
-                    if !ArrayContains(characterSlots, outfitSlot.slotID) {
-                        ArrayPush(characterSlots, outfitSlot.slotID);
+                if ArrayContains(characterSlots, t"AttachmentSlots.Chest") {
+                    for outfitSlot in outfitSlots {
+                        if !ArrayContains(characterSlots, outfitSlot.slotID) {
+                            ArrayPush(characterSlots, outfitSlot.slotID);
+                        }
                     }
-                }
 
-                batch.SetFlat(character.GetID() + t".attachmentSlots", characterSlots);
-                batch.UpdateRecord(character.GetID());
+                    batch.SetFlat(character.GetID() + t".attachmentSlots", characterSlots);
+                    batch.UpdateRecord(character.GetID());
+                }
             }
         }
 
