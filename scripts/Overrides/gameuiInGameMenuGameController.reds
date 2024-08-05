@@ -14,7 +14,7 @@ protected cb func OnInitialize() -> Bool {
 protected cb func OnPuppetReady(sceneName: CName, puppet: ref<gamePuppet>) -> Bool {
     wrappedMethod(sceneName, puppet);
 
-    if this.m_outfitSystem.IsActive() && Equals(sceneName, n"inventory") {
+    if this.m_outfitSystem.IsActive() && Equals(sceneName, n"inventory") && !GetPlayer(puppet.GetGame()).IsReplacer() {
         this.m_outfitSystem.EquipPuppetOutfit(puppet) ;
     }
 }
