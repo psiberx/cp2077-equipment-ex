@@ -350,8 +350,8 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
     }
 
     protected cb func OnEquipmentProgress(inProgress: Bool) {
-        this.m_isEquipInProgress = inProgress;
-        this.m_outfitManager.SetEnabled(!inProgress);
+        //this.m_isEquipInProgress = inProgress;
+        //this.m_outfitManager.SetEnabled(!inProgress);
 
         //this.m_inventoryGridArea.SetInteractive(!inProgress);
         //this.m_inventoryGridArea.SetOpacity(!inProgress ? 1.0 : 0.6);
