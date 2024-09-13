@@ -7,8 +7,13 @@ private let m_outfitSystem: wref<OutfitSystem>;
 protected cb func OnInitialize() -> Bool {
     wrappedMethod();
 
+    let cameraSetup: gameuiPuppetPreviewCameraSetup;
+    cameraSetup.slotName = n"UISlotPreview_UpperBody";
+    cameraSetup.cameraZoom = 1.85;
+    cameraSetup.interpolationTime = 1;
+
     ArrayResize(this.cameraController.cameraSetup, Cast<Int32>(EnumGetMax(n"InventoryPaperdollZoomArea") + 1l));
-    this.cameraController.cameraSetup[EnumInt(InventoryPaperdollZoomArea.Head)] = new gameuiPuppetPreviewCameraSetup(n"UISlotPreview_UpperBody", 1.85, 1);
+    this.cameraController.cameraSetup[EnumInt(InventoryPaperdollZoomArea.Head)] = cameraSetup;
 }
 
 @wrapMethod(WardrobeSetPreviewGameController)
