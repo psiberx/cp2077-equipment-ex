@@ -1,6 +1,6 @@
 module EquipmentEx
 
-class OutfitPart {
+public class OutfitPart {
     private persistent let m_itemID: ItemID;
     private persistent let m_slotID: TweakDBID;
 
