@@ -810,6 +810,10 @@ public class OutfitSystem extends ScriptableSystem {
         return true;
     }
 
+    public func AddOutfit(name: CName, parts: [ref<OutfitPart>], opt overwrite: Bool) -> Bool {
+        return this.m_state.SaveOutfit(name, parts, overwrite, this.GetTimestamp());
+    }
+
     public func SaveOutfit(name: CName, opt overwrite: Bool) -> Bool {
         this.Activate();
 
