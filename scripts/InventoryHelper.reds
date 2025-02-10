@@ -6,7 +6,7 @@ public class InventoryHelper extends ScriptableSystem {
     private let m_wardrobeSystem: wref<WardrobeSystem>;
     private let m_inventoryManager: wref<InventoryDataManagerV2>;
     private let m_stash: wref<Stash>;
-    
+
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
         this.m_player = GameInstance.GetPlayerSystem(this.GetGameInstance()).GetLocalPlayerMainGameObject();
         this.m_transactionSystem = GameInstance.GetTransactionSystem(this.GetGameInstance());
@@ -29,10 +29,6 @@ public class InventoryHelper extends ScriptableSystem {
         if !IsDefined(this.m_stash) {
             this.m_stash = stash;
         }
-    }
-
-    public func GetStash() -> wref<Stash> {
-        return this.m_stash;
     }
 
     public func GetStashItems(out items: array<InventoryItemData>) {

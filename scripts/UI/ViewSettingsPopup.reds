@@ -69,4 +69,8 @@ public class ViewSettingsPopup extends InMenuPopup {
         let popup = new ViewSettingsPopup();
         popup.Open(requester);
     }
+
+    func OnCancel() {}
+    func OnShown() {}
+    func OnReparent(parent: ref<inkCompoundWidget>) {}
 }
