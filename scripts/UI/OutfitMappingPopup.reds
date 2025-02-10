@@ -31,7 +31,7 @@ public class OutfitMappingPopup extends InMenuPopup {
         for areas in schema {
             let column = new inkVerticalPanel();
             column.Reparent(panel);
-            
+
             for area in areas {
                 for outfitSlot in outfitSlots {
                     if Equals(outfitSlot.slotArea, area) {
@@ -99,4 +99,8 @@ public class OutfitMappingPopup extends InMenuPopup {
         popup.m_system = system;
         popup.Open(requester);
     }
+
+    func OnCancel() {}
+    func OnShown() {}
+    func OnReparent(parent: ref<inkCompoundWidget>) {}
 }

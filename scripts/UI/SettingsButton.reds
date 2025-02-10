@@ -83,4 +83,6 @@ class SettingsButton extends inkCustomController {
 
         return self;
     }
+
+    func OnReparent(parent: ref<inkCompoundWidget>) {}
 }

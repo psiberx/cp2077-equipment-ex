@@ -21,7 +21,7 @@ private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) 
     inkWidgetRef.SetVisible(this.m_filterButtonsGrid, !active);
 
     if active && !this.m_outfitWardrobeSpawned {
-        let wardrobeContainer = inkCompoundRef.Get(this.m_wardrobeSlotsContainer) as inkCompoundWidget;
+        let wardrobeContainer = inkWidgetRef.Get(this.m_wardrobeSlotsContainer) as inkCompoundWidget;
 
         let wardrobeInfo = new inkText();
         wardrobeInfo.SetLocalizedTextString("UI-Wardrobe-Tooltip-OutfitInfo");
