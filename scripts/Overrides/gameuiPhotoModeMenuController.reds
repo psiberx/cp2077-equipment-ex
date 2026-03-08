@@ -44,7 +44,7 @@ protected cb func OnShow(reversedUI: Bool) -> Bool {
         let active = this.m_outfitSystem.IsActive();
         let options: array<PhotoModeOptionSelectorData>;
         let current: Int32 = 0;
-
+        
         ArrayResize(options, ArraySize(outfits) + (active ? 2 : 1));
 
         options[0].optionText = GetLocalizedTextByKey(n"UI-Wardrobe-NoOutfit");
@@ -97,7 +97,8 @@ protected cb func OnSetAttributeOptionEnabled(attribute: Uint32, enabled: Bool) 
 @addMethod(gameuiPhotoModeMenuController)
 public func OnAttributeOptionSelected(attribute: Uint32, option: PhotoModeOptionSelectorData) {
     if Equals(attribute, Cast<Uint32>(EnumInt(PhotoModeUI.OutfitAttribute))) {
-        switch IntEnum<PhotoModeUI>(option.optionData) {
+        let optionCase = IntEnum<PhotoModeUI>(option.optionData);
+        switch optionCase {
             case PhotoModeUI.NoOutfitOption:
                 this.m_outfitSystem.EquipPuppetOutfit(this.m_paperdollHelper.GetPuppet(), false);
                 break;
@@ -117,7 +118,7 @@ private final func StartArrowClickedEffect(widget: inkWidgetRef) {
     wrappedMethod(widget);
 
     this.m_photoModeController.OnAttributeOptionSelected(
-        (this.GetData() as PhotoModeMenuListItemData).attributeKey,
+        (this.GetData() as PhotoModeMenuListItemData).attributeKey, 
         this.m_OptionSelectorValues[this.m_OptionSelector.GetCurrIndex()]
     );
 }

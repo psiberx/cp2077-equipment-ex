@@ -5,7 +5,7 @@ struct BaseSlotConfig {
     public let equipmentArea: gamedataEquipmentArea;
 
     public static func Create(slotID: TweakDBID, equipmentArea: gamedataEquipmentArea) -> BaseSlotConfig {
-        return new BaseSlotConfig(slotID, equipmentArea);
+        return BaseSlotConfig(slotID, equipmentArea);
     }
 }
 
@@ -19,7 +19,7 @@ struct ExtraSlotConfig {
     public let displayName: String;
 
     public static func Create(slotArea: CName, slotName: CName, garmentOffset: Int32, opt relatedIDs: array<TweakDBID>, opt dependencyIDs: array<TweakDBID>) -> ExtraSlotConfig {
-        return new ExtraSlotConfig(
+        return ExtraSlotConfig(
             TDBID.Create(NameToString(slotName)),
             slotName,
             slotArea,

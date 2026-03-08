@@ -34,7 +34,7 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         content.SetVAlign(inkEVerticalAlign.Center);
         content.SetAnchor(inkEAnchor.CenterLeft);
         content.SetAnchorPoint(0.0, 0.5);
-        content.SetMargin(new inkMargin(28.0, 0.0, 0.0, 4.0));
+        content.SetMargin(inkMargin(28.0, 0.0, 0.0, 4.0));
         content.Reparent(this.m_root);
 
         let slotName = new inkText();
@@ -71,13 +71,13 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         let panel = new inkCanvas();
         panel.SetName(n"panel");       
         panel.SetAnchor(inkEAnchor.Fill);
-        panel.SetMargin(new inkMargin(0.0, 2.0, 0.0, 8.0));
+        panel.SetMargin(inkMargin(0.0, 2.0, 0.0, 8.0));
         panel.Reparent(this.m_root);
 
         let bg1 = new inkImage();
         bg1.SetName(n"bg1");
         bg1.SetAnchor(inkEAnchor.Fill);
-        bg1.SetAnchorPoint(new Vector2(0.5, 0.5));
+        bg1.SetAnchorPoint(Vector2(0.5, 0.5));
         bg1.SetNineSliceScale(true);
         bg1.SetAtlasResource(r"base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas");
         bg1.SetTexturePart(n"item_bg");
@@ -89,9 +89,9 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         let bg2 = new inkImage();
         bg2.SetName(n"bg2");
         bg2.SetAnchor(inkEAnchor.Fill);
-        bg2.SetAnchorPoint(new Vector2(0.5, 0.5));
+        bg2.SetAnchorPoint(Vector2(0.5, 0.5));
         bg2.SetNineSliceScale(true);
-        bg2.SetNineSliceGrid(new inkMargin(0.0, 0.0, 20.0, 0.0));
+        bg2.SetNineSliceGrid(inkMargin(0.0, 0.0, 20.0, 0.0));
         bg2.SetAtlasResource(r"base\\gameplay\\gui\\fullscreen\\inventory\\atlas_inventory.inkatlas");
         bg2.SetTexturePart(n"texture_2slot_iconic");
         bg2.SetOpacity(0.03);
@@ -103,7 +103,7 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         let fg = new inkImage();
         fg.SetName(n"fg");
         fg.SetAnchor(inkEAnchor.Fill);
-        fg.SetAnchorPoint(new Vector2(0.5, 0.5));
+        fg.SetAnchorPoint(Vector2(0.5, 0.5));
         fg.SetNineSliceScale(true);
         fg.SetAtlasResource(r"base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas");
         fg.SetTexturePart(n"item_fg");
@@ -115,8 +115,8 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         let arrow = new inkImage();
         arrow.SetName(n"arrow");
         arrow.SetAnchor(inkEAnchor.CenterRight);
-        arrow.SetAnchorPoint(new Vector2(1.0, 0.5));
-        arrow.SetMargin(new inkMargin(0.0, 0.0, 40.0, 0.0));
+        arrow.SetAnchorPoint(Vector2(1.0, 0.5));
+        arrow.SetMargin(inkMargin(0.0, 0.0, 40.0, 0.0));
         arrow.SetFitToContent(true);
         arrow.SetAtlasResource(r"base\\gameplay\\gui\\common\\shapes\\atlas_shapes_sync.inkatlas");
         arrow.SetTexturePart(n"arrow_right_bg");

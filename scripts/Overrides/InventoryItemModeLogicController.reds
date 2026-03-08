@@ -38,7 +38,7 @@ private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) 
         // wardrobeLink.SetMargin(new inkMargin(16.0, 0.0, 0.0, 0.0));
 
         let wardrobeBtn = this.SpawnFromLocal(wardrobeContainer, n"wardrobeOutfitSlot:EquipmentEx.WardrobeHubBtnController");
-        wardrobeBtn.SetMargin(new inkMargin(16.0, 0.0, 0.0, 0.0));
+        wardrobeBtn.SetMargin(inkMargin(16.0, 0.0, 0.0, 0.0));
 
         this.m_outfitWardrobeSpawned = true;
     }

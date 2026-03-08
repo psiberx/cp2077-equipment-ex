@@ -16,7 +16,7 @@ public class OutfitMappingPopup extends InMenuPopup {
         content.Reparent(this);
 
         let panel = new inkHorizontalPanel();
-        panel.SetMargin(new inkMargin(0, 24, 0, 0));
+        panel.SetMargin(inkMargin(0, 24, 0, 0));
         panel.Reparent(content.GetContainerWidget());
 
         let outfitSlots = OutfitConfig.OutfitSlots();

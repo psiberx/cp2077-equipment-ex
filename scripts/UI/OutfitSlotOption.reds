@@ -60,16 +60,16 @@ class OutfitSlotOptionController extends inkButtonController {
     }
 
     protected func UpdateView() {
-        this.m_root.SetSize(new Vector2(this.m_label.GetDesiredWidth() + 170.0, 80.0));
+        this.m_root.SetSize(Vector2(this.m_label.GetDesiredWidth() + 170.0, 80.0));
 
         this.m_label.SetText(GetLocalizedText(this.m_data.displayName));
         this.m_label.BindProperty(n"fontStyle", n"MainColors.BodyFontWeight");
         this.m_label.BindProperty(n"fontSize", n"MainColors.ReadableSmall");
 
         this.m_checkbox.SetVisible(true);
-        this.m_label.SetMargin(new inkMargin(20, 0, 0, 0));
+        this.m_label.SetMargin(inkMargin(20, 0, 0, 0));
 
-        this.GetChildWidgetByPath(n"titleAndCheckbox").SetMargin(new inkMargin(0, 0, 0, 0));
+        this.GetChildWidgetByPath(n"titleAndCheckbox").SetMargin(inkMargin(0, 0, 0, 0));
         this.GetChildWidgetByPath(n"background").SetVisible(false);
     }
 

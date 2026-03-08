@@ -1,7 +1,7 @@
 module EquipmentEx
 
 @if(ModuleExists("EquipmentEx.DevMode"))
-public static func DevMode() -> Bool = true;
+public func DevMode() -> Bool = true;
 
 @if(!ModuleExists("EquipmentEx.DevMode"))
-public static func DevMode() -> Bool = false;
+public func DevMode() -> Bool = false;

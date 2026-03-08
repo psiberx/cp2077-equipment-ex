@@ -48,7 +48,7 @@ class OutfitManagerController extends inkLogicController {
 
         let header = new inkVerticalPanel();
         header.SetName(n"header");
-        header.SetChildMargin(new inkMargin(130.0, 0.0, 20.0, 0.0));
+        header.SetChildMargin(inkMargin(130.0, 0.0, 20.0, 0.0));
         header.Reparent(this.GetRootCompoundWidget());
 
         let title = new inkText();
@@ -62,12 +62,12 @@ class OutfitManagerController extends inkLogicController {
         title.BindProperty(n"fontStyle", n"MainColors.BodyFontWeight");
         title.BindProperty(n"fontSize", n"MainColors.ReadableFontSize");
         title.SetAnchor(inkEAnchor.TopLeft);
-        title.SetMargin(new inkMargin(0.0, 0.0, 0.0, 4.0));
+        title.SetMargin(inkMargin(0.0, 0.0, 0.0, 4.0));
         title.Reparent(header);
 
         let divider = new inkRectangle();
         divider.SetName(n"divider");
-        divider.SetMargin(new inkMargin(0.0, 0.0, 0.0, 15.0));
+        divider.SetMargin(inkMargin(0.0, 0.0, 0.0, 15.0));
         divider.SetStyle(r"base\\gameplay\\gui\\common\\main_colors.inkstyle");
         divider.BindProperty(n"tintColor", n"MainColors.Red");
         divider.SetOpacity(0.3);

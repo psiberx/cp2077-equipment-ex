@@ -13,7 +13,7 @@ func ExtractClothingSets(game: GameInstance) -> array<ExtractedSet> {
 
     for clothingSet in clothingSets {
         if ArraySize(clothingSet.clothingList) > 0 {
-            ArrayPush(extractedSets, new ExtractedSet(
+            ArrayPush(extractedSets, ExtractedSet(
                 EnumInt(clothingSet.setID) + 1,
                 clothingSet.clothingList
             ));

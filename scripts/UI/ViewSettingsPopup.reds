@@ -18,7 +18,7 @@ public class ViewSettingsPopup extends InMenuPopup {
         content.Reparent(this);
 
         let panel = new inkVerticalPanel();
-        panel.SetMargin(new inkMargin(0, 24, 0, 0));
+        panel.SetMargin(inkMargin(0, 24, 0, 0));
         panel.Reparent(content.GetContainerWidget());
 
         for itemSource in [WardrobeItemSource.WardrobeStore, WardrobeItemSource.InventoryAndStash, WardrobeItemSource.InventoryOnly] {

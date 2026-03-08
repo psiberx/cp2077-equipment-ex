@@ -12,7 +12,7 @@ class SettingsButton extends inkCustomController {
     protected cb func OnCreate() {
         let root = new inkCanvas();
         root.SetSize(110.0, 80.0);
-        root.SetAnchorPoint(new Vector2(0.5, 0.5));
+        root.SetAnchorPoint(Vector2(0.5, 0.5));
         root.SetInteractive(true);
 
         let frame = new inkImage();
@@ -29,15 +29,15 @@ class SettingsButton extends inkCustomController {
 
         let icon = new inkVerticalPanel();
         icon.SetAnchor(inkEAnchor.Centered);
-        icon.SetAnchorPoint(new Vector2(0.5, 0.5));
-        icon.SetChildMargin(new inkMargin(0.0, 4.0, 0.0, 4.0));
+        icon.SetAnchorPoint(Vector2(0.5, 0.5));
+        icon.SetChildMargin(inkMargin(0.0, 4.0, 0.0, 4.0));
         icon.Reparent(root);
 
         let i = 0;
         while i < 3 {
             let line = new inkRectangle();
             line.SetHAlign(inkEHorizontalAlign.Center);
-            line.SetSize(new Vector2(33.0, 2.0));
+            line.SetSize(Vector2(33.0, 2.0));
             line.SetStyle(r"base\\gameplay\\gui\\common\\components\\toggles_style.inkstyle");
             line.BindProperty(n"tintColor", n"FilterButton.iconColor");
             line.Reparent(icon);

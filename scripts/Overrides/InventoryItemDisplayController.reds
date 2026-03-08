@@ -33,7 +33,7 @@ protected func RefreshUI() {
     if isOutfit && isOverriden {
         inkWidgetRef.SetVisible(this.m_wardrobeInfoText, false);
         inkWidgetRef.SetVisible(this.m_slotItemsCountWrapper, false);
-        inkWidgetRef.SetMargin(this.m_wardrobeInfoContainer, new inkMargin(12.0, 0, 0, 12.0));
+        inkWidgetRef.SetMargin(this.m_wardrobeInfoContainer, inkMargin(12.0, 0, 0, 12.0));
     }
 }
 

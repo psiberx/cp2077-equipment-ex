@@ -92,10 +92,10 @@ class OutfitListEntryController extends inkVirtualCompoundItemController {
         if this.m_data.IsSelectable {
             this.m_checkbox.SetVisible(true);
             this.m_selection.SetVisible(this.m_data.IsSelected);
-            this.m_label.SetMargin(new inkMargin(30.0, 0.0, 0.0, 0.0));
+            this.m_label.SetMargin(inkMargin(30.0, 0.0, 0.0, 0.0));
         } else {
             this.m_checkbox.SetVisible(false);
-            this.m_label.SetMargin(new inkMargin(10.0, 0.0, 0.0, 0.0));
+            this.m_label.SetMargin(inkMargin(10.0, 0.0, 0.0, 0.0));
         }
     }
 

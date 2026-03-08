@@ -46,7 +46,7 @@ private final func SetupSetButton() -> Void {
     // Adjust fluff text position
     let fluff = btnWrapper.GetWidget(n"buttonFluff2");
     fluff.SetAnchor(inkEAnchor.BottomLeft);
-    fluff.SetMargin(new inkMargin(0, 0, 0, 4.0));
+    fluff.SetMargin(inkMargin(0, 0, 0, 4.0));
 
     // Force hide original button
     inkWidgetRef.SetVisible(this.m_btnSets, false);
@@ -195,7 +195,7 @@ protected final func PlaySlidePaperdollAnimationToOutfit() {
     translationInterpolator.SetType(inkanimInterpolationType.Linear);
     translationInterpolator.SetMode(inkanimInterpolationMode.EasyIn);
     translationInterpolator.SetStartTranslation(inkWidgetRef.GetTranslation(this.m_paperDollWidget));
-    translationInterpolator.SetEndTranslation(new Vector2(outfitPreviewMargin.left, 0.00));
+    translationInterpolator.SetEndTranslation(Vector2(outfitPreviewMargin.left, 0.00));
 
     let translationAnimation = new inkAnimDef();
     translationAnimation.AddInterpolator(translationInterpolator);

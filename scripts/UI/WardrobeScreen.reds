@@ -170,7 +170,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         let filterSpacing = this.m_filtersContainer.GetChildMargin();
 
         let searchWrapper = new inkCanvas();
-        searchWrapper.SetMargin(new inkMargin(filterSpacing.right, 0, 0, filterSpacing.bottom));
+        searchWrapper.SetMargin(inkMargin(filterSpacing.right, 0, 0, filterSpacing.bottom));
         searchWrapper.Reparent(filterWrapper);
 
         this.m_searchInput = HubTextInput.Create();
@@ -187,14 +187,14 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
 
         let buttonPanel = new inkHorizontalPanel();
         buttonPanel.SetAnchor(inkEAnchor.TopRight);
-        buttonPanel.SetAnchorPoint(new Vector2(1.0, 0.0));
-        buttonPanel.SetMargin(new inkMargin(0.0, 186.0, 0.0, 0.0));
-        buttonPanel.SetChildMargin(new inkMargin(8.0, 0.0, 0.0, 0.0));
+        buttonPanel.SetAnchorPoint(Vector2(1.0, 0.0));
+        buttonPanel.SetMargin(inkMargin(0.0, 186.0, 0.0, 0.0));
+        buttonPanel.SetChildMargin(inkMargin(8.0, 0.0, 0.0, 0.0));
         buttonPanel.Reparent(headerWrapper);
 
         let modeBtn = SettingsButton.Create();
         modeBtn.Reparent(buttonPanel, this);
-        modeBtn.GetRootWidget().SetMargin(new inkMargin(0, 0, 10, 0));
+        modeBtn.GetRootWidget().SetMargin(inkMargin(0, 0, 10, 0));
 
         let expandBtn = CollapseButton.Create();
         expandBtn.SetFlipped(true);
@@ -553,7 +553,7 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
             let cursorPos = evt.GetScreenSpacePosition();
             let screenSize = ScreenHelper.GetScreenSize(this.m_player.GetGame());
 
-            this.m_cursorScreenPosition = new Vector2(cursorPos.X / screenSize.X, cursorPos.Y / screenSize.Y);
+            this.m_cursorScreenPosition = Vector2(cursorPos.X / screenSize.X, cursorPos.Y / screenSize.Y);
         }
 
         if evt.IsAction(n"mouse_left") {

@@ -17,7 +17,7 @@ class CollapseButton extends inkCustomController {
     protected cb func OnCreate() {
         let root = new inkCanvas();
         root.SetSize(110.0, 80.0);
-        root.SetAnchorPoint(new Vector2(0.5, 0.5));
+        root.SetAnchorPoint(Vector2(0.5, 0.5));
         root.SetInteractive(true);
 
         let bg = new inkImage();
@@ -43,11 +43,11 @@ class CollapseButton extends inkCustomController {
 
         let icon = new inkVerticalPanel();
         icon.SetAnchor(inkEAnchor.Centered);
-        icon.SetAnchorPoint(new Vector2(0.5, 0.5));
+        icon.SetAnchorPoint(Vector2(0.5, 0.5));
         icon.Reparent(root);
 
         let arrowScale = 0.4;
-        let arrowSize = new Vector2(44.0 * arrowScale, 38.0 * arrowScale);
+        let arrowSize = Vector2(44.0 * arrowScale, 38.0 * arrowScale);
 
         let arrowUp = new inkImage();
         arrowUp.SetName(n"arrowUp");
@@ -61,7 +61,7 @@ class CollapseButton extends inkCustomController {
 
         let line = new inkRectangle();
         line.SetHAlign(inkEHorizontalAlign.Center);
-        line.SetSize(new Vector2(arrowSize.X + 12.0, 2.0));
+        line.SetSize(Vector2(arrowSize.X + 12.0, 2.0));
         line.SetStyle(r"base\\gameplay\\gui\\common\\components\\toggles_style.inkstyle");
         line.BindProperty(n"tintColor", n"FilterButton.iconColor");
         line.Reparent(icon);
@@ -105,7 +105,7 @@ class CollapseButton extends inkCustomController {
 
     protected func ApplyCollapseState() {
         this.m_icon.SetChildOrder(this.m_isCollapse ? inkEChildOrder.Backward : inkEChildOrder.Forward);
-        this.m_icon.SetChildMargin(this.m_isCollapse ? new inkMargin(0.0, 3.0, 0.0, 3.0) : new inkMargin(0.0, 3.0, 0.0, 3.0));
+        this.m_icon.SetChildMargin(this.m_isCollapse ? inkMargin(0.0, 3.0, 0.0, 3.0) : inkMargin(0.0, 3.0, 0.0, 3.0));
     }
 
     protected func ApplyFlippedState() {
