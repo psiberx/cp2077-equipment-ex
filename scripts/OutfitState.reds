@@ -252,6 +252,11 @@ class OutfitState {
         return null;
     }
 
+    public func GetOutfitParts(name: CName) -> array<ref<OutfitPart>> {
+		let outfit = this.GetOutfit(name);
+		return IsDefined(outfit) ? outfit.GetParts() : [];
+	}
+
     public func SaveOutfit(name: CName, overwrite: Bool, timestamp: Float) -> Bool {
         return this.SaveOutfit(name, this.m_parts, overwrite, timestamp);
     }

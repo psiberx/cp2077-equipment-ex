@@ -848,6 +848,10 @@ public class OutfitSystem extends ScriptableSystem {
         return outfits;
     }
 
+    public func GetOutfitParts(name: CName) -> array<ref<OutfitPart>> {
+		return this.m_state.GetOutfitParts(name);
+	}
+
     public func GiveItem(recordID: TweakDBID) -> ItemID {
         let itemID: ItemID;
         let itemData = this.m_transactionSystem.GetItemDataByTDBID(this.m_player, recordID);
