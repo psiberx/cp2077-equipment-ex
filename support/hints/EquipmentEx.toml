@@ -14,24 +14,24 @@ span_starts_with = "TweakXL"
 message = "Install TweakXL 1.12.0 or higher"
 
 [[UNRESOLVED_FN]]
-id = "CODEWARE_12100"
+id = "CODEWARE_12101"
 span_starts_with = "Print(command)"
-message = "Install Codeware 1.21.0 or higher"
+message = "Install Codeware 1.21.1 or higher"
 
 [[UNRESOLVED_FN]]
-id = "CODEWARE_12100"
+id = "CODEWARE_12101"
 line_contains = "UTF8StrLower"
-message = "Install Codeware 1.21.0 or higher"
+message = "Install Codeware 1.21.1 or higher"
 
 [[UNRESOLVED_METHOD]]
-id = "CODEWARE_12100"
+id = "CODEWARE_12101"
 line_contains = "ForgetItemID"
-message = "Install Codeware 1.21.0 or higher"
+message = "Install Codeware 1.21.1 or higher"
 
 [[UNRESOLVED_TYPE]]
-id = "CODEWARE_12100"
+id = "CODEWARE_12101"
 line_contains = "InMenuPopup"
-message = "Install Codeware 1.21.0 or higher"
+message = "Install Codeware 1.21.1 or higher"
 
 [[UNRESOLVED_METHOD]]
 id = "EQEX_MIX"
