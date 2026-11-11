@@ -58,11 +58,11 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceTight", 190000, [], [t"AttachmentSlots.Head"]),
         ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceShort", 190000),
         ExtraSlotConfig.Create(n"Neck", n"OutfitSlots.NecklaceLong", 190000),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoUnder", 120000, [t"AttachmentSlots.Chest"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso"]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoInner", 150000, [t"AttachmentSlots.Chest"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso"]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoMiddle", 180000, [t"AttachmentSlots.Torso"], [t"AttachmentSlots.Head"]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoOuter", 210000, [t"AttachmentSlots.Torso"], [t"AttachmentSlots.Head"]),
-        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoAux", 240000, [t"AttachmentSlots.Torso"], [t"AttachmentSlots.Head"]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoUnder", 120000, [t"AttachmentSlots.Chest"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoInner", 150000, [t"AttachmentSlots.Chest"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoMiddle", 180000, [t"AttachmentSlots.Torso"], [t"AttachmentSlots.Head", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoOuter", 210000, [t"AttachmentSlots.Torso"], [t"AttachmentSlots.Head", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Torso", n"OutfitSlots.TorsoAux", 240000, [t"AttachmentSlots.Torso"], [t"AttachmentSlots.Head", t"AttachmentSlots.Hands"]),
         ExtraSlotConfig.Create(n"Back", n"OutfitSlots.Back", 220000),
         ExtraSlotConfig.Create(n"Waist", n"OutfitSlots.Waist", 200000),
         ExtraSlotConfig.Create(n"Arms", n"OutfitSlots.ShoulderLeft", 200000),
@@ -94,9 +94,9 @@ public abstract class OutfitConfig {
         ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToesRight", 120000, [], [t"AttachmentSlots.Feet"]),
         ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsLeft", 100000, [], [t"AttachmentSlots.Feet"]),
         ExtraSlotConfig.Create(n"Toes", n"OutfitSlots.ToenailsRight", 100000, [], [t"AttachmentSlots.Feet"]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyUnder", 110000, [t"AttachmentSlots.Chest", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Feet"]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyInner", 140000, [t"AttachmentSlots.Chest", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Feet"]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyMiddle", 170000, [t"AttachmentSlots.Torso", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Feet"]),
-        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyOuter", 300000, [t"AttachmentSlots.Torso", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Feet"])
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyUnder", 110000, [t"AttachmentSlots.Chest", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Feet", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyInner", 140000, [t"AttachmentSlots.Chest", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Feet", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyMiddle", 170000, [t"AttachmentSlots.Torso", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Feet", t"AttachmentSlots.Hands"]),
+        ExtraSlotConfig.Create(n"Body", n"OutfitSlots.BodyOuter", 300000, [t"AttachmentSlots.Torso", t"AttachmentSlots.Legs"], [t"AttachmentSlots.Head", t"AttachmentSlots.Torso", t"AttachmentSlots.Feet", t"AttachmentSlots.Hands"])
    ];
 }
