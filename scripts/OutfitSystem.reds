@@ -1030,7 +1030,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public static func GetInstance(game: GameInstance) -> ref<OutfitSystem> {
-        return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.OutfitSystem") as OutfitSystem;
+        return GameInstance.GetScriptableSystemsContainer(game).Get(NameOf<OutfitSystem>()) as OutfitSystem;
     }
 }
 

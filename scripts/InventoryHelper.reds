@@ -104,6 +104,6 @@ public class InventoryHelper extends ScriptableSystem {
     }
 
     public static func GetInstance(game: GameInstance) -> ref<InventoryHelper> {
-        return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.InventoryHelper") as InventoryHelper;
+        return GameInstance.GetScriptableSystemsContainer(game).Get(NameOf<InventoryHelper>()) as InventoryHelper;
     }
 }

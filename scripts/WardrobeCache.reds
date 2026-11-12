@@ -240,7 +240,7 @@ public class WardrobeCache extends ScriptableSystem {
     }
 
     public static func GetInstance(game: GameInstance) -> ref<WardrobeCache> {
-        return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.WardrobeCache") as WardrobeCache;
+        return GameInstance.GetScriptableSystemsContainer(game).Get(NameOf<WardrobeCache>()) as WardrobeCache;
     }
 }
 

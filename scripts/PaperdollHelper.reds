@@ -21,6 +21,6 @@ public class PaperdollHelper extends ScriptableSystem {
     }
 
     public static func GetInstance(game: GameInstance) -> ref<PaperdollHelper> {
-        return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.PaperdollHelper") as PaperdollHelper;
+        return GameInstance.GetScriptableSystemsContainer(game).Get(NameOf<PaperdollHelper>()) as PaperdollHelper;
     }
 }

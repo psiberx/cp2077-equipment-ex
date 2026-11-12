@@ -55,6 +55,6 @@ public class ViewManager extends ScriptableSystem {
     }
 
     public static func GetInstance(game: GameInstance) -> ref<ViewManager> {
-        return GameInstance.GetScriptableSystemsContainer(game).Get(n"EquipmentEx.ViewManager") as ViewManager;
+        return GameInstance.GetScriptableSystemsContainer(game).Get(NameOf<ViewManager>()) as ViewManager;
     }
 }
