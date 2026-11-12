@@ -5,11 +5,12 @@ $GlobalScope = "${ProjectName}.Global"
 $SettingsScope = "${ProjectName}.Settings"
 $SettingsFile = "Settings.reds"
 
+$Utf8 = [System.Text.UTF8Encoding]::new($false)
 $SourceFiles = Get-ChildItem -Path "scripts" -Filter *.reds -Recurse
 $Bundles = @{}
 
 foreach ($ScriptFile in $SourceFiles) {
-    $Content = Get-Content $ScriptFile.FullName
+    $Content = [System.IO.File]::ReadAllLines($ScriptFile.FullName, $Utf8) | ForEach-Object { $_.TrimStart([char]0xFEFF) }
     $Module = ($Content | Select-String -Pattern "^module\s+(.+)" -List | %{$_.matches.groups[1].Value})
     $Scope = $Module ?? $GlobalScope
 
@@ -47,19 +48,23 @@ Copy-Item -Path "LICENSE" -Destination ${ScriptsDir}
 
 foreach ($Bundle in $Bundles.Values) {
     $BundleFile = "${ScriptsDir}/$($Bundle.Scope).reds"
-    Out-File -FilePath ${BundleFile} -Encoding ascii -InputObject "// ${ProjectName} ${Version}"
+    $Lines = [System.Collections.Generic.List[string]]::new()
+    $Lines.Add("// ${ProjectName} ${Version}")
 
     if ($Bundle.Module -and ($Bundle.Scope -ne $SettingsScope)) {
-        Out-File -FilePath ${BundleFile} -Encoding ascii -InputObject "module $($Bundle.Module)" -Append
+        $Lines.Add("module $($Bundle.Module)")
     }
 
     foreach ($Import in $Bundle.Imports.Keys) {
-        Out-File -FilePath ${BundleFile} -Encoding ascii -InputObject "import ${Import}" -Append
+        $Lines.Add("import ${Import}")
     }
 
     foreach ($Source in $Bundle.Sources) {
         if ($Source) {
-            Out-File -FilePath ${BundleFile} -Encoding ascii -InputObject "`n${Source}" -Append
+            $Lines.Add("")
+            $Lines.Add($Source)
         }
     }
+
+    [System.IO.File]::WriteAllText($BundleFile, ($Lines -join "`r`n") + "`r`n", $Utf8)
 }
