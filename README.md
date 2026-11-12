@@ -147,11 +147,10 @@ then the slot will be automatically assigned according to this table:
 
 ## Translations
 
-If you want to translate this mod into your language, get translation template JSON 
-[`support/localization/lang.json.json`](https://github.com/psiberx/cp2077-equipment-ex/blob/master/support/localization/lang.json.json), 
-translate all `femaleVariant` values, and send it to us.
-Please try to make a translation as close to the English version as possible.
-Your translation will be added to the mod, and you will be credited on the mod page.
+If you want to translate this mod into your language, copy english package 
+[`scripts/Localization/Packages/English.reds`](https://github.com/psiberx/cp2077-equipment-ex/blob/master/scripts/Localization/Packages/English.reds), 
+translate and send it to us.
+Your translation will be added to the mod with the future update, and you will be credited on the mod page.
 
 Available translations:
 
