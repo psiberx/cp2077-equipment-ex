@@ -278,7 +278,7 @@ class OutfitState {
     }
 
     public func CopyOutfit(name: CName, from: CName, timestamp: Float) -> Bool {
-        let outfit = this.GetOutfit(name);
+        let outfit = this.GetOutfit(from);
 
         if !IsDefined(outfit) {
             return false;
