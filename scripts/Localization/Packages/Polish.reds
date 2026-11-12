@@ -5,7 +5,7 @@ public class Polish extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "Brak stroju");
         this.Text("UI-Wardrobe-CurrentOutfit", "Obecny strój");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "Wprowadź nazwę stroju:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "Wprowadź nazwę stroju");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "Strój o tej nazwie już istnieje. Czy chcesz go zastąpić?");
         this.Text("UI-Wardrobe-SearchByName", "Szukaj według nazwy");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "Źródło Przedmiotu");

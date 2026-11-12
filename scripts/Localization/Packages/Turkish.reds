@@ -5,7 +5,7 @@ public class Turkish extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "Kıyafet yok");
         this.Text("UI-Wardrobe-CurrentOutfit", "Mevcut Kıyafet");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "Kıyafet adı gir:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "Kıyafet adı gir");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "Bu isime sahip bir kıyafet zaten mevcut, üzerine yazmak ister misiniz?");
         this.Text("UI-Wardrobe-SearchByName", "İsime göre ara");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "Eşya Kaynağı");

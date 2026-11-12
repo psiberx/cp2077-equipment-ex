@@ -5,7 +5,7 @@ public class Arabic extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "لا يوجد زي");
         this.Text("UI-Wardrobe-CurrentOutfit", "الزي الحالي");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "أدخل اسم الزي:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "أدخل اسم الزي");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "زي بهذا الاسم موجود بالفعل ، هل تريد الاستبدال؟");
         this.Text("UI-Wardrobe-SearchByName", "البحث عن طريق الإسم");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "مصدر العنصر");

@@ -5,7 +5,7 @@ public class ChineseSimplified extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "无穿搭");
         this.Text("UI-Wardrobe-CurrentOutfit", "当前穿搭");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "输入此穿搭名称：");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "输入此穿搭名称");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "具有相同此名称的穿搭已存在，是否要覆盖它？");
         this.Text("UI-Wardrobe-SearchByName", "按名称搜索");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "服装来源");

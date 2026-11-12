@@ -5,7 +5,7 @@ public class Czech extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "Žádný oblek");
         this.Text("UI-Wardrobe-CurrentOutfit", "Současný oblek");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "Zadej název obleku:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "Zadej název obleku");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "Oblek s timto názvem už existuje, chceš ho přepsat?");
         this.Text("UI-Wardrobe-SearchByName", "Hledat podle jména");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "Zdroj předmětů");

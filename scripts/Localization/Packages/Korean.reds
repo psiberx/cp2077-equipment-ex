@@ -5,7 +5,7 @@ public class Korean extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "복장 없음");
         this.Text("UI-Wardrobe-CurrentOutfit", "현재 복장");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "복장 이름 입력:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "복장 이름 입력");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "이미 이름이 있는 복장입니다. 덮어씌우겠습니까?");
         this.Text("UI-Wardrobe-SearchByName", "이름으로 검색");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "아이템 소스");

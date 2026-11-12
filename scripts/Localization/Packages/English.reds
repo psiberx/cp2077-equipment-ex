@@ -5,10 +5,10 @@ public class English extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "No outfit");
         this.Text("UI-Wardrobe-CurrentOutfit", "Current outfit");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "Enter outfit name:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "Enter outfit name");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "Outfit with this name already exists, do you want to overwrite it?");
         this.Text("UI-Wardrobe-SearchByName", "Search by name");
-        this.Text("UI-Wardrobe-OverwriteWarning", "!! Overwritting existing outfit !!");
+        this.Text("UI-Wardrobe-OverwriteWarning", "Overwriting existing outfit");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "Item Source");
         this.Text("UI-EquipmentEx-WardrobeItemSource-Description", "Preferred source of items for outfit manager: \"Inventory + Stash\" will only use the current items in your inventory and stashes, \"Wardrobe Store\" will use every item you have ever obtained in the game (including dropped and disassembled items).");
         this.Text("UI-EquipmentEx-WardrobeItemSource-InventoryOnly", "Inventory");

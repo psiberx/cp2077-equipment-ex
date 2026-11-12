@@ -5,7 +5,7 @@ public class Russian extends ModLocalizationPackage {
     protected func DefineTexts() -> Void {
         this.Text("UI-Wardrobe-NoOutfit", "Без комплекта");
         this.Text("UI-Wardrobe-CurrentOutfit", "Текущий комплект");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "Введите название комплекта:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "Введите название комплекта");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "Комплект с таким названием уже существует, вы хотите перезаписать его?");
         this.Text("UI-Wardrobe-SearchByName", "Поиск");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "Источник предметов");

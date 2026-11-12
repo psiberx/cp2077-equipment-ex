@@ -10,7 +10,7 @@ public class German extends ModLocalizationPackage {
         this.Text("Gameplay-OutfitSlots-KneeRight", "Rechtes Knie");
         this.Text("UI-Wardrobe-NoOutfit", "Kein Outfit");
         this.Text("UI-Wardrobe-CurrentOutfit", "Aktuelles Outfit");
-        this.Text("UI-Wardrobe-NotificationSaveSet", "Name des Outfits eingeben:");
+        this.Text("UI-Wardrobe-NotificationSaveSet", "Name des Outfits eingeben");
         this.Text("UI-Wardrobe-NotificationReplaceSet", "Ein Outfit mit diesem Namen existiert bereits, möchtest du es überschreiben?");
         this.Text("UI-Wardrobe-SearchByName", "Suche nach Name");
         this.Text("UI-EquipmentEx-WardrobeItemSource", "Kleidung Quelle");

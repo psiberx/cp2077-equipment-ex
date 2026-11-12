@@ -3,6 +3,7 @@ module EquipmentEx
 public class OutfitSystem extends ScriptableSystem {
     private persistent let m_state: ref<OutfitState>;
     private let m_firstUse: Bool;
+    private let m_lastUsedOutfit: CName;
 
     private let m_baseSlots: array<TweakDBID>;
     private let m_outfitSlots: array<TweakDBID>;
@@ -350,7 +351,33 @@ public class OutfitSystem extends ScriptableSystem {
 
         this.m_equipmentBlackboard.FireCallbacks();
     }
-    
+
+    private func SetLastUsedOutfit(outfitName: CName) {
+		this.m_lastUsedOutfit = outfitName;
+    }
+
+    public func GetLastUsedOutfit() -> CName {
+        if !this.m_state.IsActive() {
+            return n"";
+        }
+
+        return this.m_lastUsedOutfit;
+    }
+
+    public func UpdateLastUsedOutfit() {
+        if !this.m_state.IsActive() {
+            this.m_lastUsedOutfit = n"";
+            return;
+        }
+
+        for outfit in this.m_state.GetOutfits() {
+            if this.m_state.IsOutfit(outfit.GetName()) {
+                this.m_lastUsedOutfit = outfit.GetName();
+                return;
+            }
+        }
+    }
+
     private func TriggerActivationEvent(opt outfitName: CName) {
         let event = new OutfitUpdated();
         event.isActive = true;
@@ -439,6 +466,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.EnableGarmentOffsets();
             this.CloneEquipment();
             
+            this.UpdateLastUsedOutfit();
             this.TriggerActivationEvent();
         }
     }
@@ -456,6 +484,7 @@ public class OutfitSystem extends ScriptableSystem {
 
             this.EnableGarmentOffsets();
 
+            this.UpdateLastUsedOutfit();
             this.TriggerActivationEvent();
         }
     }
@@ -474,6 +503,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.EnableGarmentOffsets();
             this.CloneEquipment(ItemID.None(), slotID);
 
+            this.UpdateLastUsedOutfit();
             this.TriggerActivationEvent();
         }
     }
@@ -492,6 +522,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.EnableGarmentOffsets();
             this.CloneEquipment(itemID, TDBID.None());
 
+            this.UpdateLastUsedOutfit();
             this.TriggerActivationEvent();
         }
     }
@@ -509,6 +540,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.EnableGarmentOffsets();
             this.AttachAllVisualsToSlots(true);
 
+            this.UpdateLastUsedOutfit();
             this.TriggerActivationEvent();
         }
     }
@@ -521,6 +553,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.ShowEquipment();
             this.DetachAllVisualsFromSlots(false);
 
+			this.UpdateLastUsedOutfit();
             this.TriggerDeactivationEvent();
         }
     }
@@ -619,6 +652,7 @@ public class OutfitSystem extends ScriptableSystem {
 
         this.AddItemToState(itemID, slotID);
         this.AttachVisualToSlot(itemID, slotID);
+        this.UpdateLastUsedOutfit();
 
         return true;
     }
@@ -654,6 +688,7 @@ public class OutfitSystem extends ScriptableSystem {
 
         this.RemoveItemFromState(itemID);
         this.DetachVisualFromSlot(itemID, slotID);
+        this.UpdateLastUsedOutfit();
 
         return true;
     }
@@ -675,6 +710,7 @@ public class OutfitSystem extends ScriptableSystem {
 
         this.RemoveItemFromState(itemID);
         this.DetachVisualFromSlot(itemID, slotID);
+        this.UpdateLastUsedOutfit();
 
         return true;
     }
@@ -691,6 +727,7 @@ public class OutfitSystem extends ScriptableSystem {
                     this.DetachVisualFromSlot(part.GetItemID(), part.GetSlotID());
                 }
             }
+            this.UpdateLastUsedOutfit();
         } else {
             this.ActivateWithoutClone();
         }
@@ -805,6 +842,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.UnequipSlot(slotID);
         }
 
+        this.SetLastUsedOutfit(name);
         this.TriggerActivationEvent(name);
 
         return true;

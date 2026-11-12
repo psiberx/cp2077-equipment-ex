@@ -28,6 +28,8 @@ class OutfitManagerController extends inkLogicController {
         this.m_wardrobeScreen = wardrobeScreen;
         this.m_buttonHints = buttonHints;
 
+        this.m_outfitSystem.UpdateLastUsedOutfit();
+
         this.PopulateList();
         this.SetEnabled(true);
     }
@@ -192,49 +194,15 @@ class OutfitManagerController extends inkLogicController {
     }
 
     protected cb func ShowSaveOutfitPopup() {
-        this.m_popupToken = GenericMessageNotification.ShowInput(this.m_wardrobeScreen, GetLocalizedTextByKey(n"UI-Wardrobe-SaveSet"), GetLocalizedTextByKey(n"UI-Wardrobe-NotificationSaveSet"), GenericMessageNotificationType.ConfirmCancel);
-        this.m_popupToken.RegisterListener(this, n"OnSaveOutfitPopupClosed");
+        OutfitSavePopup.Show(this.m_wardrobeScreen, this.m_outfitSystem, this.m_outfitSystem.GetLastUsedOutfit(), this);
     }
 
-    protected cb func OnSaveOutfitPopupClosed(data: ref<inkGameNotificationData>) {
-        let resultData = data as GenericMessageNotificationCloseData;
-
-        if Equals(resultData.result, GenericMessageNotificationResult.Confirm) && NotEquals(resultData.input, "") {
-            let outfitName = StringToName(resultData.input);
-
-            if this.m_outfitSystem.HasOutfit(outfitName) {
-                this.ShowReplaceOutfitPopup(outfitName);
-                return;
-            }
-            
-            this.PlaySound(n"Item", n"OnBuy");
-            
-            if this.m_outfitSystem.SaveOutfit(outfitName, true) {
-                this.AppendToList(outfitName, true);
-            }
+    public func OnOutfitSaved(outfitName: CName) {
+        if Equals(outfitName, n"") {
+            return;
         }
 
-        this.ResetPopupState();
-    }
-
-    protected cb func ShowReplaceOutfitPopup(outfitName: CName) {
-        this.m_popupOutfit = outfitName;
-        this.m_popupToken = GenericMessageNotification.Show(this.m_wardrobeScreen, GetLocalizedTextByKey(n"UI-Wardrobe-SaveSet"), GetLocalizedTextByKey(n"UI-Wardrobe-NotificationReplaceSet"), GenericMessageNotificationType.ConfirmCancel);
-        this.m_popupToken.RegisterListener(this, n"OnReplaceOutfitPopupClosed");
-    }
-
-    protected cb func OnReplaceOutfitPopupClosed(data: ref<inkGameNotificationData>) {
-        let resultData = data as GenericMessageNotificationCloseData;
-
-        if Equals(resultData.result, GenericMessageNotificationResult.Confirm) {
-            this.PlaySound(n"Item", n"OnBuy");
-
-            if this.m_outfitSystem.SaveOutfit(this.m_popupOutfit, true) {
-                this.RefreshList(true);
-            }
-        }
-
-        this.ResetPopupState();
+        this.PopulateList();
     }
 
     protected cb func ShowDeleteOutfitPopup(outfitName: CName) {
