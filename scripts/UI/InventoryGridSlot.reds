@@ -69,7 +69,7 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         itemCount.Reparent(content);
 
         let panel = new inkCanvas();
-        panel.SetName(n"panel");       
+        panel.SetName(n"panel");
         panel.SetAnchor(inkEAnchor.Fill);
         panel.SetMargin(inkMargin(0.0, 2.0, 0.0, 8.0));
         panel.Reparent(this.m_root);
@@ -148,7 +148,15 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
     }
 
     protected cb func OnOutfitPartUpdated(evt: ref<OutfitPartUpdated>) {
-        if Equals(this.m_uiSlot.ItemData.SlotID, evt.slotID) {
+        if IsDefined(this.m_uiSlot) && Equals(this.m_uiSlot.ItemData.SlotID, evt.slotID) {
+            for child in this.m_uiSlot.Children {
+                if Equals(child.SourceItemID, evt.itemID) {
+                    child.IsEquipped = evt.isEquipped;
+                    break;
+                }
+            }
+
+            this.m_uiSlot.UpdateActiveItem();
             this.UpdateActiveItem();
         }
     }
@@ -168,7 +176,11 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
     }
 
     protected func UpdateSlotInfo() {
-        this.m_slotName.SetText(this.m_uiSlot.ItemData.CategoryName);
+        if !IsDefined(this.m_uiSlot) {
+            return;
+        }
+
+        let slotName = this.m_uiSlot.ItemData.CategoryName;
 
         let itemCount = GetLocalizedText("LocKey#53719") + ": ";
         if this.m_uiSlot.TotalItems != this.m_uiSlot.VisibleItems {
@@ -176,23 +188,38 @@ class InventoryGridSlotController extends inkVirtualCompoundItemController {
         }
         itemCount += ToString(this.m_uiSlot.TotalItems);
 
-        this.m_itemCount.SetText(itemCount);
+		this.m_slotName.SetText(slotName);
+		this.m_itemCount.SetText(itemCount);
     }
 
     protected func UpdateActiveItem() {
-        let uiItem = this.m_uiSlot.GetActiveItem();
-        
-        if IsDefined(uiItem) {
-            this.m_itemName.SetText(uiItem.Item.GetName());
-            this.m_itemName.BindProperty(n"tintColor", n"MainColors.Blue");
-        } else {
-            this.m_itemName.SetText(GetLocalizedTextByKey(n"UI-Labels-EmptySlot"));
-            this.m_itemName.BindProperty(n"tintColor", n"MainColors.Grey");
+        if !IsDefined(this.m_uiSlot) {
+            return;
         }
+
+        let uiItem = this.m_uiSlot.GetActiveItem();
+        let itemName: String;
+        let tint: CName;
+
+        if IsDefined(uiItem) {
+            itemName = uiItem.Item.GetName();
+            tint = n"MainColors.Blue";
+        } else {
+            itemName = GetLocalizedTextByKey(n"UI-Labels-EmptySlot");
+            tint = n"MainColors.Grey";
+        }
+
+		this.m_itemName.SetText(itemName);
+		this.m_itemName.BindProperty(n"tintColor", tint);
     }
 
     protected func UpdateState() {
-        this.m_arrow.SetRotation(this.m_uiSlot.IsCollapsed ? 0.0 : 90.0);
+        if !IsDefined(this.m_uiSlot) {
+            return;
+        }
+
+        let rotation = this.m_uiSlot.IsCollapsed ? 0.0 : 90.0;
+		this.m_arrow.SetRotation(rotation);
     }
 
     protected func TriggerClickEvent(action: ref<inkActionName>) {

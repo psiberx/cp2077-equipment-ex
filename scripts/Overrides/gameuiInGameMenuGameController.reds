@@ -1,4 +1,4 @@
-import EquipmentEx.OutfitSystem
+import EquipmentEx.{OutfitSystem,WardrobeCache}
 
 @addField(gameuiInGameMenuGameController)
 private let m_outfitSystem: wref<OutfitSystem>;
@@ -24,4 +24,11 @@ protected cb func OnEquipmentChanged(value: Variant) -> Bool {
     if !this.m_outfitSystem.UpdatePuppetFromBlackboard(this.GetPuppet(n"inventory")) {
         wrappedMethod(value);
     }
+}
+
+@wrapMethod(gameuiInGameMenuGameController)
+protected cb func OnUninitialize() -> Bool {
+    WardrobeCache.GetInstance(this.GetPlayerControlledObject().GetGame()).Invalidate();
+
+    return wrappedMethod();
 }
