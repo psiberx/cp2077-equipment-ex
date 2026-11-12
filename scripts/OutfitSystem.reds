@@ -835,17 +835,23 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func GetOutfits() -> array<CName> {
-        let outfits: array<CName>;
-        
+        let names: array<CName>;
+        let keys: array<String>;
+
         for outfit in this.m_state.GetOutfits() {
+            let name = outfit.GetName();
+            let key = NameToString(name);
+
             let index = 0;
-            while index < ArraySize(outfits) && StrCmp(NameToString(outfit.GetName()), NameToString(outfits[index])) > 0 {
+            while index < ArraySize(keys) && StrCmp(key, keys[index]) > 0 {
                 index += 1;
             }
-            ArrayInsert(outfits, index, outfit.GetName());
+
+            ArrayInsert(names, index, name);
+            ArrayInsert(keys, index, key);
         }
 
-        return outfits;
+        return names;
     }
 
     public func GetOutfitParts(name: CName) -> array<ref<OutfitPart>> {
