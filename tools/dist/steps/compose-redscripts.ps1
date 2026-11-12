@@ -10,18 +10,20 @@ $SourceFiles = Get-ChildItem -Path "scripts" -Filter *.reds -Recurse
 $Bundles = @{}
 
 foreach ($ScriptFile in $SourceFiles) {
-    $Content = [System.IO.File]::ReadAllLines($ScriptFile.FullName, $Utf8) | ForEach-Object { $_.TrimStart([char]0xFEFF) }
+    $Content = [System.IO.File]::ReadAllLines($ScriptFile.FullName, $Utf8) |
+        ForEach-Object { $_.TrimStart([char]0xFEFF).Trim() } |
+        Where-Object { $_ -ne "" }
     $Module = ($Content | Select-String -Pattern "^module\s+(.+)" -List | %{$_.matches.groups[1].Value})
     $Scope = $Module ?? $GlobalScope
 
     if ($ScriptFile.Name -eq $SettingsFile) {
         $Scope = $SettingsScope
         $Imports = @()
-        $Source = $Content | Out-String
+        $Source = $Content -join "`n"
     }
     else {
         $Imports = ($Content | Select-String -Pattern "^import\s+(.+)" -List | %{$_.matches.groups[1].Value})
-        $Source = ($Content | Select-String -Pattern "^\s*(//|module\s|import\s)" -NotMatch) | Out-String
+        $Source = (($Content | Select-String -Pattern "^\s*(//|module\s|import\s)" -NotMatch).Line) -join "`n"
     }
 
     if ($Bundles[$Scope] -eq $null) {
@@ -34,7 +36,7 @@ foreach ($ScriptFile in $SourceFiles) {
     }
 
     $Bundle = $Bundles[$Scope]
-    $Bundle.Sources.Add($Source.Trim()) > $null
+    $Bundle.Sources.Add(($Source -split "\r?\n" | Where-Object { $_.Trim() -ne "" }) -join "`n") > $null
 
     if ($Imports -ne $null) {
         foreach ($Import in $Imports) {
@@ -61,8 +63,7 @@ foreach ($Bundle in $Bundles.Values) {
 
     foreach ($Source in $Bundle.Sources) {
         if ($Source) {
-            $Lines.Add("")
-            $Lines.Add($Source)
+            $Lines.AddRange([string[]]($Source -split "`n"))
         }
     }
 
