@@ -71,7 +71,6 @@ public class OutfitSavePopup extends InMenuPopup {
         }
 
 		this.m_input.SelectAll();
-		this.m_input.SetCaretToStart();
 		this.m_input.RequestSetFocus();
 
         this.UpdateOverwriteWarning();

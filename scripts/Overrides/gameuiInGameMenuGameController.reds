@@ -1,4 +1,4 @@
-import EquipmentEx.{OutfitSystem,WardrobeCache}
+import EquipmentEx.{OutfitSystem, WardrobeCache}
 
 @addField(gameuiInGameMenuGameController)
 private let m_outfitSystem: wref<OutfitSystem>;

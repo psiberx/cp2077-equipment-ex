@@ -53,13 +53,8 @@ public class WardrobeCache extends ScriptableSystem {
     private let m_job: ref<WardrobeCacheBuildJob>;
     private let m_isBuilding: Bool;
     private let m_isReady: Bool;
-    private let m_isStale: Bool;
     private let m_itemCount: Int32;
     private let m_builtSource: WardrobeItemSource;
-
-    private func OnAttach() {
-        this.m_isStale = true;
-    }
 
     private func OnPlayerAttach(request: ref<PlayerAttachRequest>) {
         this.Initialize();
@@ -88,17 +83,15 @@ public class WardrobeCache extends ScriptableSystem {
     }
 
     public func Invalidate() {
-        this.m_isStale = true;
         this.m_isReady = false;
     }
 
     public func IsReady() -> Bool {
-        if this.m_isStale || !this.m_isReady {
+        if !this.m_isReady {
             return false;
         }
 
         if NotEquals(this.GetCurrentSource(), this.m_builtSource) {
-            this.m_isStale = true;
             return false;
         }
 
@@ -109,18 +102,6 @@ public class WardrobeCache extends ScriptableSystem {
         return ViewManager.GetInstance(this.GetGameInstance()).GetItemSource();
     }
 
-    public func IsBuilding() -> Bool {
-        return this.m_isBuilding;
-    }
-
-    public func GetItemCount() -> Int32 {
-        return this.m_itemCount;
-    }
-
-    public func GetSlots() -> array<ref<InventoryGridSlotData>> {
-        return this.m_slots;
-    }
-
     public func StartBuild(opt excludes: array<ItemModParams>) {
         if !this.Initialize() {
             return;
@@ -128,7 +109,6 @@ public class WardrobeCache extends ScriptableSystem {
 
         this.m_isBuilding = true;
         this.m_isReady = false;
-        this.m_isStale = false;
         this.m_itemCount = 0;
 
         ArrayClear(this.m_slots);
@@ -229,6 +209,14 @@ public class WardrobeCache extends ScriptableSystem {
         this.m_isReady = true;
     }
 
+    public func IsBuilding() -> Bool {
+        return this.m_isBuilding;
+    }
+
+    public func GetSlots() -> array<ref<InventoryGridSlotData>> {
+        return this.m_slots;
+    }
+
     public func FindSlot(slotID: TweakDBID) -> ref<InventoryGridSlotData> {
         for slot in this.m_slots {
             if Equals(slot.ItemData.SlotID, slotID) {
@@ -237,6 +225,10 @@ public class WardrobeCache extends ScriptableSystem {
         }
 
         return null;
+    }
+
+    public func GetItemCount() -> Int32 {
+        return this.m_itemCount;
     }
 
     public static func GetInstance(game: GameInstance) -> ref<WardrobeCache> {

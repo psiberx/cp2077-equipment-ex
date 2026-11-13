@@ -1,4 +1,4 @@
-import EquipmentEx.{CompatibilityManager, OutfitSystem, ArchivePopup, RequirementsPopup}
+import EquipmentEx.{CompatibilityManager, OutfitSystem, WardrobeCache, ArchivePopup, RequirementsPopup}
 
 @addField(gameuiInventoryGameController)
 private let m_outfitSystem: wref<OutfitSystem>;
@@ -17,6 +17,7 @@ protected cb func OnInitialize() -> Bool {
     wrappedMethod();
 
     this.m_outfitSystem = OutfitSystem.GetInstance(this.GetPlayerControlledObject().GetGame());
+    WardrobeCache.GetInstance(this.GetPlayerControlledObject().GetGame()).Invalidate();
 }
 
 @wrapMethod(gameuiInventoryGameController)
