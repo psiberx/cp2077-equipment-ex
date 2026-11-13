@@ -1,9 +1,9 @@
 module EquipmentEx
 
 public abstract class CompatibilityManager {
-    public static func RequiredCodeware() -> String = "1.21.3";
-    public static func RequiredArchiveXL() -> String = "1.28.7";
-    public static func RequiredTweakXL() -> String = "1.12.1";
+    public static func RequiredCodeware() -> String = "1.21.4";
+    public static func RequiredArchiveXL() -> String = "1.28.8";
+    public static func RequiredTweakXL() -> String = "1.12.2";
 
     public static func CheckRequirements() -> Bool {
         return Codeware.Require(CompatibilityManager.RequiredCodeware())
