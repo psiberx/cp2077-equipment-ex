@@ -158,7 +158,7 @@ Available translations:
 - Arabic (`ar-ar`) by [@MONSTERaider](https://www.nexusmods.com/users/1630457)
 - Brazilian (`pt-br`) by [@Jaqueta](https://github.com/Jaqueta)
 - Czech (`cz-cz`) by [@starfis](https://www.nexusmods.com/users/933641)
-- French (`fr-fr`) by [@TFE71](https://www.nexusmods.com/users/5620844)
+- French (`fr-fr`) by [@TFE71](https://www.nexusmods.com/users/5620844) and [DollyGethFR](https://www.nexusmods.com/profile/DollyGethFR)
 - German (`de-de`) by [@Vorgash](https://www.nexusmods.com/users/3957237)
 - Italian (`it-it`) by [@chipzz97](https://www.nexusmods.com/users/46275402)
 - Korean (`kr-kr`) by [@manikda11](https://www.nexusmods.com/users/47584948)
