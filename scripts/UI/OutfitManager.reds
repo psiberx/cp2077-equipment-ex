@@ -54,7 +54,6 @@ class OutfitManagerController extends inkLogicController {
         header.Reparent(this.GetRootCompoundWidget());
 
         let title = new inkText();
-        title = new inkText();
         title.SetName(n"title");
         title.SetText("LocKey#82878");
         title.SetFontFamily("base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily");
@@ -102,26 +101,32 @@ class OutfitManagerController extends inkLogicController {
         unequipAction.IsSelected = !this.m_outfitSystem.IsActive();
         unequipAction.Postition = 2;
 
-        this.m_outfitListDataSource.Clear();
-        this.m_outfitListDataSource.AppendItem(saveAction);
-        this.m_outfitListDataSource.AppendItem(unequipAction);
+        let entries: array<ref<IScriptable>>;
+        ArrayPush(entries, saveAction);
+        ArrayPush(entries, unequipAction);
+        let flags = this.m_outfitSystem.GetEquippedOutfitFlags();
 
         for outfitName in this.m_outfitSystem.GetOutfits() {
-            this.AppendToList(outfitName, false);
+            ArrayPush(entries, this.MakeListEntry(outfitName, this.m_outfitSystem.IsEquippedInList(flags, outfitName)));
         }
+        this.m_outfitListDataSource.Reset(entries);
 
         this.m_outfitListDataView.UpdateView();
     }
 
-    protected func AppendToList(outfitName: CName, opt updateView: Bool) {
+    private func MakeListEntry(outfitName: CName, selected: Bool) -> ref<OutfitListEntryData> {
         let outfitEntry = new OutfitListEntryData();
         outfitEntry.Name = outfitName;
         outfitEntry.Title = NameToString(outfitName);
         outfitEntry.IsRemovable = true;
         outfitEntry.IsSelectable = true;
-        outfitEntry.IsSelected = this.m_outfitSystem.IsEquipped(outfitEntry.Name);
+        outfitEntry.IsSelected = selected;
 
-        this.m_outfitListDataSource.AppendItem(outfitEntry);
+        return outfitEntry;
+    }
+
+    protected func AppendToList(outfitName: CName, opt updateView: Bool) {
+        this.m_outfitListDataSource.AppendItem(this.MakeListEntry(outfitName, this.m_outfitSystem.IsEquipped(outfitName)));
 
         if updateView {
             this.m_outfitListDataView.UpdateView();
@@ -145,10 +150,11 @@ class OutfitManagerController extends inkLogicController {
 
     protected func RefreshList(opt updateState: Bool) {
         if updateState {
+            let flags = this.m_outfitSystem.GetEquippedOutfitFlags();
             for data in this.m_outfitListDataSource.GetArray() {
                 let outfitEntry = data as OutfitListEntryData;
                 if outfitEntry.IsSelectable {
-                    outfitEntry.IsSelected = this.m_outfitSystem.IsEquipped(outfitEntry.Name);
+                    outfitEntry.IsSelected = this.m_outfitSystem.IsEquippedInList(flags, outfitEntry.Name);
                 }
             }
         }

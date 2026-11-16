@@ -3,17 +3,19 @@ module EquipmentEx
 class PatchOriginaltems extends ScriptableTweak {
     protected func OnApply() -> Void {
         let batch = TweakDBManager.StartBatch();
+        let devMode = DevMode();
         let outfitSlots = OutfitConfig.OutfitSlots();
         let outfitMap = OutfitTweakHelper.BuildOutfitSlotMap(outfitSlots);
         let slotMatcher = OutfitTweakHelper.PrepareOriginalSlotMatcher();
 
         for record in TweakDBInterface.GetRecords(n"Clothing_Record") {
             let item = record as Clothing_Record;
-            let placementSlots = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".placementSlots");
+            let recordID = item.GetID();
+            let placementSlots = TweakDBInterface.GetForeignKeyArray(recordID + t".placementSlots");
             let garmentOffset = item.GarmentOffset();
 
             let outfitSlotID: TweakDBID;
-            if ArraySize(placementSlots) == 1 || DevMode() {
+            if ArraySize(placementSlots) == 1 || devMode {
                 outfitSlotID = slotMatcher.Match(item);
             } else {
                 outfitSlotID = ArrayLast(placementSlots);
@@ -30,7 +32,7 @@ class PatchOriginaltems extends ScriptableTweak {
                     if NotEquals(ArrayLast(placementSlots), outfitSlot.slotID) {
                         ArrayRemove(placementSlots, outfitSlot.slotID);
                         ArrayPush(placementSlots, outfitSlot.slotID);
-                        if garmentOffset == 0 || DevMode() {
+                        if garmentOffset == 0 || devMode {
                             garmentOffset = outfitSlot.garmentOffset;
                         }
                         updated = true;
@@ -38,9 +40,9 @@ class PatchOriginaltems extends ScriptableTweak {
                 }
 
                 if updated {
-                    batch.SetFlat(item.GetID() + t".placementSlots", placementSlots);
-                    batch.SetFlat(item.GetID() + t".garmentOffset", garmentOffset);
-                    batch.UpdateRecord(item.GetID());
+                    batch.SetFlat(recordID + t".placementSlots", placementSlots);
+                    batch.SetFlat(recordID + t".garmentOffset", garmentOffset);
+                    batch.UpdateRecord(recordID);
                 }
             }
         }

@@ -96,12 +96,18 @@ class OutfitSet {
         for part in parts {
             let item = part.GetItemHash();
 
-            let index = 0;
-            while index < ArraySize(items) && items[index] < item {
-                index += 1;
-            }
+            let left = 0;
+            let right = ArraySize(items);
+            while left < right {
+                let middle = left + (right - left) / 2;
+                if items[middle] < item {
+                    left = middle + 1;
+                } else {
+                    right = middle;
+                }
 
-            ArrayInsert(items, index, item);
+            }
+            ArrayInsert(items, left, item);
         }
 
         let hash = 14695981039346656037ul; // 0xcbf29ce484222325
@@ -253,9 +259,9 @@ class OutfitState {
     }
 
     public func GetOutfitParts(name: CName) -> array<ref<OutfitPart>> {
-		let outfit = this.GetOutfit(name);
-		return IsDefined(outfit) ? outfit.GetParts() : [];
-	}
+  let outfit = this.GetOutfit(name);
+  return IsDefined(outfit) ? outfit.GetParts() : [];
+ }
 
     public func SaveOutfit(name: CName, overwrite: Bool, timestamp: Float) -> Bool {
         return this.SaveOutfit(name, this.m_parts, overwrite, timestamp);

@@ -1,11 +1,10 @@
-import EquipmentEx.{CompatibilityManager, OutfitSystem, WardrobeCache, ArchivePopup, RequirementsPopup}
+import EquipmentEx.{CompatibilityManager, OutfitSystem, ArchivePopup, RequirementsPopup}
 
 @addField(WardrobeUIGameController)
 private let m_wardrobePopup: ref<inkGameNotificationToken>;
 
 @replaceMethod(WardrobeUIGameController)
 protected cb func OnInitialize() -> Bool {
-    WardrobeCache.GetInstance(this.GetPlayerControlledObject().GetGame()).Invalidate();
 
     this.GetChildWidgetByPath(n"mainScreenContainer").SetVisible(false);
     this.GetChildWidgetByPath(n"setEditorScreenContainer").SetVisible(false);
@@ -21,6 +20,7 @@ protected cb func OnInitialize() -> Bool {
             this.m_wardrobePopup.RegisterListener(this, n"OnWardrobePopupClose");
             return false;
         }
+        wardrobe.GetController().QueueEvent(new DropQueueUpdatedEvent());
     }
 
     this.m_introAnimProxy = new inkAnimProxy();

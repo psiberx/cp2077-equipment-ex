@@ -42,6 +42,7 @@ protected cb func OnShow(reversedUI: Bool) -> Bool {
     if IsDefined(outfitMenuItem) {
         let outfits = this.m_outfitSystem.GetOutfits();
         let active = this.m_outfitSystem.IsActive();
+        let flags = this.m_outfitSystem.GetEquippedOutfitFlags();
         let options: array<PhotoModeOptionSelectorData>;
         let current: Int32 = 0;
         
@@ -60,7 +61,7 @@ protected cb func OnShow(reversedUI: Bool) -> Bool {
             options[i].optionText = NameToString(outfitName); // StrUpper()
             options[i].optionData = i;
 
-            if this.m_outfitSystem.IsEquipped(outfitName) {
+            if this.m_outfitSystem.IsEquippedInList(flags, outfitName) {
                 current = options[i].optionData;
             }
 

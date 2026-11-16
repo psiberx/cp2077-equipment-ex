@@ -1,5 +1,10 @@
 module EquipmentEx
 
+struct OutfitNameSortEntry {
+    public let name: CName;
+    public let key: String;
+}
+
 public class OutfitSystem extends ScriptableSystem {
     private persistent let m_state: ref<OutfitState>;
     private let m_firstUse: Bool;
@@ -19,7 +24,6 @@ public class OutfitSystem extends ScriptableSystem {
 
     private let m_equipmentDef: wref<UI_EquipmentDef>;
     private let m_equipmentBlackboard: wref<IBlackboard>;
-    private let m_equipmentHash: Uint64;
 
     private func OnAttach() {
         this.InitializeState();
@@ -277,7 +281,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         this.m_equipmentData.LockVisualChanges();
-        this.UpdateEquipmentHash();
     }
 
     private func ShowEquipment() {
@@ -288,7 +291,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         this.m_equipmentData.LockVisualChanges();
-        this.ResetEquipmentHash();
     }
 
     private func CloneEquipment(opt ignoreItemID: ItemID, opt ignoreSlotID: TweakDBID) {
@@ -305,8 +307,6 @@ public class OutfitSystem extends ScriptableSystem {
                 }
             }
         }
-
-        this.UpdateEquipmentHash();
     }
 
     private func GetEquipmentParts() -> array<ref<OutfitPart>> {
@@ -324,14 +324,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         return parts;
-    }
-
-    private func ResetEquipmentHash() {
-        this.m_equipmentHash = 0ul;
-    }
-
-    private func UpdateEquipmentHash() {
-        this.m_equipmentHash = OutfitSet.MakeHash(this.GetEquipmentParts());
     }
 
     private func UpdateBlackboard(slotID: TweakDBID) {
@@ -353,7 +345,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func SetLastUsedOutfit(outfitName: CName) {
-		this.m_lastUsedOutfit = outfitName;
+  this.m_lastUsedOutfit = outfitName;
     }
 
     public func GetLastUsedOutfit() -> CName {
@@ -371,7 +363,7 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         for outfit in this.m_state.GetOutfits() {
-            if this.m_state.IsOutfit(outfit.GetName()) {
+            if this.m_state.IsOutfit(outfit.GetHash()) && this.m_state.IsOutfit(outfit.GetName()) {
                 this.m_lastUsedOutfit = outfit.GetName();
                 return;
             }
@@ -420,6 +412,8 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func TriggerMappingEvent() {
+        let cache = WardrobeCache.GetInstance(this.GetGameInstance());
+        if IsDefined(cache) { cache.Invalidate(); }
         GameInstance.GetUISystem(this.GetGameInstance()).QueueEvent(new OutfitMappingUpdated());
     }
 
@@ -553,7 +547,7 @@ public class OutfitSystem extends ScriptableSystem {
             this.ShowEquipment();
             this.DetachAllVisualsFromSlots(false);
 
-			this.UpdateLastUsedOutfit();
+   this.UpdateLastUsedOutfit();
             this.TriggerDeactivationEvent();
         }
     }
@@ -585,38 +579,35 @@ public class OutfitSystem extends ScriptableSystem {
         return this.m_state.IsActive() && this.m_state.HasPart(itemID);
     }
 
-    public func IsEquippable(recordID: TweakDBID) -> Bool {
+    private func GetEquippableSlot(recordID: TweakDBID) -> TweakDBID {
         let itemRecord = TweakDBInterface.GetItemRecord(recordID);
-
-        if !IsDefined(itemRecord) {
-            return false;
+        if !IsDefined(itemRecord) || !Equals(itemRecord.ItemCategory().Type(), gamedataItemCategory.Clothing) {
+            return TDBID.None();
         }
+        let slotID = this.GetItemSlot(recordID);
+        return this.IsOutfitSlot(slotID) ? slotID : TDBID.None();
+    }
 
-        if !Equals(itemRecord.ItemCategory().Type(), gamedataItemCategory.Clothing) {
-            return false;
-        }
+    private func GetEquippableSlot(itemID: ItemID) -> TweakDBID {
+        return ItemID.IsValid(itemID) ? this.GetEquippableSlot(ItemID.GetTDBID(itemID)) : TDBID.None();
+    }
 
-        if !this.IsOutfitSlot(this.GetItemSlot(recordID)) {
-            return false;
-        }
-
-        return true;
+    public func IsEquippable(recordID: TweakDBID) -> Bool {
+        return TDBID.IsValid(this.GetEquippableSlot(recordID));
     }
 
     public func IsEquippable(itemID: ItemID) -> Bool {
-        if !ItemID.IsValid(itemID) {
-            return false;
-        }
-
-        return this.IsEquippable(ItemID.GetTDBID(itemID));
+        return TDBID.IsValid(this.GetEquippableSlot(itemID));
     }
 
     public func IsEquippable(recordID: TweakDBID, slotID: TweakDBID) -> Bool {
-        return this.IsEquippable(recordID) && this.GetItemSlot(recordID) == slotID;
+        let available = this.GetEquippableSlot(recordID);
+        return TDBID.IsValid(available) && Equals(available, slotID);
     }
 
     public func IsEquippable(itemID: ItemID, slotID: TweakDBID) -> Bool {
-        return this.IsEquippable(itemID) && this.GetItemSlot(itemID) == slotID;
+        let available = this.GetEquippableSlot(itemID);
+        return TDBID.IsValid(available) && Equals(available, slotID);
     }
 
     public func EquipItem(recordID: TweakDBID, opt slotID: TweakDBID) -> Bool {
@@ -634,16 +625,12 @@ public class OutfitSystem extends ScriptableSystem {
             return false;
         }
 
-        if TDBID.IsValid(slotID) {
-            if !this.IsEquippable(itemID, slotID) {
-                return false;
-            }
-        } else {
-            if !this.IsEquippable(itemID) {
-                return false;
-            }
-            slotID = this.GetItemSlot(itemID);
+        let available = this.GetEquippableSlot(itemID);
+        let hasSlot = TDBID.IsValid(slotID);
+        if !TDBID.IsValid(available) || (hasSlot && NotEquals(slotID, available)) {
+            return false;
         }
+        if !hasSlot { slotID = available; }
         
         this.ActivateWithoutSlot(slotID);
 
@@ -734,11 +721,10 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func AssignItem(itemID: ItemID, slotID: TweakDBID) -> Bool {
-        if !this.IsEquippable(itemID) || !this.IsOutfitSlot(slotID) {
+        let oldSlotID = this.GetEquippableSlot(itemID);
+        if !TDBID.IsValid(oldSlotID) || !this.IsOutfitSlot(slotID) {
             return false;
         }
-
-        let oldSlotID = this.GetItemSlot(itemID);
 
         if Equals(slotID, oldSlotID) {
             return false;
@@ -811,6 +797,27 @@ public class OutfitSystem extends ScriptableSystem {
             : Equals(name, n"");
     }
 
+    public func GetEquippedOutfitFlags() -> ref<inkIntHashMap> {
+        if !this.m_state.IsActive() { return null; }
+        let flags = new inkIntHashMap();
+        for outfit in this.m_state.GetOutfits() {
+            let name = outfit.GetName();
+            let key = NameToHash(name);
+            // Name lookup uses the first saved record when a name occurs twice.
+            if NotEquals(name, n"") && !flags.KeyExist(key) {
+                flags.Insert(key, this.m_state.IsOutfit(outfit.GetHash()) ? 1 : 0);
+            }
+        }
+        return flags;
+    }
+
+    public func IsEquippedInList(flags: ref<inkIntHashMap>, name: CName) -> Bool {
+        if !IsDefined(flags) { return Equals(name, n""); }
+        if Equals(name, n"") { return this.IsEquipped(name); }
+        let key = NameToHash(name);
+        return flags.KeyExist(key) && flags.Get(key) == 1;
+    }
+
     public func HasOutfit(name: CName) -> Bool {
         return IsDefined(this.m_state.GetOutfit(name));
     }
@@ -873,28 +880,62 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     public func GetOutfits() -> array<CName> {
-        let names: array<CName>;
-        let keys: array<String>;
-
-        for outfit in this.m_state.GetOutfits() {
+        let outfits = this.m_state.GetOutfits();
+        let count = ArraySize(outfits);
+        if count == 0 { return []; }
+        if count == 1 { return [outfits[0].GetName()]; }
+        let entries: array<OutfitNameSortEntry>;
+        ArrayResize(entries, count);
+        let index = count;
+        // Equal keys keep the stock order, with later entries first.
+        for outfit in outfits {
+            index -= 1;
             let name = outfit.GetName();
-            let key = NameToString(name);
-
-            let index = 0;
-            while index < ArraySize(keys) && StrCmp(key, keys[index]) > 0 {
-                index += 1;
-            }
-
-            ArrayInsert(names, index, name);
-            ArrayInsert(keys, index, key);
+            entries[index] = OutfitNameSortEntry(name, NameToString(name));
         }
+        let scratch: array<OutfitNameSortEntry>;
+        ArrayResize(scratch, count);
+        let width = 1;
+        while width < count {
+            this.MergeOutfitNameRuns(entries, scratch, width, count);
+            width *= 2;
+            if width >= count {
+                entries = scratch;
+                break;
+            }
+            this.MergeOutfitNameRuns(scratch, entries, width, count);
+            width *= 2;
+        }
+        let names: array<CName>;
+        for entry in entries { ArrayPush(names, entry.name); }
 
         return names;
     }
 
+    private func MergeOutfitNameRuns(const entries: script_ref<array<OutfitNameSortEntry>>, scratch: script_ref<array<OutfitNameSortEntry>>, width: Int32, count: Int32) {
+
+        let index = 0;
+        while index < count {
+            let left = index;
+            let middle = Min(index + width, count);
+            let right = middle;
+            let end = Min(middle + width, count);
+            while index < end {
+                if left < middle && (right >= end || StrCmp(entries[left].key, entries[right].key) <= 0) {
+                    scratch[index] = entries[left];
+                    left += 1;
+                } else {
+                    scratch[index] = entries[right];
+                    right += 1;
+                }
+                index += 1;
+            }
+        }
+    }
+
     public func GetOutfitParts(name: CName) -> array<ref<OutfitPart>> {
-		return this.m_state.GetOutfitParts(name);
-	}
+  return this.m_state.GetOutfitParts(name);
+ }
 
     public func GiveItem(recordID: TweakDBID) -> ItemID {
         let itemID: ItemID;
