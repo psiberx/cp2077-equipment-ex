@@ -15,6 +15,12 @@ struct AppearanceNameSlotMapping {
     public let appearanceTokens: array<String>;
 }
 
+struct AppearanceTokenSlotMapping {
+    public let slotID: TweakDBID;
+    public let token: String;
+    public let length: Int32;
+}
+
 struct EquipmentAreaSlotMapping {
     public let slotID: TweakDBID;
     public let equipmentAreas: array<TweakDBID>;
@@ -33,7 +39,7 @@ struct SlotMappingMatch {
 class OutfitSlotMatcher {
     private let m_recordMappings: array<RecordSlotMapping>;
     private let m_entityMappings: array<EntityNameSlotMapping>;
-    private let m_appearanceMappings: array<AppearanceNameSlotMapping>;
+    private let m_appearanceTokens: array<AppearanceTokenSlotMapping>;
     private let m_equipmentMappings: array<EquipmentAreaSlotMapping>;
     private let m_priceMappings: array<PriceModifierSlotMapping>;
     private let m_ignoredEntities: array<CName>;
@@ -47,7 +53,12 @@ class OutfitSlotMatcher {
     }
 
     public func MapAppearances(mappings: array<AppearanceNameSlotMapping>) {
-        this.m_appearanceMappings = mappings;
+        ArrayClear(this.m_appearanceTokens);
+        for mapping in mappings {
+            for token in mapping.appearanceTokens {
+                ArrayPush(this.m_appearanceTokens, AppearanceTokenSlotMapping(mapping.slotID, token, StrLen(token)));
+            }
+        }
     }
 
     public func MapEquipmentAreas(mappings: array<EquipmentAreaSlotMapping>) {
@@ -63,7 +74,8 @@ class OutfitSlotMatcher {
     }
     
     public func Match(item: ref<Clothing_Record>) -> TweakDBID {
-        if Equals(item.AppearanceName(), n"") {
+        let appearance = item.AppearanceName();
+        if Equals(appearance, n"") {
             return TDBID.None();
         }
 
@@ -74,9 +86,6 @@ class OutfitSlotMatcher {
         }
 
         let recordID = item.GetID();
-        let appearanceName = NameToString(item.AppearanceName());
-        let priceModifiers = TweakDBInterface.GetForeignKeyArray(item.GetID() + t".buyPrice");
-        let equipmentArea = item.EquipArea().GetID();
 
         // Record exact match
         for mapping in this.m_recordMappings {
@@ -86,44 +95,46 @@ class OutfitSlotMatcher {
         }
 
         // Appearance exact match
-        for mapping in this.m_appearanceMappings {
-            for appearanceToken in mapping.appearanceTokens {
-                if Equals(appearanceName, appearanceToken) {
+        if ArraySize(this.m_appearanceTokens) > 0 {
+            let appearanceName = NameToString(appearance);
+            for mapping in this.m_appearanceTokens {
+                if Equals(appearanceName, mapping.token) {
                     return mapping.slotID;
                 }
             }
-        }
 
-        // Appearance partial match
-        let match: SlotMappingMatch;
-        for mapping in this.m_appearanceMappings {
-            for appearanceToken in mapping.appearanceTokens {
-                if StrFindFirst(appearanceName, appearanceToken) >= 0 {
-                    // return mapping.slotID;
-                    if StrLen(appearanceToken) > match.score {
-                        match.score = StrLen(appearanceToken);
-                        match.slotID = mapping.slotID;
+            // Appearance partial match
+            let match: SlotMappingMatch;
+            for mapping in this.m_appearanceTokens {
+                if mapping.length > match.score && StrFindFirst(appearanceName, mapping.token) >= 0 {
+                    match.score = mapping.length;
+                    match.slotID = mapping.slotID;
+                }
+            }
+            if match.score > 0 {
+                return match.slotID;
+            }
+        }
+        if ArraySize(this.m_priceMappings) > 0 {
+            let priceModifiers = TweakDBInterface.GetForeignKeyArray(recordID + t".buyPrice");
+
+            // Price exact match
+            for mapping in this.m_priceMappings {
+                for priceModifier in mapping.priceModifiers {
+                    if ArrayContains(priceModifiers, priceModifier) {
+                        return mapping.slotID;
                     }
                 }
             }
         }
-        if match.score > 0 {
-            return match.slotID;
-        }
+        if ArraySize(this.m_equipmentMappings) > 0 {
+            let equipmentArea = item.EquipArea().GetID();
 
-        // Price exact match
-        for mapping in this.m_priceMappings {
-            for priceModifier in mapping.priceModifiers {
-                if ArrayContains(priceModifiers, priceModifier) {
+            // Equipment area exact match
+            for mapping in this.m_equipmentMappings {
+                if ArrayContains(mapping.equipmentAreas, equipmentArea) {
                     return mapping.slotID;
                 }
-            }
-        }
-
-        // Equipment area exact match
-        for mapping in this.m_equipmentMappings {
-            if ArrayContains(mapping.equipmentAreas, equipmentArea) {
-                return mapping.slotID;
             }
         }
 

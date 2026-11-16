@@ -7,6 +7,7 @@ class InventoryGridItemData extends VendorUIInventoryItemData {
     public let SortKey: String;
     public let IsEquipped: Bool;
     public let IsVisible: Bool;
+    public let BuildIndex: Int32;
 }
 
 class InventoryGridSlotData extends VendorUIInventoryItemData {
@@ -31,6 +32,22 @@ class InventoryGridSlotData extends VendorUIInventoryItemData {
         }
     }
 
+    public func UpdateEquippedItems(outfits: ref<OutfitSystem>) {
+        let latest: ref<InventoryGridItemData>;
+        this.ActiveItem = null;
+        for item in this.Children {
+            item.IsEquipped = outfits.IsEquipped(item.SourceItemID);
+            if item.IsEquipped {
+                if !IsDefined(this.ActiveItem) { this.ActiveItem = item; }
+                if !IsDefined(latest) || latest.BuildIndex < item.BuildIndex { latest = item; }
+            }
+        }
+        this.ItemData.IsEquipped = false;
+        this.ItemData.ID = ItemID.None();
+        this.ItemData.Name = "";
+        if IsDefined(latest) { this.SetEquippedItemData(latest); }
+    }
+
     public func AddItem(entry: ref<InventoryGridItemData>) {
         let index = 0;
 
@@ -39,6 +56,10 @@ class InventoryGridSlotData extends VendorUIInventoryItemData {
         }
 
         ArrayInsert(this.Children, index, entry);
+        this.SetEquippedItemData(entry);
+    }
+
+    private func SetEquippedItemData(entry: ref<InventoryGridItemData>) {
 
         if entry.IsEquipped {
             this.ItemData.ID = entry.Item.GetID();
@@ -46,14 +67,87 @@ class InventoryGridSlotData extends VendorUIInventoryItemData {
             this.ItemData.IsEquipped = true;
         }
     }
+
+    // Both sort paths keep newer equal-key entries first, as AddItem does.
+    public func SortItems() {
+        let count = ArraySize(this.Children);
+        if count < 2 { return; }
+        if count <= 24 {
+            this.SortSmallSlot();
+            return;
+        }
+
+        // Reverse first so the stable merge preserves the required tie order.
+        let source: array<ref<InventoryGridItemData>>;
+        let scratch: array<ref<InventoryGridItemData>>;
+        ArrayResize(scratch, count);
+        ArrayResize(source, count);
+        let index = 0;
+        while index < count {
+            source[index] = this.Children[count - index - 1];
+            index += 1;
+        }
+
+        let width = 1;
+        while width < count {
+            this.MergeItemRuns(source, scratch, width, count);
+            width *= 2;
+            if width < count {
+                this.MergeItemRuns(scratch, source, width, count);
+                width *= 2;
+            } else {
+                this.Children = scratch;
+                return;
+            }
+        }
+        this.Children = source;
+    }
+
+    private func SortSmallSlot() {
+        let sorted: array<ref<InventoryGridItemData>>;
+        for entry in this.Children {
+            let left = 0;
+            let right = ArraySize(sorted);
+            while left < right {
+                let middle = left + (right - left) / 2;
+                if StrCmp(sorted[middle].SortKey, entry.SortKey) < 0 {
+                    left = middle + 1;
+                } else {
+                    right = middle;
+                }
+            }
+            ArrayInsert(sorted, left, entry);
+        }
+        this.Children = sorted;
+    }
+
+    private func MergeItemRuns(const source: script_ref<array<ref<InventoryGridItemData>>>, scratch: script_ref<array<ref<InventoryGridItemData>>>, width: Int32, count: Int32) {
+        let index = 0;
+        while index < count {
+            let left = index;
+            let middle = Min(index + width, count);
+            let right = middle;
+            let end = Min(middle + width, count);
+            while index < end {
+                if left < middle && (right >= end || StrCmp(source[left].SortKey, source[right].SortKey) <= 0) {
+                    scratch[index] = source[left];
+                    left += 1;
+                } else {
+                    scratch[index] = source[right];
+                    right += 1;
+                }
+                index += 1;
+            }
+        }
+    }
 }
 
 class InventoryGridDataView extends BackpackDataView {
     private let m_filter: Bool;
+    private let m_visibilityPrepared: Bool;
     private let m_searchQuery: String;
     private let m_viewManager: wref<ViewManager>;
     private let m_slots: array<ref<InventoryGridSlotData>>;
-    private let m_items: array<ref<InventoryGridItemData>>;
 
     public func SetViewManager(viewManager: wref<ViewManager>) {
         this.m_viewManager = viewManager;
@@ -81,13 +175,6 @@ class InventoryGridDataView extends BackpackDataView {
 
     public func SetSlots(slots: array<ref<InventoryGridSlotData>>) {
         this.m_slots = slots;
-        ArrayClear(this.m_items);
-
-        for uiSlot in this.m_slots {
-            for uiItem in uiSlot.Children {
-                ArrayPush(this.m_items, uiItem);
-            }
-        }
     }
 
     public func UpdateView() {
@@ -96,6 +183,15 @@ class InventoryGridDataView extends BackpackDataView {
         this.Filter();
         this.m_filter = false;
         this.Filter();
+    }
+
+    public func UpdateFullGrid() {
+        // The full grid has all slot headers. External data sources still use UpdateView.
+        this.RefreshVisibility();
+        this.DisableSorting();
+        this.m_visibilityPrepared = true;
+        this.Filter();
+        this.m_visibilityPrepared = false;
     }
 
     public func FilterItem(data: ref<IScriptable>) -> Bool {
@@ -115,12 +211,14 @@ class InventoryGridDataView extends BackpackDataView {
             if this.m_filter {
                 uiSlot.IsCollapsed = this.m_viewManager.IsCollapsed(uiSlot.ItemData.SlotID);
             } else {
-                uiSlot.TotalItems = ArraySize(uiSlot.Children);
-                uiSlot.VisibleItems = 0;
+                if !this.m_visibilityPrepared {
+                    uiSlot.TotalItems = ArraySize(uiSlot.Children);
+                    uiSlot.VisibleItems = 0;
 
-                for uiChildData in uiSlot.Children {
-                    if uiChildData.IsVisible {
-                        uiSlot.VisibleItems += 1;
+                    for uiChildData in uiSlot.Children {
+                        if uiChildData.IsVisible {
+                            uiSlot.VisibleItems += 1;
+                        }
                     }
                 }
             }
