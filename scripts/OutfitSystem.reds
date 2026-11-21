@@ -20,7 +20,6 @@ public class OutfitSystem extends ScriptableSystem {
 
     private let m_equipmentDef: wref<UI_EquipmentDef>;
     private let m_equipmentBlackboard: wref<IBlackboard>;
-    private let m_equipmentHash: Uint64;
 
     private func OnAttach() {
         this.InitializeState();
@@ -280,7 +279,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         this.m_equipmentData.LockVisualChanges();
-        this.UpdateEquipmentHash();
     }
 
     private func ShowEquipment() {
@@ -291,7 +289,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         this.m_equipmentData.LockVisualChanges();
-        this.ResetEquipmentHash();
     }
 
     private func CloneEquipment(opt ignoreItemID: ItemID, opt ignoreSlotID: TweakDBID) {
@@ -308,8 +305,6 @@ public class OutfitSystem extends ScriptableSystem {
                 }
             }
         }
-
-        this.UpdateEquipmentHash();
     }
 
     private func GetEquipmentParts() -> array<ref<OutfitPart>> {
@@ -327,14 +322,6 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         return parts;
-    }
-
-    private func ResetEquipmentHash() {
-        this.m_equipmentHash = 0ul;
-    }
-
-    private func UpdateEquipmentHash() {
-        this.m_equipmentHash = OutfitSet.MakeHash(this.GetEquipmentParts());
     }
 
     private func UpdateBlackboard(slotID: TweakDBID) {

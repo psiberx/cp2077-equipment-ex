@@ -54,7 +54,6 @@ class OutfitManagerController extends inkLogicController {
         header.Reparent(this.GetRootCompoundWidget());
 
         let title = new inkText();
-        title = new inkText();
         title.SetName(n"title");
         title.SetText("LocKey#82878");
         title.SetFontFamily("base\\gameplay\\gui\\fonts\\raj\\raj.inkfontfamily");

@@ -55,9 +55,11 @@ public final func OnRestored() {
 
     if !this.m_outfitSystem.IsActive() {
         let i = 0;
-        while i <= ArraySize(this.m_clothingVisualsInfo) {
+        let count = ArraySize(this.m_clothingVisualsInfo);
+        let emptyItemID = ItemID.None();
+        while i < count {
             this.m_clothingVisualsInfo[i].isHidden = false;
-            this.m_clothingVisualsInfo[i].visualItem = ItemID.None();
+            this.m_clothingVisualsInfo[i].visualItem = emptyItemID;
             i += 1;
         }
     }
