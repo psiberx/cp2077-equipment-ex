@@ -9,7 +9,8 @@ public class OutfitSystem extends ScriptableSystem {
     private let m_outfitSlots: array<TweakDBID>;
     private let m_managedSlots: array<TweakDBID>;
     private let m_managedAreas: array<gamedataEquipmentArea>;
-    // private let m_cameraDependentSlots: array<TweakDBID>;
+    private let m_extraSlots: array<ExtraSlotConfig>;
+    private let m_torsoSlots: array<TweakDBID>;
 
     private let m_player: wref<GameObject>;
     private let m_equipmentData: wref<EquipmentSystemPlayerData>;
@@ -67,13 +68,15 @@ public class OutfitSystem extends ScriptableSystem {
             ArrayPush(this.m_managedAreas, baseSlot.equipmentArea);
         }
 
-        for outfitSlot in OutfitConfig.OutfitSlots() {
+        this.m_extraSlots = OutfitConfig.OutfitSlots();
+
+        for outfitSlot in this.m_extraSlots {
             ArrayPush(this.m_outfitSlots, outfitSlot.slotID);
             ArrayPush(this.m_managedSlots, outfitSlot.slotID);
 
-            // if outfitSlot.dependsOnCamera {
-            //     ArrayPush(this.m_cameraDependentSlots, outfitSlot.slotID);
-            // }
+            if ArrayContains(outfitSlot.relatedSlotIDs, t"AttachmentSlots.Torso") || ArrayContains(outfitSlot.relatedSlotIDs, t"AttachmentSlots.Chest") {
+                ArrayPush(this.m_torsoSlots, outfitSlot.slotID);
+            }
         }
     }
 
@@ -758,7 +761,7 @@ public class OutfitSystem extends ScriptableSystem {
     }
 
     private func ApplyMapping(itemID: ItemID, slotID: TweakDBID) {
-        for outfitSlot in OutfitConfig.OutfitSlots() {
+        for outfitSlot in this.m_extraSlots {
             if Equals(outfitSlot.slotID, slotID) {
                 let record = TweakDBInterface.GetClothingRecord(ItemID.GetTDBID(itemID));
 
@@ -783,7 +786,7 @@ public class OutfitSystem extends ScriptableSystem {
         ArrayResize(placementSlots, 2); //ArrayPop(placementSlots);
         let previousSlotID = ArrayLast(placementSlots);
 
-        for outfitSlot in OutfitConfig.OutfitSlots() {
+        for outfitSlot in this.m_extraSlots {
             if Equals(outfitSlot.slotID, previousSlotID) {
                 TweakDBManager.SetFlat(record.GetID() + t".placementSlots", placementSlots);
                 TweakDBManager.SetFlat(record.GetID() + t".garmentOffset", outfitSlot.garmentOffset);
@@ -1041,9 +1044,9 @@ public class OutfitSystem extends ScriptableSystem {
         return ArrayContains(this.m_managedAreas, area);
     }
 
-    // public func IsCameraDependentSlot(slotID: TweakDBID) -> Bool {
-    //     return ArrayContains(this.m_cameraDependentSlots, slotID);
-    // }
+    public func GetTorsoOutfitSlots() -> array<TweakDBID> {
+        return this.m_torsoSlots;
+    }
 
     public func GetOutfitSlots() -> array<TweakDBID> {
         return this.m_outfitSlots;

@@ -133,6 +133,28 @@ private final func ResetItemAppearance(area: gamedataEquipmentArea, opt force: B
     }
 }
 
+@wrapMethod(EquipmentSystemPlayerData)
+public final static func HasLongSleeves(puppet: wref<ScriptedPuppet>) -> Bool {
+    let outfitSystem = OutfitSystem.GetInstance(puppet.GetGame());
+
+    if outfitSystem.IsActive() {
+        let slotsToCheck = outfitSystem.GetTorsoOutfitSlots();
+        let transactionSystem = GameInstance.GetTransactionSystem(puppet.GetGame());
+        for slotID in slotsToCheck {
+            let itemObject = transactionSystem.GetItemInSlot(puppet, slotID);
+            if IsDefined(itemObject) {
+                let itemData = itemObject.GetItemData();
+                if itemData.HasTag(n"LongSleeve") || itemData.HasTag(n"BodySuit") {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    return wrappedMethod(puppet);
+}
+
 class EquipmentSystemReattachItem extends DelayCallback {
     protected let m_data: ref<EquipmentSystemPlayerData>;
     protected let m_slotID: TweakDBID;
