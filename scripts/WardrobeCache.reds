@@ -83,7 +83,9 @@ public class WardrobeCache extends ScriptableSystem {
     }
 
     public func Invalidate() {
+        this.m_isBuilding = false;
         this.m_isReady = false;
+        this.m_job = null;
     }
 
     public func IsReady() -> Bool {
@@ -107,6 +109,10 @@ public class WardrobeCache extends ScriptableSystem {
             return;
         }
 
+        if (this.m_isReady || this.m_isBuilding) && ArraySize(excludes) == 0 {
+        	return;
+        }
+
         this.m_isBuilding = true;
         this.m_isReady = false;
         this.m_itemCount = 0;
@@ -123,7 +129,7 @@ public class WardrobeCache extends ScriptableSystem {
         }
 
         this.m_items = this.m_inventoryHelper.GetAvailableItems(excludes);
-        this.m_items = this.MergeVisualGroups(this.m_items);
+        //this.m_items = this.MergeVisualGroups(this.m_items);
 
         this.m_builtSource = this.GetCurrentSource();
 

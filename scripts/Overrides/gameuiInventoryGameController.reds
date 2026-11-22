@@ -4,6 +4,9 @@ import EquipmentEx.{CompatibilityManager, OutfitSystem, WardrobeCache, ArchivePo
 private let m_outfitSystem: wref<OutfitSystem>;
 
 @addField(gameuiInventoryGameController)
+private let m_wardrobeCache: wref<WardrobeCache>;
+
+@addField(gameuiInventoryGameController)
 private let m_wardrobeButton: wref<inkWidget>;
 
 @addField(gameuiInventoryGameController)
@@ -17,7 +20,7 @@ protected cb func OnInitialize() -> Bool {
     wrappedMethod();
 
     this.m_outfitSystem = OutfitSystem.GetInstance(this.GetPlayerControlledObject().GetGame());
-    WardrobeCache.GetInstance(this.GetPlayerControlledObject().GetGame()).Invalidate();
+    this.m_wardrobeCache = WardrobeCache.GetInstance(this.GetPlayerControlledObject().GetGame());
 }
 
 @wrapMethod(gameuiInventoryGameController)
@@ -25,6 +28,7 @@ protected cb func OnUninitialize() -> Bool {
     wrappedMethod();
 
     this.m_wardrobeButton.UnregisterFromCallback(n"OnClick", this, n"OnWardrobeBtnClick");
+    this.m_wardrobeCache.Invalidate();
 }
 
 @replaceMethod(gameuiInventoryGameController)
@@ -85,6 +89,8 @@ protected func ShowWardrobeScreen() -> Bool {
     if IsDefined(this.GetChildWidgetByPath(n"wardrobe")) {
         return false;
     }
+
+    this.m_wardrobeCache.StartBuild();
 
     let wardrobe = this.SpawnFromExternal(this.GetRootCompoundWidget(), r"equipment_ex\\gui\\wardrobe.inkwidget", n"Root:EquipmentEx.WardrobeScreenController") as inkCompoundWidget;
     
