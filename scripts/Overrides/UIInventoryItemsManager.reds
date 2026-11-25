@@ -8,12 +8,16 @@ class ItemRecordCacheEntry {
 private let m_itemRecordCache: ref<inkHashMap>;
 
 @addField(UIInventoryItemsManager)
+private let m_itemRecordLock: RWLock;
+
+@addField(UIInventoryItemsManager)
 private let m_outfitSystem: wref<OutfitSystem>;
 
 @wrapMethod(UIInventoryItemsManager)
 public final static func Make(player: wref<PlayerPuppet>, transactionSystem: ref<TransactionSystem>, uiScriptableSystem: wref<UIScriptableSystem>) -> ref<UIInventoryItemsManager> {
     let instance = wrappedMethod(player, transactionSystem, uiScriptableSystem);
     instance.m_outfitSystem = OutfitSystem.GetInstance(player.GetGame());
+    instance.m_itemRecordCache = new inkHashMap();
 
     return instance;
 }
@@ -34,13 +38,12 @@ public final static func ResolveItemIconName(itemTweakID: TweakDBID, itemRecord:
 		return wrappedMethod(itemTweakID, itemRecord, manager);
 	}
 
-	if !IsDefined(manager.m_itemRecordCache) {
-        manager.m_itemRecordCache = new inkHashMap();
-    }
+	let key = TDBID.ToNumber(itemTweakID);
 
-    let key = TDBID.ToNumber(itemTweakID);
-
+	RWLock.AcquireShared(manager.m_itemRecordLock);
     let cached = manager.m_itemRecordCache.Get(key) as ItemRecordCacheEntry;
+    RWLock.ReleaseShared(manager.m_itemRecordLock);
+
     if IsDefined(cached) {
         return cached.iconName;
     }
@@ -48,7 +51,9 @@ public final static func ResolveItemIconName(itemTweakID: TweakDBID, itemRecord:
     let entry = new ItemRecordCacheEntry();
     entry.iconName = wrappedMethod(itemTweakID, itemRecord, manager);
 
+	RWLock.Acquire(manager.m_itemRecordLock);
     manager.m_itemRecordCache.Insert(key, entry);
+    RWLock.Release(manager.m_itemRecordLock);
 
     return entry.iconName;
 }
