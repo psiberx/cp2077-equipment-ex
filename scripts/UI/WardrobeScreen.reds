@@ -218,9 +218,11 @@ public class WardrobeScreenController extends inkPuppetPreviewGameController {
         buttonPanel.SetChildMargin(inkMargin(8.0, 0.0, 0.0, 0.0));
         buttonPanel.Reparent(headerWrapper);
 
-        let modeBtn = SettingsButton.Create();
-        modeBtn.Reparent(buttonPanel, this);
-        modeBtn.GetRootWidget().SetMargin(inkMargin(0, 0, 10, 0));
+        if !this.m_outfitSystem.HidesItemSourceButton() {
+            let modeBtn = SettingsButton.Create();
+            modeBtn.Reparent(buttonPanel, this);
+            modeBtn.GetRootWidget().SetMargin(inkMargin(0, 0, 10, 0));
+        }
 
         let expandBtn = CollapseButton.Create();
         expandBtn.SetFlipped(true);

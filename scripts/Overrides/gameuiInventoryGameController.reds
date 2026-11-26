@@ -33,6 +33,10 @@ protected cb func OnUninitialize() -> Bool {
 
 @replaceMethod(gameuiInventoryGameController)
 private final func SetupSetButton() -> Void {
+    if OutfitSystem.GetInstance(this.m_player.GetGame()).HidesWardrobeButtons() {
+        return;
+    }
+
     let btnWrapper = this.GetChildWidgetByPath(n"default_wrapper/menuLinks") as inkCompoundWidget;
     let btnList = this.GetChildWidgetByPath(n"default_wrapper/menuLinks/btnsContainer") as inkCompoundWidget;
 
