@@ -2,6 +2,7 @@ module EquipmentEx
 
 public class OutfitSystem extends ScriptableSystem {
     private persistent let m_state: ref<OutfitState>;
+    private let m_policies: array<ref<OutfitPolicy>>;
     private let m_firstUse: Bool;
     private let m_lastUsedOutfit: CName;
 
@@ -202,10 +203,21 @@ public class OutfitSystem extends ScriptableSystem {
     private func AttachAllVisualsToSlots(opt refresh: Bool) {
         for part in this.m_state.GetParts() {
             if this.IsOutfitSlot(part.GetSlotID()) && this.IsEquippable(part.GetItemID()) {
-                this.AttachVisualToSlot(part.GetItemID(), part.GetSlotID());
+                let itemID = this.ResolveItem(part.GetItemID(), part.GetSlotID());
 
-                if refresh {
-                    this.RefreshSlotAttachment(part.GetSlotID());
+                if !ItemID.IsValid(itemID) {
+                    this.RemoveItemFromState(part.GetItemID());
+                } else {
+                    if NotEquals(itemID, part.GetItemID()) {
+                        this.RemoveItemFromState(part.GetItemID());
+                        this.AddItemToState(itemID, part.GetSlotID());
+                    }
+
+                    this.AttachVisualToSlot(itemID, part.GetSlotID());
+
+                    if refresh {
+                        this.RefreshSlotAttachment(part.GetSlotID());
+                    }
                 }
             }
         }
@@ -272,7 +284,14 @@ public class OutfitSystem extends ScriptableSystem {
 
     private func HideEquipment() {
         this.m_equipmentData.UnlockVisualChanges();
-        this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit), 0, false);
+
+        let outfitItemID = this.m_equipmentData.GetActiveItem(gamedataEquipmentArea.Outfit);
+
+        if ItemID.IsValid(outfitItemID) && this.KeepsOutfitArea(outfitItemID) {
+            this.HideOutfitArea(outfitItemID);
+        } else {
+            this.m_equipmentData.UnequipItem(this.m_equipmentData.GetEquipAreaIndex(gamedataEquipmentArea.Outfit), 0, false);
+        }
 
         for baseSlot in OutfitConfig.BaseSlots() {
             this.m_equipmentData.ClearVisuals(baseSlot.equipmentArea);
@@ -286,6 +305,12 @@ public class OutfitSystem extends ScriptableSystem {
 
         for baseSlot in OutfitConfig.BaseSlots() {
             this.m_equipmentData.UnequipVisuals(baseSlot.equipmentArea);
+        }
+
+        let outfitItemID = this.m_equipmentData.GetActiveItem(gamedataEquipmentArea.Outfit);
+
+        if ItemID.IsValid(outfitItemID) && this.KeepsOutfitArea(outfitItemID) {
+            this.m_transactionSystem.ResetItemAppearance(this.m_player, outfitItemID);
         }
 
         this.m_equipmentData.LockVisualChanges();
@@ -424,6 +449,66 @@ public class OutfitSystem extends ScriptableSystem {
         }
 
         return false;
+    }
+
+    public func RegisterPolicy(policy: ref<OutfitPolicy>) {
+        if IsDefined(policy) && !ArrayContains(this.m_policies, policy) {
+            ArrayPush(this.m_policies, policy);
+        }
+    }
+
+    public func UnregisterPolicy(policy: ref<OutfitPolicy>) {
+        ArrayRemove(this.m_policies, policy);
+    }
+
+    private func ResolveItem(itemID: ItemID, slotID: TweakDBID) -> ItemID {
+        for policy in this.m_policies {
+            if !ItemID.IsValid(itemID) {
+                break;
+            }
+            itemID = policy.ResolveItem(itemID, slotID);
+        }
+        return itemID;
+    }
+
+    private func CanGiveItem(recordID: TweakDBID) -> Bool {
+        for policy in this.m_policies {
+            if !policy.CanGiveItem(recordID) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public func KeepsOutfitArea(itemID: ItemID) -> Bool {
+        for policy in this.m_policies {
+            if policy.KeepsOutfitArea(itemID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public func HidesWardrobeButtons() -> Bool {
+        for policy in this.m_policies {
+            if policy.HidesWardrobeButtons() {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public func HidesItemSourceButton() -> Bool {
+        for policy in this.m_policies {
+            if policy.HidesItemSourceButton() {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public func HideOutfitArea(itemID: ItemID) {
+        this.m_transactionSystem.ChangeItemAppearanceByName(this.m_player, itemID, n"empty_appearance_default");
     }
 
     public func IsDisabled() -> Bool {
@@ -614,7 +699,14 @@ public class OutfitSystem extends ScriptableSystem {
             return false;
         }
         
-        let itemID = this.GiveItem(recordID);
+        let itemID = this.FindItem(recordID);
+
+        if !ItemID.IsValid(itemID) {
+            if !this.CanGiveItem(recordID) {
+                return false;
+            }
+            itemID = this.GiveItem(recordID);
+        }
 
         return this.EquipItem(itemID, slotID);
     }
@@ -634,7 +726,13 @@ public class OutfitSystem extends ScriptableSystem {
             }
             slotID = this.GetItemSlot(itemID);
         }
-        
+
+        itemID = this.ResolveItem(itemID, slotID);
+
+        if !ItemID.IsValid(itemID) {
+            return false;
+        }
+
         this.ActivateWithoutSlot(slotID);
 
         this.UnequipItem(itemID);
@@ -824,8 +922,9 @@ public class OutfitSystem extends ScriptableSystem {
             let itemID = part.GetItemID();
             let slotID = this.GetItemSlot(itemID); // part.GetSlotID()
 
-            this.EquipItem(itemID, slotID);
-            ArrayRemove(slots, slotID);
+            if this.EquipItem(itemID, slotID) {
+                ArrayRemove(slots, slotID);
+            }
         }
 
         for slotID in slots {
@@ -885,6 +984,21 @@ public class OutfitSystem extends ScriptableSystem {
     public func GetOutfitParts(name: CName) -> array<ref<OutfitPart>> {
 		return this.m_state.GetOutfitParts(name);
 	}
+
+    public func FindItem(recordID: TweakDBID) -> ItemID {
+        let playerItems: array<wref<gameItemData>>;
+
+        if this.m_transactionSystem.GetItemList(this.m_player, playerItems) {
+            for itemData in playerItems {
+                let itemID = itemData.GetID();
+
+                if Equals(ItemID.GetTDBID(itemID), recordID) && !ItemID.HasFlag(itemID, gameEItemIDFlag.Preview) {
+                    return itemID;
+                }
+            }
+        }
+        return ItemID.None();
+    }
 
     public func GiveItem(recordID: TweakDBID) -> ItemID {
         let itemID: ItemID;
@@ -1068,7 +1182,11 @@ public class PlayerSlotsCallback extends AttachmentSlotsScriptCallback {
     public func OnItemEquipped(slotID: TweakDBID, itemID: ItemID) -> Void {
         if this.m_system.IsActive() && ItemID.IsValid(itemID) {
             if Equals(slotID, t"AttachmentSlots.Outfit") {
-                this.m_system.Deactivate();
+                if this.m_system.KeepsOutfitArea(itemID) {
+                    this.m_system.HideOutfitArea(itemID);
+                } else {
+                    this.m_system.Deactivate();
+                }
             }
             //else {
             //    if Equals(slotID, t"AttachmentSlots.TppHead") {

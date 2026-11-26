@@ -15,6 +15,10 @@ public final func SetupData(buttonHints: wref<ButtonHints>, tooltipsManager: wre
 
 @replaceMethod(InventoryItemModeLogicController)
 private final func UpdateOutfitWardrobe(active: Bool, activeSetOverride: Int32) {
+    if this.m_outfitSystem.HidesWardrobeButtons() {
+        active = false;
+    }
+
     inkWidgetRef.SetVisible(this.m_wardrobeSlotsContainer, active);
     inkWidgetRef.SetVisible(this.m_wardrobeSlotsLabel, active);
     inkWidgetRef.SetVisible(this.m_outfitsFilterInfoText, active);
